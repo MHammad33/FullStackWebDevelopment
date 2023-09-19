@@ -1,2 +1,2 @@
 # Full Stack Web Development
-Exercises
+Exercises Solved Here

@@ -27,7 +27,7 @@ const Statistics = (props) => {
 					<StatisticsLine text="average" value={(props.good + props.bad) / 2} />
 					<StatisticsLine
 						text="positives"
-						value={((props.good / props.total) * 100).toFixed(2) + " %"}
+						value={((props.good / props.total) * 100).toFixed(1) + "%"}
 					/>
 				</tbody>
 			</table>

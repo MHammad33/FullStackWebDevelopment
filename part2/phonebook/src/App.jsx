@@ -34,9 +34,13 @@ function App() {
 
 		const newPerson = {
 			name: newName,
-			num: newNum,
+			number: newNum,
 		};
-		setPersons(persons.concat(newPerson));
+
+		axios.post("http://localhost:3000/personsData", newPerson).then((res) => {
+			setPersons(persons.concat(newPerson));
+			setSearchedPersons(persons.concat(newPerson));
+		});
 
 		setNewName("");
 		setNewNum("");

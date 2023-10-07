@@ -4,6 +4,7 @@ import Phonebook from "./components/Phonebook";
 import AddPerson from "./features/AddPerson";
 import SearchPerson from "./features/SearchPerson";
 import axios from "axios";
+import PersonService from "./services/PersonService";
 
 function App() {
 	const [newName, setNewName] = useState("");
@@ -11,9 +12,9 @@ function App() {
 	const [persons, setPersons] = useState([]);
 
 	const hook = () => {
-		axios.get("http://localhost:3000/personsData").then((res) => {
-			setPersons(res.data);
-			setSearchedPersons(res.data);
+		PersonService.getAll().then((initialData) => {
+			setPersons(initialData);
+			setSearchedPersons(initialData);
 		});
 	};
 	useEffect(hook, []);
@@ -37,9 +38,9 @@ function App() {
 			number: newNum,
 		};
 
-		axios.post("http://localhost:3000/personsData", newPerson).then((res) => {
-			setPersons(persons.concat(newPerson));
-			setSearchedPersons(persons.concat(newPerson));
+		PersonService.create(newPerson).then((newData) => {
+			setPersons(persons.concat(newData));
+			setSearchedPersons(persons.concat(newData));
 		});
 
 		setNewName("");

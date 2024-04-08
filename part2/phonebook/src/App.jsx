@@ -3,7 +3,6 @@ import "./App.css";
 import Phonebook from "./components/Phonebook";
 import AddPerson from "./features/AddPerson";
 import SearchPerson from "./features/SearchPerson";
-import axios from "axios";
 import PersonService from "./services/PersonService";
 
 function App() {
@@ -12,9 +11,9 @@ function App() {
 	const [persons, setPersons] = useState([]);
 
 	const hook = () => {
-		PersonService.getAll().then((initialData) => {
-			setPersons(initialData);
-			setSearchedPersons(initialData);
+		PersonService.getAll().then((response) => {
+			setPersons(response.data);
+			setSearchedPersons(response.data);
 		});
 	};
 	useEffect(hook, []);
@@ -38,15 +37,27 @@ function App() {
 			number: newNum,
 		};
 
-		PersonService.create(newPerson).then((newData) => {
-			setPersons(persons.concat(newData));
-			setSearchedPersons(persons.concat(newData));
+		PersonService.create(newPerson).then((response) => {
+			setPersons(persons.concat(response.data));
+			setSearchedPersons(persons.concat(response.data));
 		});
 
 		setNewName("");
 		setNewNum("");
 		setResult(" * Added to the phonebook");
 		setTimeout(() => setResult(""), 1000);
+	};
+
+	const deletePerson = (id) => {
+		const person = persons.find((p) => p.id === id);
+
+		if (window.confirm(`Delete ${person.name} ?`)) {
+			PersonService.deletePerson(id).then((response) => {
+				const newPersonsList = persons.filter((p) => p.id !== id);
+				setPersons(newPersonsList);
+				setSearchedPersons(newPersonsList);
+			});
+		}
 	};
 
 	const handleName = (e) => {
@@ -84,7 +95,7 @@ function App() {
 			<h1>Phonebook</h1>
 			<SearchPerson persons={persons} handleSearch={handleSearch} />
 			<AddPerson data={data} />
-			<Phonebook persons={searchedPersons} />
+			<Phonebook persons={searchedPersons} onDelete={deletePerson} />
 		</div>
 	);
 }

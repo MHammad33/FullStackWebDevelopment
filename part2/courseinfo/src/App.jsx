@@ -48,8 +48,9 @@ const App = () => {
 	console.log(courses[0]);
 	return (
 		<div>
-			<Course course={courses[0]} />
-			<Course course={courses[1]} />
+			{courses.map((course) => (
+				<Course key={course.id} course={course} />
+			))}
 		</div>
 	);
 };

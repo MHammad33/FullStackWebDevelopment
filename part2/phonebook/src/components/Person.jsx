@@ -1,10 +1,13 @@
 const Person = (props) => {
-	const { name, num } = props;
+	const { name, num, onDelete } = props;
 
 	return (
-		<li>
-			{name}: {num}
-		</li>
+		<>
+			<li>
+				{name}: {num}
+				<button onClick={onDelete}>Delete</button>
+			</li>
+		</>
 	);
 };
 export default Person;

@@ -28,7 +28,7 @@ function App() {
 
 	return (
 		<div>
-			<Feedbacks handleFeedback={handleFeedback} />
+			<Feedbacks onFeedback={handleFeedback} />
 
 			<Statistics good={good} bad={bad} neutral={neutral} total={total} />
 		</div>

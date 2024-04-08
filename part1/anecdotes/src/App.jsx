@@ -8,8 +8,9 @@ import Votes from "./components/Votes";
 function App() {
 	const [selected, setSelected] = useState(0);
 	const [votes, setVotes] = useState(Array(antecdotes.length).fill(0));
-	const max = votes.reduce((a, b) => Math.max(a, b));
-	console.log(votes);
+	const maxVotes = Math.max(...votes);
+	const maxVotesIndex = votes.indexOf(maxVotes);
+	// console.log(max);
 
 	const handleAntecdote = () => {
 		let rand;
@@ -34,7 +35,7 @@ function App() {
 				handleAntecdote={handleAntecdote}
 			/>
 			<Votes votes={votes} selected={selected} handleVotes={handleVotes} />
-			<PopularAntecdote antecdotes={antecdotes} max={max} votes={votes} />
+			<PopularAntecdote antecdotes={antecdotes} maxVotesIndex={maxVotesIndex} />
 		</div>
 	);
 }

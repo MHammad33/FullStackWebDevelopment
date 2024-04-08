@@ -1,7 +1,6 @@
 import Button from "./Button";
 
-const Feedbacks = (props) => {
-	const { handleFeedback } = props;
+const Feedbacks = ({ onFeedback }) => {
 	const FEEDBACKS = {
 		good: 1,
 		neutral: 2,
@@ -10,14 +9,14 @@ const Feedbacks = (props) => {
 
 	const { good, neutral, bad } = FEEDBACKS;
 
-	console.log(good, bad, neutral);
+	// console.log(good, bad, neutral);
 
 	return (
 		<div>
 			<h2>Give feedback</h2>
-			<Button handleClick={() => handleFeedback(good)} text={"good"} />
-			<Button handleClick={() => handleFeedback(neutral)} text={"neutral"} />
-			<Button handleClick={() => handleFeedback(bad)} text={"bad"} />
+			<Button onClick={() => onFeedback(good)} text={"good"} />
+			<Button onClick={() => onFeedback(neutral)} text={"neutral"} />
+			<Button onClick={() => onFeedback(bad)} text={"bad"} />
 		</div>
 	);
 };

@@ -54,7 +54,13 @@ function App() {
 					);
 				} catch (error) {
 					// Handle error if update fails
+					setResult(
+						` * Information of ${newName} has already been removed from the server`
+					);
 					console.error("Failed to update person:", error);
+					const newPersonsList = persons.filter((p) => p.id !== id);
+					setPersons(newPersonsList);
+					setSearchedPersons(newPersonsList);
 				}
 			}
 		} else if (isDuplicate) {
@@ -88,13 +94,23 @@ function App() {
 		const person = persons.find((p) => p.id === id);
 
 		if (window.confirm(`Delete ${person.name} ?`)) {
-			PersonService.deletePerson(id).then((response) => {
-				const newPersonsList = persons.filter((p) => p.id !== id);
-				setPersons(newPersonsList);
-				setSearchedPersons(newPersonsList);
-				setResult(` * Deleted ${person.name} from the phonebook`);
-				setTimeout(() => setResult(""), 3000);
-			});
+			PersonService.deletePerson(id)
+				.then((response) => {
+					const newPersonsList = persons.filter((p) => p.id !== id);
+					setPersons(newPersonsList);
+					setSearchedPersons(newPersonsList);
+					setResult(` * Deleted ${person.name} from the phonebook`);
+					setTimeout(() => setResult(""), 3000);
+				})
+				.catch((error) => {
+					setResult(
+						` * Information of ${person.name} has already been removed from the server`
+					);
+					console.error("Failed to delete person:", error);
+					const newPersonsList = persons.filter((p) => p.id !== id);
+					setPersons(newPersonsList);
+					setSearchedPersons(newPersonsList);
+				});
 		}
 	};
 

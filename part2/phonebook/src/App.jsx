@@ -25,27 +25,56 @@ function App() {
 		e.preventDefault();
 		const isDuplicate = persons.find((p) => p.name === newName);
 
-		if (isDuplicate) {
+		if (isDuplicate && isDuplicate.number !== newNum) {
+			const confirmReplace = window.confirm(
+				`${newName} is already added to the Phonebook, replace the old number with a new one?`
+			);
+
+			if (confirmReplace) {
+				try {
+					const updatedPerson = { ...isDuplicate, number: newNum };
+
+					PersonService.update(isDuplicate.id, updatedPerson).then(
+						(response) => {
+							const updatedPersons = persons.map((p) =>
+								p.id !== isDuplicate.id ? p : response.data
+							);
+							setPersons(updatedPersons);
+							setSearchedPersons(updatedPersons);
+						}
+					);
+				} catch (error) {
+					// Handle error if update fails
+					console.error("Failed to update person:", error);
+				}
+			}
+			setNewName("");
+			setNewNum("");
+		} else if (isDuplicate) {
 			setResult(` ${newName} is already added to the Phonebook`);
 			setTimeout(() => setResult(""), 3000);
-			setNewName("");
-			return;
+		} else {
+			try {
+				const newPerson = {
+					name: newName,
+					number: newNum,
+				};
+
+				PersonService.create(newPerson).then((response) => {
+					const updatedPersons = persons.concat(response.data);
+					setPersons(updatedPersons);
+					setSearchedPersons(updatedPersons);
+					setResult(" * Added to the phonebook");
+					setTimeout(() => setResult(""), 1000);
+				});
+			} catch (error) {
+				console.error("Failed to create person:", error);
+			}
 		}
 
-		const newPerson = {
-			name: newName,
-			number: newNum,
-		};
-
-		PersonService.create(newPerson).then((response) => {
-			setPersons(persons.concat(response.data));
-			setSearchedPersons(persons.concat(response.data));
-		});
-
+		// Reset form fields
 		setNewName("");
 		setNewNum("");
-		setResult(" * Added to the phonebook");
-		setTimeout(() => setResult(""), 1000);
 	};
 
 	const deletePerson = (id) => {

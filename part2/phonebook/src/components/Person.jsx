@@ -2,12 +2,12 @@ const Person = (props) => {
 	const { name, num, onDelete } = props;
 
 	return (
-		<>
+		<div className="person">
 			<li>
-				{name}: {num}
-				<button onClick={onDelete}>Delete</button>
+				<span>{name}</span>: {num}
 			</li>
-		</>
+			<button onClick={onDelete}>Delete</button>
+		</div>
 	);
 };
 export default Person;

@@ -2,7 +2,7 @@ import Person from "./Person";
 
 const Phonebook = ({ persons, onDelete }) => {
 	return (
-		<>
+		<div className="phonebook">
 			<h2>Numbers</h2>
 			<div>
 				<ul>
@@ -16,7 +16,7 @@ const Phonebook = ({ persons, onDelete }) => {
 					))}
 				</ul>
 			</div>
-		</>
+		</div>
 	);
 };
 export default Phonebook;

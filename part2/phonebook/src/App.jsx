@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import "./App.css";
 import Phonebook from "./components/Phonebook";
+import Notification from "./components/Notification";
 import AddPerson from "./features/AddPerson";
 import SearchPerson from "./features/SearchPerson";
 import PersonService from "./services/PersonService";
@@ -23,6 +23,13 @@ function App() {
 
 	const addPerson = (e) => {
 		e.preventDefault();
+
+		if (!newName || !newNum) {
+			setResult(" * Name or number is missing");
+			setTimeout(() => setResult(""), 3000);
+			return;
+		}
+
 		const isDuplicate = persons.find((p) => p.name === newName);
 
 		if (isDuplicate && isDuplicate.number !== newNum) {
@@ -41,6 +48,8 @@ function App() {
 							);
 							setPersons(updatedPersons);
 							setSearchedPersons(updatedPersons);
+							setResult(` * Updated ${newName}'s number`);
+							setTimeout(() => setResult(""), 3000);
 						}
 					);
 				} catch (error) {
@@ -48,8 +57,6 @@ function App() {
 					console.error("Failed to update person:", error);
 				}
 			}
-			setNewName("");
-			setNewNum("");
 		} else if (isDuplicate) {
 			setResult(` ${newName} is already added to the Phonebook`);
 			setTimeout(() => setResult(""), 3000);
@@ -64,7 +71,7 @@ function App() {
 					const updatedPersons = persons.concat(response.data);
 					setPersons(updatedPersons);
 					setSearchedPersons(updatedPersons);
-					setResult(" * Added to the phonebook");
+					setResult(` * Added ${newName} to the phonebook`);
 					setTimeout(() => setResult(""), 1000);
 				});
 			} catch (error) {
@@ -85,6 +92,8 @@ function App() {
 				const newPersonsList = persons.filter((p) => p.id !== id);
 				setPersons(newPersonsList);
 				setSearchedPersons(newPersonsList);
+				setResult(` * Deleted ${person.name} from the phonebook`);
+				setTimeout(() => setResult(""), 3000);
 			});
 		}
 	};
@@ -122,6 +131,7 @@ function App() {
 	return (
 		<div>
 			<h1>Phonebook</h1>
+			{result && <Notification message={result} />}
 			<SearchPerson persons={persons} handleSearch={handleSearch} />
 			<AddPerson data={data} />
 			<Phonebook persons={searchedPersons} onDelete={deletePerson} />

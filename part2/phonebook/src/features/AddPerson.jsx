@@ -3,21 +3,20 @@ const AddPerson = (props) => {
 		props.data;
 
 	return (
-		<>
+		<div className="add-contact">
 			<h2>Add Contact</h2>
 			<form onSubmit={addPerson}>
 				<div>
-					name: <input value={newName} onChange={handleName} />
+					Name: <input value={newName} onChange={handleName} />
 				</div>
 				<div>
-					number: <input value={newNum} onChange={handleNum} />
+					Number: <input value={newNum} onChange={handleNum} />
 				</div>
 				<div>
 					<button type="submit">Add</button>
 				</div>
-				<div>{result}</div>
 			</form>
-		</>
+		</div>
 	);
 };
 export default AddPerson;

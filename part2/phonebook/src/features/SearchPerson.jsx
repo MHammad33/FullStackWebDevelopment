@@ -6,8 +6,7 @@ const SearchPerson = ({ persons, handleSearch }) => {
 	return (
 		<div>
 			<h2>Search Contact</h2>
-			<div>
-				Search:{" "}
+			<div className="search">
 				<input
 					value={searchValue}
 					onChange={(e) => {
@@ -16,6 +15,7 @@ const SearchPerson = ({ persons, handleSearch }) => {
 						handleSearch(e.target.value);
 					}}
 				/>
+				<button disabled>Search</button>
 			</div>
 		</div>
 	);

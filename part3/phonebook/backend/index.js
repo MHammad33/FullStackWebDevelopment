@@ -28,6 +28,7 @@ let persons = [
 
 app.use(express.json());
 app.use(cors());
+app.use(express.static("dist"));
 
 // Morgan Logger
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms :body"));
@@ -98,5 +99,5 @@ app.get("/api/info", (req, res) => {
     res.send(msg);
 })
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

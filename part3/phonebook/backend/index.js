@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const morgan = require("morgan");
 
 let persons = [
@@ -26,6 +27,7 @@ let persons = [
 ]
 
 app.use(express.json());
+app.use(cors());
 
 // Morgan Logger
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms :body"));
@@ -34,6 +36,16 @@ morgan.token("body", (req, res) => JSON.stringify(req.body));
 app.get("/api/persons", (req, res) => {
     res.json(persons)
 })
+
+app.get("/api/persons/:id", (req, res) => {
+    const id = Number(req.params.id);
+    const person = persons.find(person => person.id === id);
+    if (person) {
+        res.json(person);
+    } else {
+        res.status(404).end();
+    }
+});
 
 app.post("/api/persons", (req, res) => {
     const body = req.body;
@@ -59,15 +71,19 @@ app.post("/api/persons", (req, res) => {
     res.json(person);
 });
 
-app.get("/api/persons/:id", (req, res) => {
+app.put("/api/persons/:id", (req, res) => {
     const id = Number(req.params.id);
+    const body = req.body;
     const person = persons.find(person => person.id === id);
-    if (person) {
-        res.json(person);
-    } else {
-        res.status(404).end();
+    if (!person) {
+        return res.status(404).end();
     }
+
+    const updatedPerson = { ...person, number: body.number };
+    persons = persons.map(person => person.id !== id ? person : updatedPerson);
+    res.json(updatedPerson);
 });
+
 
 app.delete("/api/persons/:id", (req, res) => {
     const id = Number(req.params.id);

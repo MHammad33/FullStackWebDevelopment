@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const path = require("path");
 const cors = require("cors");
 const morgan = require("morgan");
 require('dotenv').config();
@@ -29,11 +30,16 @@ let persons = [
 
 app.use(express.json());
 app.use(cors());
-app.use(express.static("dist"));
+app.use(express.static(path.resolve(__dirname, "dist")));
 
 // Morgan Logger
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms :body"));
 morgan.token("body", (req, res) => JSON.stringify(req.body));
+
+// Routes
+app.get("/", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "dist", "index.html"));
+});
 
 app.get("/api/persons", (req, res) => {
     res.json(persons)
@@ -100,5 +106,5 @@ app.get("/api/info", (req, res) => {
     res.send(msg);
 })
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

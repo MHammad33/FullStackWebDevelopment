@@ -83,7 +83,6 @@ function App() {
 					})
 					.catch((error) => {
 						console.log(error.response.data.error);
-						setResult(` * ${error.response.data.error}`);
 					});
 			} catch (error) {
 				console.error("Failed to create person:", error);

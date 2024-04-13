@@ -68,3 +68,7 @@ if (process.argv.length === 5) {
 
 
 
+// rm -rf node_modules
+// rm package-lock.json
+// npm install --package-lock-only
+// npm install

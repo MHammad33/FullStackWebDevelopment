@@ -7,7 +7,6 @@ require('dotenv').config();
 
 // Models
 const Person = require("./models/person");
-const { log } = require("console");
 
 // Middleware
 const errorHandler = (error, req, res, next) => {
@@ -15,6 +14,8 @@ const errorHandler = (error, req, res, next) => {
 
     if (error.name === "CastError") {
         return res.status(400).send({ error: 'malformatted id' });
+    } else if (error.name === "ValidationError") {
+        return res.status(400).json({ error: error.message });
     }
 
     next(error);
@@ -51,10 +52,10 @@ app.get("/api/persons/:id", async (req, res, next) => {
     }
 });
 
-app.post("/api/persons", async (req, res) => {
-    const body = req.body;
+app.post("/api/persons", async (req, res, next) => {
+    const { name, number } = req.body;
 
-    if (!body.name || !body.number) {
+    if (!name || !number) {
         return res.status(400).json({
             error: "content missing"
         });
@@ -67,25 +68,30 @@ app.post("/api/persons", async (req, res) => {
     // }
 
     const person = new Person({
-        name: body.name,
-        number: body.number
+        name: name,
+        number: number
     })
 
-    const result = await person.save();
-    res.json(result);
+    try {
+        const result = await person.save();
+        res.json(result);
+    } catch (error) {
+        next(error);
+    }
 });
 
 app.put("/api/persons/:id", async (req, res, next) => {
     const id = req.params.id;
-    const body = req.body;
+    const { name, number } = req.body;
+
 
     const person = {
-        name: body.name,
-        number: body.number
+        name: name,
+        number: number
     }
 
     try {
-        const result = await Person.findByIdAndUpdate(id, person, { new: true });
+        const result = await Person.findByIdAndUpdate(id, person, { new: true, runValidators: true, context: "query" });
         res.json(result);
     } catch (error) {
         next(error);

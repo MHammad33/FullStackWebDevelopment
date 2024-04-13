@@ -73,13 +73,17 @@ function App() {
 					number: newNum,
 				};
 
-				PersonService.create(newPerson).then((response) => {
-					const updatedPersons = persons.concat(response.data);
-					setPersons(updatedPersons);
-					setSearchedPersons(updatedPersons);
-					setResult(` * Added ${newName} to the phonebook`);
-					setTimeout(() => setResult(""), 1000);
-				});
+				PersonService.create(newPerson)
+					.then((response) => {
+						const updatedPersons = persons.concat(response.data);
+						setPersons(updatedPersons);
+						setSearchedPersons(updatedPersons);
+						setResult(` * Added ${newName} to the phonebook`);
+						setTimeout(() => setResult(""), 1000);
+					})
+					.catch((error) => {
+						console.log(error.response.data.error);
+					});
 			} catch (error) {
 				console.error("Failed to create person:", error);
 			}

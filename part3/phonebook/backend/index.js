@@ -9,9 +9,20 @@ require('dotenv').config();
 const Person = require("./models/person");
 const { log } = require("console");
 
+// Middleware
+const errorHandler = (error, req, res, next) => {
+    console.log(error.message);
+
+    if (error.name === "CastError") {
+        return res.status(400).send({ error: 'malformatted id' });
+    }
+
+    next(error);
+}
 app.use(express.json());
 app.use(cors());
 app.use(express.static(path.resolve(__dirname, "dist")));
+app.use(errorHandler);
 
 // Morgan Logger
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms :body"));
@@ -27,12 +38,16 @@ app.get("/api/persons", async (req, res) => {
     res.json(persons);
 })
 
-app.get("/api/persons/:id", async (req, res) => {
-    const person = await Person.findById(req.params.id);
-    if (person) {
-        res.json(person);
-    } else {
-        res.status(404).end();
+app.get("/api/persons/:id", async (req, res, next) => {
+    try {
+        const person = await Person.findById(req.params.id);
+        if (person) {
+            res.json(person);
+        } else {
+            res.status(404).end();
+        }
+    } catch (error) {
+        next(error);
     }
 });
 
@@ -60,30 +75,40 @@ app.post("/api/persons", async (req, res) => {
     res.json(result);
 });
 
-app.put("/api/persons/:id", (req, res) => {
-    const id = Number(req.params.id);
+app.put("/api/persons/:id", async (req, res, next) => {
+    const id = req.params.id;
     const body = req.body;
-    const person = persons.find(person => person.id === id);
-    if (!person) {
-        return res.status(404).end();
+
+    const person = {
+        name: body.name,
+        number: body.number
     }
 
-    const updatedPerson = { ...person, number: body.number };
-    persons = persons.map(person => person.id !== id ? person : updatedPerson);
-    res.json(updatedPerson);
+    try {
+        const result = await Person.findByIdAndUpdate(id, person, { new: true });
+        res.json(result);
+    } catch (error) {
+        next(error);
+    }
 });
 
 
-app.delete("/api/persons/:id", (req, res) => {
-    const id = Number(req.params.id);
+app.delete("/api/persons/:id", async (req, res, next) => {
+    const id = req.params.id;
     console.log("Id, ", id);
-    persons = persons.filter(person => person.id !== id);
-    res.status(204).end();
+
+    try {
+        const result = await Person.findByIdAndDelete(id);
+        res.status(204).end();
+    } catch (error) {
+        next(error);
+    }
 });
 
-app.get("/api/info", (req, res) => {
+app.get("/api/info", async (req, res) => {
     const date = new Date();
-    const msg = `<p>Phonebook has info for ${persons.length} people</p><p>${date}</p>`;
+    const totalPeople = await Person.find({});
+    const msg = `<p>Phonebook has info for ${totalPeople.length} people</p><p>${date}</p>`;
     res.send(msg);
 })
 

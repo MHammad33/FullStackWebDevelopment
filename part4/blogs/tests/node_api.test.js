@@ -42,6 +42,13 @@ test("there are two blogs", async () => {
   assert.strictEqual(response.body.length, 2);
 })
 
+test("id is defined in the blog schema", async () => {
+  const response = await api.get("/api/blogs");
+  const result = response.body.map(blog => blog.id);
+
+  // Check if the id is defined
+  assert.ok(result[0]);
+})
 
 // Close the connection after all tests
 after(() => {

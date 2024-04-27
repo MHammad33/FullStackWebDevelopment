@@ -16,6 +16,10 @@ router.post('/', (req, res) => {
   console.log(req.body);
   const blog = new Blog(req.body);
 
+  if (!blog.title && !blog.url) {
+    return res.status(400).json({ error: "Title and URL are required" });
+  }
+
   if (!blog.likes) {
     blog.likes = 0;
   }

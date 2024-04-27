@@ -99,6 +99,22 @@ test("if the likes property is missing, it will default to 0", async () => {
   assert.strictEqual(likes[likes.length - 1], 0);
 })
 
+/**
+ * @dev Test to check if the title and url properties are missing from the request
+ */
+test("if the title and url properties are missing, return 400 Bad Request", async () => {
+  const newBlog = {
+    author: "New Author",
+    likes: 10
+  }
+
+  // Add the new blog to the database
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(400);
+})
+
 // Close the connection after all tests
 after(() => {
   mongoose.connection.close();

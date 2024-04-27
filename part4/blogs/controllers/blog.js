@@ -15,6 +15,11 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
   console.log(req.body);
   const blog = new Blog(req.body);
+
+  if (!blog.likes) {
+    blog.likes = 0;
+  }
+
   blog
     .save()
     .then(result => {

@@ -50,6 +50,31 @@ test("id is defined in the blog schema", async () => {
   assert.ok(result[0]);
 })
 
+/**
+ * @dev Test to check if a blog can be added
+*/
+test("a valid blog can be added", async () => {
+  const newBlog = {
+    title: "New Blog",
+    author: "New Author",
+    url: "newblog.com",
+    likes: 10
+  }
+
+  // Add the new blog to the database
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  // verify that the content of the blog post is saved correctly to the database.
+  const blogsAtEnd = await helper.blogsInDb();
+  const titles = blogsAtEnd.map(blog => blog.title);
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1);
+  assert.ok(titles.includes("New Blog"));
+})
+
 // Close the connection after all tests
 after(() => {
   mongoose.connection.close();

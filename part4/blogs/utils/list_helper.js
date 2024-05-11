@@ -7,9 +7,6 @@ const totalLikes = (blogs) => {
   const reducer = (sum, item) => {
     return sum + item.likes;
   }
-
-  console.log(blogs);
-
   return blogs.reduce(reducer, 0);
 }
 

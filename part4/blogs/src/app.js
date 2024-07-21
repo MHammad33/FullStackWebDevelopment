@@ -10,7 +10,7 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.use("/api/v1/blogs", blogRouter);
+app.use("/api/blogs", blogRouter);
 
 
 // Middlewares

@@ -1,3 +1,5 @@
+const Blog = require('../models/blog.model');
+
 const initialBlogs = [
   {
     "title": "Go To Statement Considered Harmful",

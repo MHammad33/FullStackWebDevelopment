@@ -38,6 +38,12 @@ test("all blogs are returned", async () => {
   assert.strictEqual(response.body.length, helper.initialBlogs.length);
 })
 
+test("unique identifier property of the blog posts is named id", async () => {
+  const res = await helper.blogsInDb();
+  const blog = res[0];
+  assert(blog.id);
+});
+
 // Close the connection after all tests are done
 after(async () => {
   await mongoose.connection.close();

@@ -25,6 +25,7 @@ beforeEach(async () => {
   await Promise.all(promiseArray);
 });
 
+// Test that the GET request returns the correct status code
 test("blogs are returned as json", async () => {
   await api
     .get("/api/blogs")
@@ -33,15 +34,38 @@ test("blogs are returned as json", async () => {
   ;
 })
 
+// Test that the GET request returns the correct number of blog posts
 test("all blogs are returned", async () => {
   const response = await api.get("/api/blogs");
   assert.strictEqual(response.body.length, helper.initialBlogs.length);
 })
 
+// Test that the unique identifier property of the blog posts is named id
 test("unique identifier property of the blog posts is named id", async () => {
   const res = await helper.blogsInDb();
   const blog = res[0];
   assert(blog.id);
+});
+
+// Test that a new blog post can be added
+test("a valid blog can be added", async () => {
+  const newBlog = {
+    title: "Test Blog",
+    author: "Test Author",
+    url: "http://testurl.com",
+    likes: 10
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const blogsAtEnd = await helper.blogsInDb();
+
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1);
+  assert(blogsAtEnd.some(blog => blog.title === "Test Blog"));
 });
 
 // Close the connection after all tests are done

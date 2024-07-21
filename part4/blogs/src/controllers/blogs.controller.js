@@ -10,6 +10,10 @@ const getBlogs = async (req, res) => {
 const createBlog = async (req, res) => {
   const newBlog = new Blog(req.body);
 
+  if (!newBlog.title || !newBlog.url) {
+    return res.status(400).json({ error: "title or url missing" });
+  }
+
   if (!newBlog.likes) {
     newBlog.likes = 0;
   }

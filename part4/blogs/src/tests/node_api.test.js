@@ -68,6 +68,25 @@ test("a valid blog can be added", async () => {
   assert(blogsAtEnd.some(blog => blog.title === "Test Blog"));
 });
 
+// Test that if the likes property is missing from the request, it will default to 0
+test("if the likes property is missing from the request, it will default to 0", async () => {
+  const newBlog = {
+    title: "Test Blog",
+    author: "Test Author",
+    url: "http://testurl.com"
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const blogsAtEnd = await helper.blogsInDb();
+  const blog = blogsAtEnd.find(blog => blog.title === "Test Blog");
+  assert.strictEqual(blog.likes, 0);
+});
+
 // Close the connection after all tests are done
 after(async () => {
   await mongoose.connection.close();

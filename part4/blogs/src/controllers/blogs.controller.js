@@ -10,6 +10,10 @@ const getBlogs = async (req, res) => {
 const createBlog = async (req, res) => {
   const newBlog = new Blog(req.body);
 
+  if (!newBlog.likes) {
+    newBlog.likes = 0;
+  }
+
   try {
     const savedBlog = await newBlog.save();
     res.status(201).json(savedBlog);

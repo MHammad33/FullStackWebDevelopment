@@ -26,6 +26,19 @@ const createBlog = async (req, res) => {
   }
 };
 
+// Get a single blog
+const getBlog = async (req, res) => {
+  const { id } = req.params;
+
+  const blog = await Blog.findById(id);
+
+  if (blog) {
+    res.json(blog);
+  } else {
+    res.status(404).end();
+  }
+}
+
 module.exports = {
-  getBlogs, createBlog
+  getBlogs, createBlog, getBlog
 };

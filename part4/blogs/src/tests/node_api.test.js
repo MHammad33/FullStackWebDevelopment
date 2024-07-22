@@ -42,6 +42,35 @@ describe("Initially some blogs are saved", () => {
     assert(blog.id);
   });
 
+  describe("Viewing a specific blog", () => {
+
+    test("succeeds with a valid id", async () => {
+      const blogsAtStart = await helper.blogsInDb();
+      const blogToView = blogsAtStart[0];
+
+      const resultBlog = await api
+        .get(`/api/blogs/${blogToView.id}`)
+        .expect(200)
+        .expect("Content-Type", /application\/json/);
+
+      assert.deepStrictEqual(resultBlog.body, blogToView);
+    });
+
+    test("fails with status code 404 if blog does not exist", async () => {
+      const validNonExistingId = await helper.nonExistingId();
+      await api
+        .get(`/api/blogs/${validNonExistingId}`)
+        .expect(404);
+    });
+
+    test("fails with status code 400 if id is invalid", async () => {
+      const invalidId = "5a3d5da59070081a82a3445";
+      await api
+        .get(`/api/blogs/${invalidId}`)
+        .expect(400);
+    });
+  });
+
   describe("Adding a new blog", () => {
 
     // Test that a new blog post can be added

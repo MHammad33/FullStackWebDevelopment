@@ -39,6 +39,19 @@ const getBlog = async (req, res) => {
   }
 }
 
+// Delete a blog
+const deleteBlog = async (req, res) => {
+  const { id } = req.params;
+
+  const blog = await Blog.findByIdAndDelete(id);
+
+  if (!blog) {
+    return res.status(404).end();
+  }
+
+  res.status(204).end();
+}
+
 module.exports = {
-  getBlogs, createBlog, getBlog
+  getBlogs, createBlog, getBlog, deleteBlog
 };

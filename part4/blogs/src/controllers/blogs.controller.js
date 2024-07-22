@@ -52,6 +52,20 @@ const deleteBlog = async (req, res) => {
   res.status(204).end();
 }
 
+// Update a blog
+const updateBlog = async (req, res) => {
+  const { id } = req.params;
+  const blog = req.body;
+
+  const updatedBlog = await Blog.findByIdAndUpdate(id, blog, { new: true });
+
+  if (!updatedBlog) {
+    return res.status(404).end();
+  }
+
+  res.status(200).json(updatedBlog);
+}
+
 module.exports = {
-  getBlogs, createBlog, getBlog, deleteBlog
+  getBlogs, createBlog, getBlog, deleteBlog, updateBlog
 };

@@ -166,6 +166,43 @@ describe("Initially some blogs are saved", () => {
     });
   });
 
+  describe("Updating a blog", () => {
+
+    test("a blog can be updated", async () => {
+      const blogsAtStart = await helper.blogsInDb();
+      const blogToUpdate = blogsAtStart[0];
+
+      const updatedBlog = {
+        ...blogToUpdate,
+        likes: 10
+      };
+
+      await api
+        .put(`/api/blogs/${blogToUpdate.id}`)
+        .send(updatedBlog)
+        .expect(200)
+        .expect("Content-Type", /application\/json/);
+
+      const blogsAtEnd = await helper.blogsInDb();
+      const newUpdatedBlog = blogsAtEnd.find(blog => blog.id === blogToUpdate.id);
+      assert.strictEqual(newUpdatedBlog.likes, 10);
+    });
+
+    test("fails with status code 404 if blog does not exist", async () => {
+      const validNonExistingId = await helper.nonExistingId();
+      await api
+        .put(`/api/blogs/${validNonExistingId}`)
+        .expect(404);
+    });
+
+    test("fails with status code 400 if id is invalid", async () => {
+      const invalidId = "5a3d5da59070081a82a3445";
+      await api
+        .put(`/api/blogs/${invalidId}`)
+        .expect(400);
+    });
+  });
+
 });
 
 

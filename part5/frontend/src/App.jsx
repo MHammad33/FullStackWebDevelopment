@@ -1,14 +1,21 @@
 import { useState, useEffect } from "react";
-import Blog from "./components/Blog";
+import Blog from "./components/blog/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
-import Login from "./components/Login";
+import Login from "./components/login/Login";
 import Notification from "./components/Notification";
 
 const App = () => {
 	const [blogs, setBlogs] = useState([]);
 	const [user, setUser] = useState(null);
-	const [errorMessage, setErrorMessage] = useState("null");
+	const [errorMessage, setErrorMessage] = useState(null);
+
+	const showMessage = (message, duration = 3000) => {
+		setErrorMessage(message);
+		setTimeout(() => {
+			setErrorMessage(null);
+		}, duration);
+	};
 
 	const fetchBlogs = async () => {
 		try {
@@ -27,10 +34,7 @@ const App = () => {
 		const loggedUser = window.localStorage.getItem("loggedUser");
 		if (loggedUser) {
 			// Give a notification and remove it after 3 seconds
-			setErrorMessage("User already logged in");
-			setTimeout(() => {
-				setErrorMessage(null);
-			}, 3000);
+			showMessage("User already logged in");
 
 			// Set the user and token in the blog service
 			const user = JSON.parse(loggedUser);
@@ -51,18 +55,12 @@ const App = () => {
 			window.localStorage.setItem("loggedUser", JSON.stringify(user));
 			// Give a notification and remove it after 3 seconds
 			setErrorMessage("Logged in successfully");
-			setTimeout(() => {
-				setErrorMessage(null);
-			}, 3000);
 			// Fetch the blogs
 			fetchBlogs();
 		} catch (err) {
+			console.error("Login error:", err.message);
 			// Give a notification and remove it after 3 seconds
-			setErrorMessage("Invalid credentials");
-			setTimeout(() => {
-				setErrorMessage(null);
-			}, 3000);
-			console.error(err.message);
+			showMessage("Invalid username or password");
 		}
 	};
 
@@ -71,10 +69,7 @@ const App = () => {
 		setUser(null);
 
 		// Give a notification and remove it after 3 seconds
-		setErrorMessage("Logged out successfully");
-		setTimeout(() => {
-			setErrorMessage(null);
-		}, 3000);
+		showMessage("Logged out successfully");
 	};
 
 	return (
@@ -91,9 +86,12 @@ const App = () => {
 							</p>
 						</div>
 						<hr />
-						{blogs.map((blog) => (
-							<Blog key={blog.id} blog={blog} />
-						))}
+
+						<div className="blog-container">
+							{blogs.map((blog) => (
+								<Blog key={blog.id} blog={blog} />
+							))}
+						</div>
 					</div>
 				) : (
 					<Login onLogin={handleLogin} />

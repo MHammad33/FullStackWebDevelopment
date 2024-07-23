@@ -56,25 +56,7 @@ const getBlog = async (req, res) => {
 // Delete a blog
 const deleteBlog = async (req, res) => {
   const { id } = req.params;
-  const { token } = req;
-
-  // Check if the token is present
-  if (!token) {
-    return res.status(401).json({ error: "token missing" });
-  }
-
-  const decodedToken = jwt.verify(token, process.env.SECRET);
-
-  // Check if the decoded token contains a user ID
-  if (!decodedToken.id) {
-    return res.status(401).json({ error: "token invalid" });
-  }
-
-  // Find the user by ID
-  const user = await User.findById(decodedToken.id);
-  if (!user) {
-    return res.status(401).json({ error: "user not found" });
-  }
+  const { user } = req;
 
   // Find the blog by ID
   const blog = await Blog.findById(id);

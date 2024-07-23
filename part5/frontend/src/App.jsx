@@ -1,11 +1,15 @@
+import { useState } from "react";
 import Blog from "./components/blog/Blog";
 import Login from "./components/login/Login";
 import Notification from "./components/Notification";
-import { useAuth } from "./hooks/useAuth";
+import useAuth from "./hooks/useAuth";
+import useBlog from "./hooks/useBlog";
+import BlogForm from "./components/blogForm/BlogForm";
 
 const App = () => {
-	const { user, blogs, loading, errorMessage, handleLogin, handleLogout } =
-		useAuth();
+	const { user, errorMessage, login, logout } = useAuth();
+	const { blogs, addBlog } = useBlog();
+	const [showForm, setShowForm] = useState(false);
 
 	return (
 		<div>
@@ -16,23 +20,27 @@ const App = () => {
 					<div>
 						<div>
 							<p>
-								{user?.name} Logged in{" "}
-								<button onClick={handleLogout}>Logout</button>
+								{user?.name} Logged in <button onClick={logout}>Logout</button>
 							</p>
 						</div>
-						<hr />
-						{loading ? (
-							<p>Loading blogs...</p>
-						) : (
-							<div className="blog-container">
-								{blogs.map((blog) => (
-									<Blog key={blog.id} blog={blog} />
-								))}
-							</div>
+						<button onClick={() => setShowForm(!showForm)}>
+							{showForm ? "Cancel" : "Add New Blog"}
+						</button>
+						{showForm && (
+							<BlogForm
+								onAddBlog={addBlog}
+								closeForm={() => setShowForm(false)}
+							/>
 						)}
+						<hr />
+						<div className="blog-container">
+							{blogs.map((blog) => (
+								<Blog key={blog.id} blog={blog} />
+							))}
+						</div>
 					</div>
 				) : (
-					<Login onLogin={handleLogin} />
+					<Login onLogin={login} />
 				)}
 			</div>
 		</div>

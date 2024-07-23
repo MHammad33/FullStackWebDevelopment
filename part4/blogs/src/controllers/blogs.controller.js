@@ -1,4 +1,7 @@
+const jwt = require("jsonwebtoken");
+
 const Blog = require("../models/blog.model");
+const User = require("../models/user.model");
 
 // Get all blogs
 const getBlogs = async (req, res) => {
@@ -6,24 +9,45 @@ const getBlogs = async (req, res) => {
   res.json(blogs);
 }
 
+const getTokenFrom = (req) => {
+  const authorization = req.get("authorization");
+  if (authorization && authorization.startsWith("Bearer ")) {
+    return authorization.replace("Bearer ", "");
+  }
+  return null;
+}
+
 // Create a new blog
 const createBlog = async (req, res) => {
-  const newBlog = new Blog(req.body);
+  const { body } = req;
+
+  const token = getTokenFrom(req);
+  const decodedToken = jwt.verify(token, process.env.SECRET);
+
+  if (!decodedToken) {
+    return res.status(401).json({ error: "token invalid" });
+  }
+
+  const user = await User.findById(decodedToken.id);
+
+  const newBlog = new Blog({
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes || 0,
+    user: user._id
+  })
+
 
   if (!newBlog.title || !newBlog.url) {
     return res.status(400).json({ error: "title or url missing" });
   }
 
-  if (!newBlog.likes) {
-    newBlog.likes = 0;
-  }
+  const savedBlog = await newBlog.save();
+  user.blogs = user.blogs.concat(savedBlog._id);
+  await user.save();
 
-  try {
-    const savedBlog = await newBlog.save();
-    res.status(201).json(savedBlog);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
+  res.status(201).json(savedBlog);
 };
 
 // Get a single blog

@@ -8,6 +8,7 @@ const middleware = require("./utils/middleware");
 const errorHandler = require("./utils/error-handler");
 const blogRouter = require("./routes/blogs.routes");
 const usersRouter = require("./routes/users.routes");
+const authRouter = require("./routes/auth.routes");
 
 // Middlewares
 app.use(cors());
@@ -21,6 +22,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/blogs", blogRouter);
 app.use("/api/users", usersRouter);
+app.use("/api", authRouter);
 
 // Error handler middleware
 app.use(errorHandler);

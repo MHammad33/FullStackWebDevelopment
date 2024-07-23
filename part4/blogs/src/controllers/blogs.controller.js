@@ -38,7 +38,6 @@ const createBlog = async (req, res) => {
     user: user._id
   })
 
-
   if (!newBlog.title || !newBlog.url) {
     return res.status(400).json({ error: "title or url missing" });
   }

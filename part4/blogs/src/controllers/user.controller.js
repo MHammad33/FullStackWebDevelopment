@@ -11,6 +11,13 @@ const getUsers = async (req, res) => {
 const createUser = async (req, res) => {
   const { username, name, password } = req.body;
 
+  // Validate the request body
+  if (!password || password.length < 3) {
+    return res
+      .status(400)
+      .json({ error: "Password is required and must be at least 3 characters long." });
+  }
+
   // Hash the password
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(password, saltRounds);

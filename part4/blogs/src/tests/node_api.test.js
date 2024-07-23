@@ -2,9 +2,11 @@ const { test, after, beforeEach, describe } = require("node:test");
 const assert = require("node:assert");
 const supertest = require("supertest");
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const app = require("../app");
 const Blog = require("../models/blog.model");
+const User = require("../models/user.model");
 const helper = require("./helper");
 const config = require("../utils/config");
 const connectDb = require("../db/connectDb");
@@ -12,18 +14,40 @@ const connectDb = require("../db/connectDb");
 
 const api = supertest(app);
 
-describe("Initially some blogs are saved", () => {
-  // Delete all blogs and save initial blogs before each test
+describe("Initially some blogs are saved and one user in the db", () => {
+  let token;
+
   beforeEach(async () => {
+
     await connectDb(config.MONGODB_URI);
+
+    // Delete all users and save one user before each test
+    await User.deleteMany({});
+    const passwordHash = await bcrypt.hash("password", 10);
+    const user = new User({ username: "root", passwordHash });
+    await user.save();
+
+    // Log in to get a token
+    const response = await api.post("/api/login").send({
+      username: "root", password: "password"
+    });
+    token = response.body.token;
+
+    const blogsToAdd = helper.initialBlogs.map(blog => new Blog({
+      ...blog,
+      user: user._id
+    }));
+
+    // Delete all blogs and save initial blogs before each test
     await Blog.deleteMany({});
-    await Blog.insertMany(helper.initialBlogs);
+    await Blog.insertMany(blogsToAdd);
   });
 
   // Test that the GET request returns the correct status code
   test("blogs are returned as json", async () => {
     await api
       .get("/api/blogs")
+      .set("Authorization", `Bearer ${token}`)
       .expect(200)
       .expect("Content-Type", /application\/json/);
     ;
@@ -31,7 +55,7 @@ describe("Initially some blogs are saved", () => {
 
   // Test that the GET request returns the correct number of blog posts
   test("all blogs are returned", async () => {
-    const response = await api.get("/api/blogs");
+    const response = await api.get("/api/blogs").set("Authorization", `Bearer ${token}`);
     assert.strictEqual(response.body.length, helper.initialBlogs.length);
   })
 
@@ -50,8 +74,10 @@ describe("Initially some blogs are saved", () => {
 
       const resultBlog = await api
         .get(`/api/blogs/${blogToView.id}`)
+        .set("Authorization", `Bearer ${token}`)
         .expect(200)
         .expect("Content-Type", /application\/json/);
+
 
       assert.deepStrictEqual(resultBlog.body, blogToView);
     });
@@ -60,6 +86,7 @@ describe("Initially some blogs are saved", () => {
       const validNonExistingId = await helper.nonExistingId();
       await api
         .get(`/api/blogs/${validNonExistingId}`)
+        .set("Authorization", `Bearer ${token}`)
         .expect(404);
     });
 
@@ -67,8 +94,18 @@ describe("Initially some blogs are saved", () => {
       const invalidId = "5a3d5da59070081a82a3445";
       await api
         .get(`/api/blogs/${invalidId}`)
+        .set("Authorization", `Bearer ${token}`)
         .expect(400);
     });
+
+    test("fails with status code 401 if token is missing", async () => {
+      const blogsAtStart = await helper.blogsInDb();
+      const blogToView = blogsAtStart[0];
+
+      await api
+        .get(`/api/blogs/${blogToView.id}`)
+        .expect(401);
+    })
   });
 
   describe("Adding a new blog", () => {
@@ -84,6 +121,7 @@ describe("Initially some blogs are saved", () => {
 
       await api
         .post("/api/blogs")
+        .set("Authorization", `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect("Content-Type", /application\/json/);
@@ -104,6 +142,7 @@ describe("Initially some blogs are saved", () => {
 
       await api
         .post("/api/blogs")
+        .set("Authorization", `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect("Content-Type", /application\/json/);
@@ -122,6 +161,7 @@ describe("Initially some blogs are saved", () => {
 
       await api
         .post("/api/blogs")
+        .set("Authorization", `Bearer ${token}`)
         .send(newBlog)
         .expect(400)
         .expect("Content-Type", /application\/json/);
@@ -130,6 +170,19 @@ describe("Initially some blogs are saved", () => {
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length);
 
     });
+
+    test("fails with status code 401 if token is missing", async () => {
+      const newBlog = {
+        title: "Test Blog",
+        author: "Test Author",
+        url: "http://testurl.com",
+        likes: 10
+      };
+
+      await api
+        .post("/api/blogs")
+        .send(newBlog).expect(401);
+    })
 
   });
 
@@ -141,6 +194,7 @@ describe("Initially some blogs are saved", () => {
 
       await api
         .delete(`/api/blogs/${blogToDelete.id}`)
+        .set("Authorization", `Bearer ${token}`)
         .expect(204);
 
       const blogsAtEnd = await helper.blogsInDb();
@@ -154,6 +208,7 @@ describe("Initially some blogs are saved", () => {
       const validNonExistingId = await helper.nonExistingId();
       await api
         .delete(`/api/blogs/${validNonExistingId}`)
+        .set("Authorization", `Bearer ${token}`)
         .expect(404);
     }
     );
@@ -162,8 +217,18 @@ describe("Initially some blogs are saved", () => {
       const invalidId = "5a3d5da59070081a82a3445";
       await api
         .delete(`/api/blogs/${invalidId}`)
+        .set("Authorization", `Bearer ${token}`)
         .expect(400);
     });
+
+    test("fails with status code 401 if token is missing", async () => {
+      const blogsAtStart = await helper.blogsInDb();
+      const blogToDelete = blogsAtStart[0];
+
+      await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .expect(401);
+    })
   });
 
   describe("Updating a blog", () => {
@@ -180,6 +245,7 @@ describe("Initially some blogs are saved", () => {
       await api
         .put(`/api/blogs/${blogToUpdate.id}`)
         .send(updatedBlog)
+        .set("Authorization", `Bearer ${token}`)
         .expect(200)
         .expect("Content-Type", /application\/json/);
 
@@ -192,6 +258,7 @@ describe("Initially some blogs are saved", () => {
       const validNonExistingId = await helper.nonExistingId();
       await api
         .put(`/api/blogs/${validNonExistingId}`)
+        .set("Authorization", `Bearer ${token}`)
         .expect(404);
     });
 
@@ -199,8 +266,19 @@ describe("Initially some blogs are saved", () => {
       const invalidId = "5a3d5da59070081a82a3445";
       await api
         .put(`/api/blogs/${invalidId}`)
+        .set("Authorization", `Bearer ${token}`)
         .expect(400);
     });
+
+    test("fails with status code 401 if token is missing", async () => {
+      const blogsAtStart = await helper.blogsInDb();
+      const blogToUpdate = blogsAtStart[0];
+
+      await api
+        .put(`/api/blogs/${blogToUpdate.id}`)
+        .expect(401);
+    });
+
   });
 
 });

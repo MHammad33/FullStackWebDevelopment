@@ -9,22 +9,13 @@ const getBlogs = async (req, res) => {
   res.json(blogs);
 }
 
-const getTokenFrom = (req) => {
-  const authorization = req.get("authorization");
-  if (authorization && authorization.startsWith("Bearer ")) {
-    return authorization.replace("Bearer ", "");
-  }
-  return null;
-}
-
 // Create a new blog
 const createBlog = async (req, res) => {
-  const { body } = req;
+  const { body, token } = req;
 
-  const token = getTokenFrom(req);
   const decodedToken = jwt.verify(token, process.env.SECRET);
 
-  if (!decodedToken) {
+  if (!decodedToken.id) {
     return res.status(401).json({ error: "token invalid" });
   }
 

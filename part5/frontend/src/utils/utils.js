@@ -1,8 +1,5 @@
-const showMessage = (message, setMessage, duration = 3000) => {
-  setMessage(message);
-  setTimeout(() => {
-    setMessage(null);
-  }, duration);
-};
+import EventEmitter from "eventemitter3";
 
-export { showMessage };
+const eventEmitter = new EventEmitter();
+
+export default eventEmitter;

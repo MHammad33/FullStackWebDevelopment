@@ -1,17 +1,16 @@
 import { useState, useEffect } from "react";
 import blogService from "../services/blogs";
 import loginService from "../services/login";
-import { showMessage } from "../utils/utils";
+import eventEmitter from "../utils/utils";
 
 
 const useAuth = () => {
   const [user, setUser] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     const loggedUser = window.localStorage.getItem("loggedUser");
     if (loggedUser) {
-      showMessage("User already logged in", setErrorMessage);
+      eventEmitter.emit("showMessage", "Logged in successfully");
       const user = JSON.parse(loggedUser);
       setUser(user);
       blogService.setToken(user.token);
@@ -24,22 +23,22 @@ const useAuth = () => {
       setUser(user);
       blogService.setToken(user.token);
       window.localStorage.setItem("loggedUser", JSON.stringify(user));
-      showMessage("Logged in successfully", setErrorMessage);
+      eventEmitter.emit("showMessage", "Logged in successfully");
     } catch (err) {
       console.error("Login error:", err.message);
-      showMessage("Invalid credentials", setErrorMessage);
+      eventEmitter.emit("showMessage", "Invalid username or password");
     }
   };
 
   const logout = () => {
     window.localStorage.removeItem("loggedUser");
     setUser(null);
-    showMessage("Logged out successfully", setErrorMessage);
+    blogService.setToken(null);
+    eventEmitter.emit("showMessage", "Logged out successfully");
   };
 
   return {
     user,
-    errorMessage,
     login,
     logout,
   };

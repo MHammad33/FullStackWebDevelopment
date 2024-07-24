@@ -1,19 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Blog from "./components/blog/Blog";
 import Login from "./components/login/Login";
 import Notification from "./components/Notification";
 import useAuth from "./hooks/useAuth";
 import useBlog from "./hooks/useBlog";
 import BlogForm from "./components/blogForm/BlogForm";
+import eventEmitter from "./utils/utils";
 
 const App = () => {
-	const { user, errorMessage, login, logout } = useAuth();
+	const { user, login, logout } = useAuth();
 	const { blogs, addBlog } = useBlog();
 	const [showForm, setShowForm] = useState(false);
+	const [message, setMessage] = useState(null);
+
+	console.log("App :: ", message);
+
+	useEffect(() => {
+		const handleMessage = (msg, duration = 3000) => {
+			setMessage(msg);
+			setTimeout(() => {
+				setMessage(null);
+			}, duration);
+		};
+
+		eventEmitter.on("showMessage", handleMessage);
+
+		return () => {
+			eventEmitter.off("showMessage", handleMessage);
+		};
+	});
 
 	return (
 		<div>
-			{errorMessage && <Notification message={errorMessage} />}
+			{message && <Notification message={message} />}
 			<h2>Blogs</h2>
 			<div>
 				{user ? (

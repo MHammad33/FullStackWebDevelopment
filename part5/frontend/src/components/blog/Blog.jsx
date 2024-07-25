@@ -1,8 +1,11 @@
 import { useState } from "react";
 import "./Blog.css";
 
-const Blog = ({ blog, onUpdateBlog }) => {
+const Blog = (props) => {
+	const [blog, setBlog] = useState(props.blog);
 	const [fullBlogVisible, setFullBlogVisible] = useState(false);
+
+	const { onUpdateBlog } = props;
 
 	const toggleVisibility = () => {
 		setFullBlogVisible(!fullBlogVisible);
@@ -10,6 +13,7 @@ const Blog = ({ blog, onUpdateBlog }) => {
 
 	const handleLikes = () => {
 		onUpdateBlog(blog.id, { likes: blog.likes + 1 });
+		setBlog({ ...blog, likes: blog.likes + 1 });
 	};
 
 	return (

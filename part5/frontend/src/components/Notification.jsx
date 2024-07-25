@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const Notification = ({ message, type = "" }) => {
 	const getBackgroundColor = () => {
 		switch (type) {
@@ -36,4 +38,10 @@ const Notification = ({ message, type = "" }) => {
 		</>
 	);
 };
+
+Notification.propTypes = {
+	message: PropTypes.string,
+	type: PropTypes.string,
+};
+
 export default Notification;

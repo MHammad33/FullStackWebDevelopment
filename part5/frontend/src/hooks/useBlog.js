@@ -30,6 +30,19 @@ const useBlog = () => {
     }
   }
 
+  const update = async (id, updatedBlog) => {
+    try {
+      const updated = await blogService.update(id, updatedBlog);
+      setBlogs((prevBlogs) =>
+        prevBlogs.map((blog) => (blog.id === id ? updated : blog))
+      );
+      eventEmitter.emit("showMessage", "Blog updated successfully");
+    } catch (error) {
+      console.error('Update blog error:', error.message);
+      eventEmitter.emit("showMessage", "Error updating blog");
+    }
+  }
+
   useEffect(() => {
     fetchBlogs();
   }, []);
@@ -39,6 +52,7 @@ const useBlog = () => {
     addBlog,
     fetchBlogs,
     noteFormRef,
+    update
   };
 
 };

@@ -1,11 +1,15 @@
 import { useState } from "react";
 import "./Blog.css";
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, onUpdateBlog }) => {
 	const [fullBlogVisible, setFullBlogVisible] = useState(false);
 
 	const toggleVisibility = () => {
 		setFullBlogVisible(!fullBlogVisible);
+	};
+
+	const handleLikes = () => {
+		onUpdateBlog(blog.id, { likes: blog.likes + 1 });
 	};
 
 	return (
@@ -30,7 +34,10 @@ const Blog = ({ blog }) => {
 						<a href={blog.url}>Click here to see full blog</a>
 					</p>
 					<p>
-						{blog.likes} likes <button className="like-button">Like</button>
+						{blog.likes} likes{" "}
+						<button onClick={handleLikes} className="like-button">
+							Like
+						</button>
 					</p>
 					<p>
 						Added by <b>{blog?.user.username}</b>

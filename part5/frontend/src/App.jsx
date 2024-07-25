@@ -10,7 +10,7 @@ import Togglable from "./components/Togglable";
 
 const App = () => {
 	const { user, login, logout } = useAuth();
-	const { blogs, addBlog, noteFormRef } = useBlog();
+	const { blogs, addBlog, noteFormRef, update } = useBlog();
 	const [message, setMessage] = useState(null);
 
 	console.log("App :: ", message);
@@ -50,7 +50,7 @@ const App = () => {
 						<hr />
 						<div className="blog-container">
 							{blogs.map((blog) => (
-								<Blog key={blog.id} blog={blog} />
+								<Blog key={blog.id} blog={blog} onUpdateBlog={update} />
 							))}
 						</div>
 					</div>

@@ -82,8 +82,17 @@ const deleteBlog = async (req, res) => {
 
 // Update a blog
 const updateBlog = async (req, res) => {
-  const { id } = req.params;
-  const blog = req.body;
+  const { user, params, body } = req;
+  const { id } = params;
+  const blog = body;
+
+  // Find the blog by ID
+  const blogToUpdate = await Blog.findById(id);
+
+  // Check if the user owns the blog
+  if (blogToUpdate.user.toString() !== user._id.toString()) {
+    return res.status(403).json({ error: "permission denied" });
+  }
 
   const updatedBlog = await Blog.findByIdAndUpdate(id, blog, { new: true });
 

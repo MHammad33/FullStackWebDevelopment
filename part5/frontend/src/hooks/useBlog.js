@@ -10,7 +10,8 @@ const useBlog = () => {
   const fetchBlogs = async () => {
     try {
       const fetchedBlogs = await blogService.getAll();
-      setBlogs(fetchedBlogs);
+      const sortedBlogs = fetchedBlogs.sort((a, b) => b.likes - a.likes);
+      setBlogs(sortedBlogs);
       eventEmitter.emit("showMessage", "Fetched blogs successful");
     } catch (error) {
       console.error("Error fetching blogs:", error.message);

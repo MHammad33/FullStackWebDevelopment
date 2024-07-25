@@ -32,7 +32,7 @@ const Blog = ({ blog }) => {
 					<p>
 						{blog.likes} likes <button className="like-button">Like</button>
 					</p>
-					<p>Added by {blog.user.username}</p>
+					<p>Added by {blog?.user.username}</p>
 				</div>
 			)}
 		</div>

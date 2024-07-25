@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Blog from "./components/blog/Blog";
 import Login from "./components/login/Login";
 import Notification from "./components/Notification";
@@ -6,11 +6,11 @@ import useAuth from "./hooks/useAuth";
 import useBlog from "./hooks/useBlog";
 import BlogForm from "./components/blogForm/BlogForm";
 import eventEmitter from "./utils/utils";
+import Togglable from "./components/Togglable";
 
 const App = () => {
 	const { user, login, logout } = useAuth();
-	const { blogs, addBlog } = useBlog();
-	const [showForm, setShowForm] = useState(false);
+	const { blogs, addBlog, noteFormRef } = useBlog();
 	const [message, setMessage] = useState(null);
 
 	console.log("App :: ", message);
@@ -42,15 +42,11 @@ const App = () => {
 								{user?.name} Logged in <button onClick={logout}>Logout</button>
 							</p>
 						</div>
-						<button onClick={() => setShowForm(!showForm)}>
-							{showForm ? "Cancel" : "Add New Blog"}
-						</button>
-						{showForm && (
-							<BlogForm
-								onAddBlog={addBlog}
-								closeForm={() => setShowForm(false)}
-							/>
-						)}
+						<h3>Create new blog</h3>
+						<Togglable buttonLabel="New Blog" ref={noteFormRef}>
+							<BlogForm onAddBlog={addBlog} />
+						</Togglable>
+
 						<hr />
 						<div className="blog-container">
 							{blogs.map((blog) => (

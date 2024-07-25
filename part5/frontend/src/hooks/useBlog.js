@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import blogService from "../services/blogs";
 import eventEmitter from "../utils/utils";
 
 const useBlog = () => {
   const [blogs, setBlogs] = useState([]);
+
+  const noteFormRef = useRef();
 
   const fetchBlogs = async () => {
     try {
@@ -21,6 +23,7 @@ const useBlog = () => {
       const savedBlog = await blogService.create(newBlog);
       setBlogs((prevBlogs) => prevBlogs.concat(savedBlog));
       eventEmitter.emit("showMessage", "Blog added successfully");
+      noteFormRef.current.toggleVisibility();
     } catch (error) {
       console.error('Add blog error:', error.message);
       eventEmitter.emit("showMessage", "Error adding blog");
@@ -35,6 +38,7 @@ const useBlog = () => {
     blogs,
     addBlog,
     fetchBlogs,
+    noteFormRef,
   };
 
 };

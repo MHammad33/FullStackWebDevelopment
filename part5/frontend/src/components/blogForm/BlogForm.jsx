@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./BlogForm.css";
 
-const BlogForm = ({ onAddBlog, closeForm }) => {
+const BlogForm = ({ onAddBlog }) => {
 	const [title, setTitle] = useState("");
 	const [author, setAuthor] = useState("");
 	const [url, setUrl] = useState("");
@@ -9,7 +9,6 @@ const BlogForm = ({ onAddBlog, closeForm }) => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		onAddBlog({ title, author, url });
-		closeForm();
 
 		// Clear form
 		setTitle("");

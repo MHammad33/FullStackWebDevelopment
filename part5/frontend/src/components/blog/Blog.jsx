@@ -5,7 +5,7 @@ const Blog = (props) => {
 	const [blog, setBlog] = useState(props.blog);
 	const [fullBlogVisible, setFullBlogVisible] = useState(false);
 
-	const { onUpdateBlog } = props;
+	const { onUpdateBlog, onDeleteBlog } = props;
 
 	const toggleVisibility = () => {
 		setFullBlogVisible(!fullBlogVisible);
@@ -14,6 +14,15 @@ const Blog = (props) => {
 	const handleLikes = () => {
 		onUpdateBlog(blog.id, { likes: blog.likes + 1 });
 		setBlog({ ...blog, likes: blog.likes + 1 });
+	};
+
+	const handleRemoveBlog = () => {
+		const confirm = window.confirm(
+			`Remove blog ${blog.title} by ${blog.author}?`
+		);
+		if (confirm) {
+			onDeleteBlog(blog.id);
+		}
 	};
 
 	return (
@@ -46,6 +55,9 @@ const Blog = (props) => {
 					<p>
 						Added by <b>{blog?.user.username}</b>
 					</p>
+					<button onClick={handleRemoveBlog} className="remove-button">
+						Remove
+					</button>
 				</div>
 			)}
 		</div>

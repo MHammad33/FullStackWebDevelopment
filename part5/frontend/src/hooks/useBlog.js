@@ -44,6 +44,17 @@ const useBlog = () => {
     }
   }
 
+  const remove = async (id) => {
+    try {
+      await blogService.remove(id);
+      setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== id));
+      eventEmitter.emit("showMessage", "Blog removed successfully");
+    } catch (error) {
+      console.error('Remove blog error:', error.message);
+      eventEmitter.emit("showMessage", "Error removing blog");
+    }
+  }
+
   useEffect(() => {
     fetchBlogs();
   }, []);
@@ -53,7 +64,8 @@ const useBlog = () => {
     addBlog,
     fetchBlogs,
     noteFormRef,
-    update
+    update,
+    remove
   };
 
 };

@@ -27,7 +27,7 @@ const Blog = (props) => {
 	};
 
 	return (
-		<div className="blog-card blog">
+		<div className="blog-card">
 			<div className="blog-header">
 				<div className="blog-title-container">
 					<h3 className="blog-title">{blog.title}</h3>

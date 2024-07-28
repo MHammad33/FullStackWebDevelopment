@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
 import Blog from "./Blog";
 
@@ -72,5 +72,29 @@ describe("<Blog />", () => {
 		expect(
 			screen.queryByText("Click here to see full blog")
 		).toBeInTheDocument();
+	});
+
+	test("handle likes is called twice if like button is clicked twice", async () => {
+		// Handle likes mock function
+		const handleLikes = vi.fn();
+
+		render(
+			<Blog
+				blog={testBlog}
+				onUpdateBlog={handleLikes}
+				onDeleteBlog={() => {}}
+			/>
+		);
+
+		const user = userEvent.setup();
+
+		const viewButton = screen.getByRole("button", { name: /view/i });
+		await user.click(viewButton);
+
+		const likeButton = screen.getByRole("button", { name: /like/i });
+		await user.click(likeButton);
+		await user.click(likeButton);
+
+		expect(handleLikes.mock.calls).toHaveLength(2);
 	});
 });

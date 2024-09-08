@@ -6,7 +6,7 @@ const Blog = (props) => {
 	const [blog, setBlog] = useState(props.blog);
 	const [fullBlogVisible, setFullBlogVisible] = useState(false);
 
-	const { onUpdateBlog, onDeleteBlog } = props;
+	const { onUpdateBlog, onDeleteBlog, currentUser } = props;
 
 	const toggleVisibility = () => {
 		setFullBlogVisible(!fullBlogVisible);
@@ -56,9 +56,11 @@ const Blog = (props) => {
 					<p>
 						Added by <b>{blog?.user.username}</b>
 					</p>
-					<button onClick={handleRemoveBlog} className="remove-button">
-						Remove
-					</button>
+					{currentUser?.username === blog?.user.username && (
+						<button onClick={handleRemoveBlog} className="remove-button">
+							Remove
+						</button>
+					)}
 				</div>
 			)}
 		</div>

@@ -55,6 +55,7 @@ const App = () => {
 									blog={blog}
 									onUpdateBlog={update}
 									onDeleteBlog={remove}
+									currentUser={user}
 								/>
 							))}
 						</div>

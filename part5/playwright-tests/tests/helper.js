@@ -15,11 +15,10 @@ const createBlog = async (page, blog) => {
   await page.getByText(blog.title).waitFor();
 }
 
-const createUniqueBlog = () => ({
-  title: `Blog Title ${Date.now()}`,
-  author: `Author ${Date.now()}`,
-  url: `http://example.com/${Date.now()}`,
-  likes: Math.floor(Math.random() * 100)
+const createUniqueBlog = (index) => ({
+  title: `Blog Title ${index}`,
+  author: `Author ${index}`,
+  url: `http://example.com/${index}`
 });
 
 module.exports = {

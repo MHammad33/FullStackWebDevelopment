@@ -1,6 +1,6 @@
 // @ts-check
 import { expect, test, screen } from "@playwright/test";
-import { createBlog, loginWith } from "./helper";
+import { createBlog, createUniqueBlog, loginWith } from "./helper";
 
 test.describe("Blog app", () => {
   test.beforeEach(async ({ page, request }) => {
@@ -83,6 +83,32 @@ test.describe("Blog app", () => {
           await locator.getByRole("button", { name: "view" }).click();
           await expect(locator.getByRole("button", { name: "Remove" })).not.toBeVisible();
         })
+      })
+    })
+
+    test.describe("When several blogs exists", async () => {
+      test.beforeEach(async ({ page }) => {
+        for (let i = 0; i < 3; i++) {
+          await createBlog(page, createUniqueBlog(i + 1));
+        }
+      })
+
+      test("blogs are arranged in the order with the most likes first", async ({ page }) => {
+        const blogs = await page.locator(".blog-card").all();
+        for (const blog of blogs) {
+          await blog.locator("button:has-text('View')").click();
+          await blog.locator("button:has-text('Like')").click();
+          await blog.locator("button:has-text('Like')").click();
+        }
+
+        await blogs[1].locator("button:has-text('Like')").click();
+        await blogs[1].locator("button:has-text('Like')").click();
+        await blogs[2].locator("button:has-text('Like')").click();
+
+        const blogTitles = await page.locator(".blog-card").allTextContents();
+        const sortedTitles = [...blogTitles].sort((a, b) => b.likes - a.likes);
+
+        expect(blogTitles).toEqual(sortedTitles);
       })
     })
   })

@@ -1,5 +1,6 @@
 // @ts-check
 import { expect, test } from "@playwright/test";
+import { createBlog, loginWith } from "./helper";
 
 test.describe("Blog app", () => {
   test.beforeEach(async ({ page, request }) => {
@@ -23,17 +24,12 @@ test.describe("Blog app", () => {
 
   test.describe("Login", () => {
     test('succeeds with correct credentials', async ({ page }) => {
-      await page.getByTestId("test-username").fill("hammad");
-      await page.getByTestId("test-password").fill("1122");
-      await page.getByRole("button", { name: /login/i }).click();
-      await page.waitForLoadState('networkidle');
+      await loginWith(page, "hammad", "1122")
       await expect(page.getByText("Hammad Logged in")).toBeVisible();
     })
 
     test('fails with wrong credentials', async ({ page }) => {
-      await page.getByTestId("test-username").fill("test");
-      await page.getByTestId("test-password").fill("wrong password");
-      await page.getByRole("button", { name: /login/i }).click();
+      await loginWith(page, "wrong username", "wrong password");
       await expect(page.getByText("Invalid username or password")).toBeVisible();
     })
 
@@ -41,30 +37,19 @@ test.describe("Blog app", () => {
 
   test.describe("When logged in", () => {
     test.beforeEach(async ({ page }) => {
-      await page.getByTestId("test-username").fill("hammad");
-      await page.getByTestId("test-password").fill("1122");
-      await page.getByRole("button", { name: /login/i }).click();
-      await page.waitForLoadState('networkidle');
+      await loginWith(page, "hammad", "1122");
     })
 
     test("a new blog can be created", async ({ page }) => {
-      await page.getByRole("button", { name: "New Blog" }).click();
-      await page.getByTestId("title").fill("test title");
-      await page.getByTestId("author").fill("test author");
-      await page.getByTestId("url").fill("test http://www.url.com");
-      await page.getByRole("button", { name: "Add Blog" }).click();
-
-      await expect(page.getByText("test title")).toBeVisible();
-
+      const newBlog = { title: "Test Title 1", author: "Test Author 1", url: "testurl1.com" }
+      await createBlog(page, newBlog);
+      await expect(page.getByText("Test Title 1")).toBeVisible();
     })
 
     test.describe("When a blog exists", () => {
       test.beforeEach(async ({ page }) => {
-        await page.getByRole("button", { name: "New Blog" }).click();
-        await page.getByTestId("title").fill("test title");
-        await page.getByTestId("author").fill("test author");
-        await page.getByTestId("url").fill("test http://www.url.com");
-        await page.getByRole("button", { name: "Add Blog" }).click();
+        const newBlog = { title: "Test Title 1", author: "Test Author 1", url: "testurl1.com" }
+        await createBlog(page, newBlog);
       })
 
       test("a blog can be liked", async ({ page }) => {
@@ -83,4 +68,6 @@ test.describe("Blog app", () => {
       })
     })
   })
+
+
 })

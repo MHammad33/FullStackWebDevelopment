@@ -1,5 +1,5 @@
 // @ts-check
-import { expect, test } from "@playwright/test";
+import { expect, test, screen } from "@playwright/test";
 import { createBlog, loginWith } from "./helper";
 
 test.describe("Blog app", () => {
@@ -65,6 +65,24 @@ test.describe("Blog app", () => {
         });
         await page.getByRole("button", { name: "Remove" }).click();
         await expect(page.getByText("test title")).not.toBeVisible();
+      })
+
+      test.describe("Remove Button Visibility", () => {
+        test.beforeEach(async ({ page, request }) => {
+
+          await request.post("http://localhost:3000/api/users", {
+            data: { username: "user", name: "User", password: "1122" }
+          });
+
+          await page.getByRole("button", { name: "logout" }).click();
+          await loginWith(page, "user", "1122");
+        })
+
+        test("non-author cannot see remove button", async ({ page }) => {
+          const locator = page.locator('div').filter({ hasText: "Test Title" });
+          await locator.getByRole("button", { name: "view" }).click();
+          await expect(locator.getByRole("button", { name: "Remove" })).not.toBeVisible();
+        })
       })
     })
   })

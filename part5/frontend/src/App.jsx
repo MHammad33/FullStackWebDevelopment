@@ -10,10 +10,15 @@ import Togglable from "./components/Togglable";
 
 const App = () => {
 	const { user, login, logout } = useAuth();
-	const { blogs, addBlog, noteFormRef, update, remove } = useBlog();
 	const [message, setMessage] = useState(null);
 
 	console.log("App :: ", message);
+
+	if (!user) {
+		return <Login onLogin={login} />;
+	}
+
+	const { blogs, addBlog, noteFormRef, update, remove } = useBlog();
 
 	useEffect(() => {
 		const handleMessage = (msg, duration = 3000) => {

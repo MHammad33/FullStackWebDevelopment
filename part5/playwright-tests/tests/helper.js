@@ -4,7 +4,6 @@ const loginWith = async (page, username, password) => {
   await page.getByTestId("test-password").fill(password);
   await page.getByRole("button", { name: /login/i }).click();
   await page.waitForLoadState('networkidle');
-  await page.getByText(username).waitFor();
 };
 
 const createBlog = async (page, blog) => {

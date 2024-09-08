@@ -39,7 +39,15 @@ const createBlog = async (req, res) => {
   user.blogs = user.blogs.concat(savedBlog._id);
   await user.save();
 
-  res.status(201).json(savedBlog);
+  const dataForFrontend = {
+    ...savedBlog.toJSON(),
+    user: {
+      username: user?.username,
+      name: user?.name
+    }
+  }
+
+  res.status(201).json(dataForFrontend);
 };
 
 // Get a single blog

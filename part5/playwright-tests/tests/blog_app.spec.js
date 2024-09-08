@@ -20,4 +20,13 @@ test.describe("Blog app", () => {
     await expect(page.locator('form')).toContainText('Password');
     await expect(page.getByRole('button')).toContainText('Login');
   })
+
+  test.describe("Login", () => {
+    test('succeeds with correct credentials', async ({ page }) => {
+      await page.getByTestId("test-username").fill("hammad");
+      await page.getByTestId("test-password").fill("1122");
+      await page.getByRole("button", { name: /login/i }).click();
+      await expect(page.getByText("Hammad has logged in")).toBeVisible();
+    })
+  })
 })

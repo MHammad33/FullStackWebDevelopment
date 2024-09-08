@@ -35,6 +35,7 @@ const Login = ({ onLogin }) => {
 						id="username"
 						value={username}
 						onChange={(e) => setUsername(e.target.value)}
+						data-testid="test-username"
 					/>
 				</div>
 				<div className="form-group">
@@ -44,6 +45,7 @@ const Login = ({ onLogin }) => {
 						id="password"
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
+						data-testid="test-password"
 					/>
 				</div>
 				<button type="submit">Login</button>

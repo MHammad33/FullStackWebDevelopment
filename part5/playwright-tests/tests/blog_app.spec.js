@@ -36,5 +36,26 @@ test.describe("Blog app", () => {
       await page.getByRole("button", { name: /login/i }).click();
       await expect(page.getByText("Invalid username or password")).toBeVisible();
     })
+
+  })
+
+  test.describe("When logged in", () => {
+    test.beforeEach(async ({ page }) => {
+      await page.getByTestId("test-username").fill("hammad");
+      await page.getByTestId("test-password").fill("1122");
+      await page.getByRole("button", { name: /login/i }).click();
+      await page.waitForLoadState('networkidle');
+    })
+
+    test("a new blog can be created", async ({ page }) => {
+      await page.getByRole("button", { name: "New Blog" }).click();
+      await page.getByTestId("title").fill("test title");
+      await page.getByTestId("author").fill("test author");
+      await page.getByTestId("url").fill("test http://www.url.com");
+      await page.getByRole("button", { name: "Add Blog" }).click();
+
+      await expect(page.getByText("test title")).toBeVisible();
+
+    })
   })
 })

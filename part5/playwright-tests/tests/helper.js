@@ -15,6 +15,13 @@ const createBlog = async (page, blog) => {
   await page.getByText(blog.title).waitFor();
 }
 
+const createUniqueBlog = () => ({
+  title: `Blog Title ${Date.now()}`,
+  author: `Author ${Date.now()}`,
+  url: `http://example.com/${Date.now()}`,
+  likes: Math.floor(Math.random() * 100)
+});
+
 module.exports = {
-  loginWith, createBlog
+  loginWith, createBlog, createUniqueBlog
 }

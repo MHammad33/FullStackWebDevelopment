@@ -26,7 +26,15 @@ test.describe("Blog app", () => {
       await page.getByTestId("test-username").fill("hammad");
       await page.getByTestId("test-password").fill("1122");
       await page.getByRole("button", { name: /login/i }).click();
-      await expect(page.getByText("Hammad has logged in")).toBeVisible();
+      await page.waitForLoadState('networkidle');
+      await expect(page.getByText("Hammad Logged in")).toBeVisible();
+    })
+
+    test('fails with wrong credentials', async ({ page }) => {
+      await page.getByTestId("test-username").fill("test");
+      await page.getByTestId("test-password").fill("wrong password");
+      await page.getByRole("button", { name: /login/i }).click();
+      await expect(page.getByText("Invalid username or password")).toBeVisible();
     })
   })
 })

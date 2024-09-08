@@ -72,6 +72,15 @@ test.describe("Blog app", () => {
         await page.getByRole("button", { name: "Like" }).click();
         await expect(page.getByText("1 likes")).toBeVisible();
       })
+
+      test("a blog can be deleted", async ({ page }) => {
+        await page.getByRole("button", { name: "View" }).click();
+        page.once("dialog", async (dialog) => {
+          await dialog.accept();
+        });
+        await page.getByRole("button", { name: "Remove" }).click();
+        await expect(page.getByText("test title")).not.toBeVisible();
+      })
     })
   })
 })

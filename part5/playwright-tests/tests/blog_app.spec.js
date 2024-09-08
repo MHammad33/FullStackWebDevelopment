@@ -94,16 +94,19 @@ test.describe("Blog app", () => {
       })
 
       test("blogs are arranged in the order with the most likes first", async ({ page }) => {
-        const blogs = await page.locator(".blog-card").all();
-        for (const blog of blogs) {
-          await blog.locator("button:has-text('View')").click();
-          await blog.locator("button:has-text('Like')").click();
-          await blog.locator("button:has-text('Like')").click();
-        }
+        test.slow();
 
-        await blogs[1].locator("button:has-text('Like')").click();
-        await blogs[1].locator("button:has-text('Like')").click();
-        await blogs[2].locator("button:has-text('Like')").click();
+        const blogs = await page.locator(".blog-card").all();
+        const titles = ["Blog Title 1", "Blog Title 2", "Blog Title 3"];
+        const likes = [1, 4, 3];
+
+        for (let i = 0; i < titles.length; i++) {
+          const blog = await page.locator(`.blog-card:has-text("${titles[i]}")`);
+          await blog.locator("button:has-text('View')").click();
+          for (let j = 0; j < likes[i]; j++) {
+            await blog.locator("button:has-text('Like')").click();
+          }
+        }
 
         const blogTitles = await page.locator(".blog-card").allTextContents();
         const sortedTitles = [...blogTitles].sort((a, b) => b.likes - a.likes);

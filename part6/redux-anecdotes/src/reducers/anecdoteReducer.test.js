@@ -19,9 +19,9 @@ describe('anecdoteReducer', () => {
   test("a new antecdote can be added", () => {
     const state = initialStateOfAnecdote;
     const newAntecdote = asObject("A new Antecdote");
-    const action = { type: "ADD_NOTE", payload: { ...newAntecdote } };
+    const action = { type: "ADD_ANTECDOTE", payload: { ...newAntecdote } };
     deepFreeze(state);
     const newState = anecdoteReducer(initialStateOfAnecdote, action);
-    expect(newState).toEqual([...initialState, newAntecdote])
+    expect(newState).toEqual([...state, newAntecdote])
   });
 })

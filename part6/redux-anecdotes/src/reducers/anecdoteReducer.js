@@ -28,6 +28,8 @@ const reducer = (state = initialState, action) => {
       return state.map(
         anecdote => anecdote.id === action.payload.id ? { ...anecdote, votes: anecdote.votes + 1 } : anecdote
       );
+    case "ADD_ANTECDOTE":
+      return [...state, action.payload];
     default:
       return state;
   }
@@ -41,5 +43,6 @@ export const addVote = (id) => {
     }
   }
 }
+
 
 export default reducer

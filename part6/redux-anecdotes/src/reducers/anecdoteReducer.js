@@ -20,16 +20,14 @@ export const asObject = (anecdote) => {
 export const initialState = anecdotesAtStart.map(asObject)
 
 const reducer = (state = initialState, action) => {
-  console.log('state now: ', state)
-  console.log('action', action)
-
   switch (action.type) {
     case "ADD_VOTE":
       return state.map(
         anecdote => anecdote.id === action.payload.id ? { ...anecdote, votes: anecdote.votes + 1 } : anecdote
       );
-    case "ADD_ANTECDOTE":
-      return [...state, action.payload];
+    case "ADD_ANECDOTE":
+      const anecdoteToAdd = asObject(action.payload.anecdote);
+      return [...state, anecdoteToAdd];
     default:
       return state;
   }

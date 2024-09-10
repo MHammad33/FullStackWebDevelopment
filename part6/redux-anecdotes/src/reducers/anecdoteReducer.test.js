@@ -1,4 +1,4 @@
-import anecdoteReducer, { asObject, initialState } from "./anecdoteReducer";
+import anecdoteReducer, { initialState } from "./anecdoteReducer";
 import deepFreeze from "deep-freeze";
 
 const initialStateOfAnecdote = initialState;
@@ -18,10 +18,13 @@ describe('anecdoteReducer', () => {
 
   test("a new antecdote can be added", () => {
     const state = initialStateOfAnecdote;
-    const newAntecdote = asObject("A new Antecdote");
-    const action = { type: "ADD_ANTECDOTE", payload: { ...newAntecdote } };
+    const action = { type: "ADD_ANECDOTE", payload: { anecdote: "A New Anecdote" } };
     deepFreeze(state);
+
     const newState = anecdoteReducer(initialStateOfAnecdote, action);
-    expect(newState).toEqual([...state, newAntecdote])
+    const addedAnecdote = newState.find(anecdote => anecdote.content === "A New Anecdote");
+
+    expect(newState).toEqual([...state, addedAnecdote]);
+    expect(newState.length).toBe(state.length + 1);
   });
 })

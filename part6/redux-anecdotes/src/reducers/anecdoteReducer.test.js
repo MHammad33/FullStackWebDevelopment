@@ -11,9 +11,8 @@ describe('anecdoteReducer', () => {
 
     deepFreeze(state);
     const newState = anecdoteReducer(initialStateOfAnecdote, action);
-    expect(newState).toContainEqual(
-      ...state[0],
-      votes: state[0].votes + 1,
+    expect(newState).toEqual(
+      state.map(antecdote => antecdote.id === targetId ? { ...antecdote, votes: antecdote.votes + 1 } : antecdote)
     )
   });
 })

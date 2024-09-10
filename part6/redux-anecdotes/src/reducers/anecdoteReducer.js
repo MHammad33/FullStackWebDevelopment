@@ -42,5 +42,14 @@ export const addVote = (id) => {
   }
 }
 
+export const createAnecdote = (anecdote) => {
+  return {
+    type: "ADD_ANECDOTE",
+    payload: {
+      anecdote
+    }
+  }
+}
+
 
 export default reducer

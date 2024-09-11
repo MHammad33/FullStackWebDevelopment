@@ -2,8 +2,8 @@ import ReactDOM from "react-dom/client";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import App from "./App";
-import anecdoteSlice from "./reducers/anecdoteSlice";
-import filterSlice from "./reducers/filterSlice";
+import anecdoteSlice from "./slices/anecdoteSlice";
+import filterSlice from "./slices/filterSlice";
 
 const store = configureStore({
 	reducer: {

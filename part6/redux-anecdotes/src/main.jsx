@@ -3,12 +3,12 @@ import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import App from "./App";
 import anecdoteSlice from "./reducers/anecdoteSlice";
-import filterReducer from "./reducers/filterReducer";
+import filterSlice from "./reducers/filterSlice";
 
 const store = configureStore({
 	reducer: {
 		anecdotes: anecdoteSlice,
-		filter: filterReducer,
+		filter: filterSlice,
 	},
 });
 

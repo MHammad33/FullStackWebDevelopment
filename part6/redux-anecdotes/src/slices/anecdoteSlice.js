@@ -26,16 +26,17 @@ const anecdoteSlice = createSlice({
   initialState,
   reducers: {
     addVote(state, action) {
-      const id = action.payload.id;
-      const anecdoteToChange = state.map(anecdote => anecdote.id === id);
-      anecdoteToChange.votes += 1;
+      const id = action.payload;
+      const anecdoteIndex = state.findIndex(anecdote => anecdote.id === id);
+      if (anecdoteIndex != -1) state[anecdoteIndex].votes += 1;
     },
-    addAnecdote(state, action) {
-      const anecdoteToAdd = asObject(action.payload.anecdote);
+    createAnecdote(state, action) {
+      const anecdoteContent = action.payload;
+      const anecdoteToAdd = asObject(anecdoteContent);
       state.push(anecdoteToAdd);
     }
   }
 });
 
-export const { addVote, addAnecdote } = anecdoteSlice.actions;
+export const { addVote, createAnecdote } = anecdoteSlice.actions;
 export default anecdoteSlice.reducer;

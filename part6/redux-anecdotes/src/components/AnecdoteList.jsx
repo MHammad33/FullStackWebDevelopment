@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { addVote } from "../slices/anecdoteReducer";
+import { addVote } from "../slices/anecdoteSlice";
 import Anecdote from "./Anecdote";
 
 const AnecdoteList = () => {

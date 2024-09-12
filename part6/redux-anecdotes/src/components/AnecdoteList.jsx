@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { addVote } from "../slices/anecdoteSlice";
+import { addVote, addVoteInDb } from "../slices/anecdoteSlice";
 import { showNotification } from "../slices/notificationSlice";
 import Anecdote from "./Anecdote";
 
@@ -22,7 +22,7 @@ const AnecdoteList = () => {
 
 	const vote = (anecdote) => {
 		console.log("vote", anecdote.id);
-		dispatch(addVote(anecdote.id));
+		dispatch(addVoteInDb({ ...anecdote, votes: anecdote.votes + 1 }));
 		dispatch(showNotification(`You voted "${anecdote.content}"`));
 	};
 

@@ -36,4 +36,12 @@ export const createAnecdote = (anecdote) => {
     dispatch(appendAnecdote(newAnecdote));
   }
 }
+
+export const addVoteInDb = (anecdote) => {
+  console.log('anecdote', anecdote)
+  return async (dispatch) => {
+    const updatedAnecdote = await anecdoteService.update(anecdote);
+    dispatch(addVote(updatedAnecdote.id));
+  }
+}
 export default anecdoteSlice.reducer;

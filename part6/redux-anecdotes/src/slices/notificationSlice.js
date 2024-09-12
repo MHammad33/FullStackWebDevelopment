@@ -12,7 +12,6 @@ const notificationSlice = createSlice({
 });
 
 export const { changeNotification, clearNotification } = notificationSlice.actions;
-export default notificationSlice.reducer;
 
 export const showNotification = (message, duration = 5000) => (dispatch) => {
   dispatch(changeNotification(message));
@@ -20,3 +19,5 @@ export const showNotification = (message, duration = 5000) => (dispatch) => {
     dispatch(clearNotification());
   }, duration);
 };
+
+export default notificationSlice.reducer;

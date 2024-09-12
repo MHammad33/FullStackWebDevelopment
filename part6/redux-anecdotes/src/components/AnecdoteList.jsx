@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { addVote, addVoteInDb } from "../slices/anecdoteSlice";
+import { addVoteInDb } from "../slices/anecdoteSlice";
 import { showNotification } from "../slices/notificationSlice";
 import Anecdote from "./Anecdote";
 

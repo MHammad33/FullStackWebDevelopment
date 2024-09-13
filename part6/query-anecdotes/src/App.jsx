@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import AnecdoteForm from "./components/AnecdoteForm";
 import Notification from "./components/Notification";
-import { getAllAnecdotes } from "./requests";
+import { getAllAnecdotes, updateAnecdote } from "./requests";
 
 const App = () => {
 	const result = useQuery({
@@ -10,17 +10,11 @@ const App = () => {
 		retry: 1,
 	});
 
-	// const handleVote = (anecdote) => {
-	// 	console.log("vote");
-	// };
-
-	// const anecdotes = [
-	// 	{
-	// 		content: "If it hurts, do it more often",
-	// 		id: "47145",
-	// 		votes: 0,
-	// 	},
-	// ];
+	const handleVote = async (anecdote) => {
+		console.log("vote");
+		const updatedAnecdote = { ...anecdote, votes: anecdote.votes + 1 };
+		await updateAnecdote(updatedAnecdote);
+	};
 
 	if (result.isLoading) {
 		return <h3>Loading...</h3>;

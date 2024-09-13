@@ -1,19 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+import { createNewAnecdote } from "../requests";
 
 const AnecdoteForm = () => {
 	const queryClient = useQueryClient();
 
 	const newAnecdoteMutation = useMutation({
-		mutationFn: (newAnecdote) =>
-			axios
-				.post("http://localhost:3001/anecdotes", newAnecdote)
-				.then((res) => res.data),
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ["anecdotes"] });
-		},
-		onError: (error) => {
-			console.error("Error creating anecdote:", error.message);
+		mutationFn: createNewAnecdote,
+		onSuccess: (newAnecdote) => {
+			const anecdotes = queryClient.getQueryData(["anecdotes"]);
+			queryClient.setQueryData(["anecdotes"], anecdotes.concat(newAnecdote));
 		},
 	});
 
@@ -22,14 +17,7 @@ const AnecdoteForm = () => {
 		const content = event.target.anecdote.value;
 		event.target.anecdote.value = "";
 		console.log("new anecdote");
-		const newAnecdote = {
-			content,
-			id: Date.now(),
-			votes: 0,
-		};
-
-		console.log("newAnecdote", newAnecdote);
-		newAnecdoteMutation.mutate(newAnecdote);
+		newAnecdoteMutation.mutate(content);
 	};
 
 	return (

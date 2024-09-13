@@ -1,13 +1,12 @@
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import AnecdoteForm from "./components/AnecdoteForm";
 import Notification from "./components/Notification";
+import { getAllAnecdotes } from "./requests";
 
 const App = () => {
 	const result = useQuery({
 		queryKey: ["anecdotes"],
-		queryFn: () =>
-			axios.get("http://localhost:3001/anecdotes").then((res) => res.data),
+		queryFn: getAllAnecdotes,
 		retry: 1,
 	});
 
@@ -28,6 +27,10 @@ const App = () => {
 	}
 
 	const anecdotes = result.data;
+
+	if (!Array.isArray(anecdotes)) {
+		return <div>No anecdotes available.</div>;
+	}
 
 	return (
 		<div>

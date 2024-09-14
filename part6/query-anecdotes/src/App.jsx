@@ -1,10 +1,26 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useReducer } from "react";
 import AnecdoteForm from "./components/AnecdoteForm";
 import Notification from "./components/Notification";
 import { getAllAnecdotes, updateAnecdote } from "./requests";
 
+const notificationReducer = (state, action) => {
+	switch (action.type) {
+		case "ADD_VOTE":
+			return "Vote Added";
+		case "ADD_ANECDOTE":
+			return "Anecdote Added";
+		default:
+			return "";
+	}
+};
+
 const App = () => {
 	const queryClient = useQueryClient();
+	const [notification, notificationDispatch] = useReducer(
+		notificationReducer,
+		""
+	);
 
 	const result = useQuery({
 		queryKey: ["anecdotes"],
@@ -28,6 +44,7 @@ const App = () => {
 		console.log("vote");
 		const updatedAnecdote = { ...anecdote, votes: anecdote.votes + 1 };
 		updateAnecdoteMutation.mutate(updatedAnecdote);
+		notificationDispatch({ type: "ADD_VOTE" });
 	};
 
 	if (result.isLoading) {

@@ -7,7 +7,7 @@ import { getAllAnecdotes, updateAnecdote } from "./requests";
 const notificationReducer = (state, action) => {
 	switch (action.type) {
 		case "ADD_VOTE":
-			return "Vote Added";
+			return `anecdote "${action.payload.content}" voted`;
 		case "ADD_ANECDOTE":
 			return "Anecdote Added";
 		default:
@@ -44,7 +44,7 @@ const App = () => {
 		console.log("vote");
 		const updatedAnecdote = { ...anecdote, votes: anecdote.votes + 1 };
 		updateAnecdoteMutation.mutate(updatedAnecdote);
-		notificationDispatch({ type: "ADD_VOTE" });
+		notificationDispatch({ type: "ADD_VOTE", payload: anecdote });
 	};
 
 	if (result.isLoading) {

@@ -5,7 +5,7 @@ const notificationReducer = (state, action) => {
 		case "ADD_VOTE":
 			return `anecdote "${action.payload.content}" voted`;
 		case "ADD_ANECDOTE":
-			return "Anecdote Added";
+			return `anecdote "${action.payload.content}" added`;
 		default:
 			return "";
 	}

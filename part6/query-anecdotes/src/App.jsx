@@ -3,24 +3,15 @@ import { useReducer } from "react";
 import AnecdoteForm from "./components/AnecdoteForm";
 import Notification from "./components/Notification";
 import { getAllAnecdotes, updateAnecdote } from "./requests";
-
-const notificationReducer = (state, action) => {
-	switch (action.type) {
-		case "ADD_VOTE":
-			return `anecdote "${action.payload.content}" voted`;
-		case "ADD_ANECDOTE":
-			return "Anecdote Added";
-		default:
-			return "";
-	}
-};
+import {
+	useNotificationDispatch,
+	useNotificationValue,
+} from "./NotificationContext";
 
 const App = () => {
 	const queryClient = useQueryClient();
-	const [notification, notificationDispatch] = useReducer(
-		notificationReducer,
-		""
-	);
+	const notification = useNotificationValue();
+	const notificationDispatch = useNotificationDispatch();
 
 	const result = useQuery({
 		queryKey: ["anecdotes"],

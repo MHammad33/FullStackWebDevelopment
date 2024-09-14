@@ -1,4 +1,4 @@
-import { createContext, useReducer, useContext } from "react";
+import { createContext, useReducer, useContext, useEffect } from "react";
 
 const notificationReducer = (state, action) => {
 	switch (action.type) {
@@ -8,8 +8,10 @@ const notificationReducer = (state, action) => {
 			return `anecdote "${action.payload.content}" added`;
 		case "ERROR":
 			return action.payload;
-		default:
+		case "CLEAR":
 			return "";
+		default:
+			return state;
 	}
 };
 
@@ -20,6 +22,17 @@ export const NotificationContextProvider = (props) => {
 		notificationReducer,
 		""
 	);
+
+	useEffect(() => {
+		if (notification) {
+			const timer = setTimeout(() => {
+				notificationDispatch({ type: "CLEAR" });
+			}, 5000);
+
+			return () => clearTimeout(timer);
+		}
+	}, [notification]);
+
 	return (
 		<NotificationContext.Provider value={[notification, notificationDispatch]}>
 			{props.children}

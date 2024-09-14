@@ -61,7 +61,7 @@ const App = () => {
 		<div>
 			<h3>Anecdote app</h3>
 
-			<Notification />
+			<Notification message={notification} />
 			<AnecdoteForm />
 
 			{anecdotes.map((anecdote) => (

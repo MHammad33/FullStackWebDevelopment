@@ -13,6 +13,15 @@ const AnecdoteForm = () => {
 			queryClient.setQueryData(["anecdotes"], anecdotes.concat(newAnecdote));
 			notificationDispatch({ type: "ADD_ANECDOTE", payload: newAnecdote });
 		},
+		onError: (error) => {
+			const errorMessage =
+				error?.response?.data?.error || "Something went wrong!";
+			notificationDispatch({
+				type: "ERROR",
+				payload: errorMessage,
+			});
+			console.error(errorMessage);
+		},
 	});
 
 	const onCreate = (event) => {

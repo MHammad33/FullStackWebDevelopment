@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+
 export const useField = (type) => {
   const [value, setValue] = useState("");
 
@@ -16,7 +18,32 @@ export const useField = (type) => {
 export const useCountry = (name) => {
   const [country, setCountry] = useState(null);
 
-  useEffect(() => {});
+  useEffect(() => {
+    if (!name) {
+      setCountry(null)
+      return;
+    };
 
-  return country;
+    const fetchData = async () => {
+      let response;
+      try {
+        response = await axios.get(`https://studies.cs.helsinki.fi/restcountries/api/name/${name}`);
+        setCountry(response.data);
+      } catch (error) {
+        console.log('error', error)
+        setCountry({ found: false })
+      }
+
+    };
+
+    fetchData();
+  }, [name]);
+
+  const updateCountryData = (countryData) => {
+    setCountry(countryData);
+  }
+
+  return {
+    countryValue: country, updateCountryData
+  };
 };

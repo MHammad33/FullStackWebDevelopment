@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useField, useCountry } from "./hooks";
 import Country from "./components/Country";
-import axios from "axios";
 
 const App = () => {
 	const nameInput = useField("text");
 	const [name, setName] = useState("");
 	const country = useCountry(name);
 
-	const fetch = (e) => {
+	const fetch = async (e) => {
 		e.preventDefault();
 		setName(nameInput.value);
 	};
@@ -20,7 +19,7 @@ const App = () => {
 				<button>find</button>
 			</form>
 
-			<Country country={country} />
+			<Country country={country.countryValue} />
 		</div>
 	);
 };

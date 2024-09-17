@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export const useField = (type) => {
   const [value, setValue] = useState("");
@@ -7,20 +8,38 @@ export const useField = (type) => {
     setValue(event.target.value);
   };
 
+  const reset = () => {
+    setValue("")
+  }
+
   return {
-    type,
-    value,
-    onChange,
+    inputProps: {
+      type,
+      value,
+      onChange
+    },
+    reset
   };
 };
 
 export const useResource = (baseUrl) => {
   const [resources, setResources] = useState([]);
 
-  // ...
+  useEffect(() => {
+    console.count("Fetch Resources");
 
-  const create = (resource) => {
-    // ...
+
+    const fetchResources = async () => {
+      const response = await axios.get(baseUrl);
+      setResources(response.data);
+    }
+
+    fetchResources();
+  }, [baseUrl]);
+
+  const create = async (resource) => {
+    const response = await axios.post(baseUrl, resource);
+    setResources([...resources, response.data])
   };
 
   const service = {

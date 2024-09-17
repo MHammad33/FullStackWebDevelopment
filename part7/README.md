@@ -2,3 +2,4 @@
 
 1. **routed-anecdotes:** Exercises 7.1 - 7.6
 2. **country-hook:** Exercises 7.7
+3. **ultimate-hooks:** Exercises 7.8

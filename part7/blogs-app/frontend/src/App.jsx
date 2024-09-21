@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Blog from "./components/blog/Blog";
 import Login from "./components/login/Login";
 import Notification from "./components/Notification";
@@ -7,11 +8,24 @@ import useBlog from "./hooks/useBlog";
 import BlogForm from "./components/blogForm/BlogForm";
 import eventEmitter from "./utils/utils";
 import Togglable from "./components/Togglable";
+import { fetchAllBlogs } from "./requests";
 
 const App = () => {
   const { user, login, logout } = useAuth();
   const { blogs, addBlog, noteFormRef, update, remove } = useBlog();
   const [message, setMessage] = useState(null);
+
+  const {
+    isPending,
+    isError,
+    error,
+    data: fetchedBlogs
+  } = useQuery({
+    queryKey: ["blogs"],
+    queryFn: fetchAllBlogs,
+    retry: 1,
+    refetchOnWindowFocus: false
+  });
 
   console.log("App :: ", message);
 
@@ -29,6 +43,14 @@ const App = () => {
       eventEmitter.off("showMessage", handleMessage);
     };
   });
+
+  if (isPending) {
+    return <h3>Loading...</h3>;
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
 
   return (
     <div>

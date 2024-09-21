@@ -9,12 +9,13 @@ import BlogForm from "./components/blogForm/BlogForm";
 import eventEmitter from "./utils/utils";
 import Togglable from "./components/Togglable";
 import { fetchAllBlogs } from "./requests";
-import { useNotificationValue } from "./reducers/NotificationContext";
+import { useNotificationDispatch, useNotificationValue } from "./reducers/NotificationContext";
 
 const App = () => {
   const { user, login, logout } = useAuth();
   const { noteFormRef, update, remove } = useBlog();
   const notification = useNotificationValue();
+  const notificationDispatch = useNotificationDispatch();
 
   const {
     isPending,
@@ -28,8 +29,28 @@ const App = () => {
     refetchOnWindowFocus: false
   });
 
+  useEffect(() => {
+    if (isError && error?.response?.data?.error === "Jwt Token Expired") {
+      notificationDispatch({ type: "ERROR", payload: "Login Session Expired. Please Login Again" });
+    }
+  }, [isError, error, notificationDispatch]);
+
   if (isPending) {
     return <h3>Loading...</h3>;
+  }
+
+  if (isError) {
+    const errorMessage = error?.response?.data?.error;
+
+    if (errorMessage === "Jwt Token Expired" || error.message === "User is not logged in.") {
+      return (
+        <>
+          {notification && <Notification message={notification} />}
+          <Login onLogin={login} />
+        </>
+      );
+    }
+    return <>Error {error.message}</>;
   }
 
   return (

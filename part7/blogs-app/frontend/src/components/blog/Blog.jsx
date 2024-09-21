@@ -1,26 +1,65 @@
-import { useState } from "react";
 import "./Blog.css";
-import PropTypes from "prop-types";
+import { useState, useEffect } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNotificationDispatch } from "../../reducers/NotificationContext";
+import { removeBlog, updateBlogInDb } from "../../requests";
 
 const Blog = props => {
   const [blog, setBlog] = useState(props.blog);
   const [fullBlogVisible, setFullBlogVisible] = useState(false);
+  const { onDeleteBlog, currentUser } = props;
 
-  const { onUpdateBlog, onDeleteBlog, currentUser } = props;
+  const notificationDispatch = useNotificationDispatch();
+  const queryClient = useQueryClient();
+  const updateBlogMutation = useMutation({
+    mutationFn: updateBlogInDb,
+    onSuccess: updatedBlogData => {
+      queryClient.setQueryData(["blogs"], prevBlogs => {
+        return prevBlogs.map(blog => (blog.id === updatedBlogData.id ? updatedBlogData : blog));
+      });
+      notificationDispatch({ type: "LIKE_BLOG", payload: updatedBlogData.title });
+    },
+    onError: error => {
+      console.log("error", error);
+    }
+  });
+
+  const deleteBlogMuatation = useMutation({
+    mutationFn: removeBlog,
+    onSuccess: deletedBlogId => {
+      console.log("Deleted");
+
+      queryClient.setQueryData(["blogs"], prevBlogs => {
+        return prevBlogs.filter(blog => blog.id !== deletedBlogId);
+      });
+      notificationDispatch({ type: "DELETE_BLOG", payload: deletedBlog.title });
+    },
+    onError: error => {
+      console.log("error", error);
+    }
+  });
+
+  useEffect(() => {
+    setBlog(props.blog);
+  }, [props.blog]);
+
+  const handleLikes = () => {
+    updateBlogMutation.mutate({
+      id: blog.id,
+      updatedBlog: {
+        likes: blog.likes + 1
+      }
+    });
+  };
 
   const toggleVisibility = () => {
     setFullBlogVisible(!fullBlogVisible);
   };
 
-  const handleLikes = () => {
-    onUpdateBlog(blog.id, { likes: blog.likes + 1 });
-    setBlog({ ...blog, likes: blog.likes + 1 });
-  };
-
   const handleRemoveBlog = () => {
     const confirm = window.confirm(`Remove blog ${blog.title} by ${blog.author}?`);
     if (confirm) {
-      onDeleteBlog(blog.id);
+      deleteBlogMuatation.mutate(blog.id);
     }
   };
 
@@ -61,12 +100,6 @@ const Blog = props => {
       )}
     </div>
   );
-};
-
-Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
-  onUpdateBlog: PropTypes.func.isRequired,
-  onDeleteBlog: PropTypes.func.isRequired
 };
 
 export default Blog;

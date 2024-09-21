@@ -25,6 +25,7 @@ const useAuth = () => {
       blogService.setToken(user.token);
       window.localStorage.setItem("loggedUser", JSON.stringify(user));
       notificationDispatch({ type: "LOGIN" });
+      window.location.href = "/";
     } catch (err) {
       console.error("Login error:", err.message);
       eventEmitter.emit("showMessage", "Invalid username or password");

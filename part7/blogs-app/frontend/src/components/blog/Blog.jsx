@@ -27,12 +27,10 @@ const Blog = props => {
   const deleteBlogMuatation = useMutation({
     mutationFn: removeBlog,
     onSuccess: deletedBlogId => {
-      console.log("Deleted");
-
       queryClient.setQueryData(["blogs"], prevBlogs => {
         return prevBlogs.filter(blog => blog.id !== deletedBlogId);
       });
-      notificationDispatch({ type: "DELETE_BLOG", payload: deletedBlog.title });
+      notificationDispatch({ type: "DELETE_BLOG", payload: "Blog" });
     },
     onError: error => {
       console.log("error", error);

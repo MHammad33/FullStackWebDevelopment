@@ -1,46 +1,28 @@
-import { useState, useEffect } from "react";
-import blogService from "../services/blogs";
 import loginService from "../services/login";
-import eventEmitter from "../utils/utils";
 import { useNotificationDispatch } from "../reducers/NotificationContext";
+import { useUserDispatch } from "../reducers/UserContext";
 
 const useAuth = () => {
-  const [user, setUser] = useState(null);
   const notificationDispatch = useNotificationDispatch();
-
-  useEffect(() => {
-    const loggedUser = window.localStorage.getItem("loggedUser");
-    if (loggedUser) {
-      eventEmitter.emit("showMessage", "Logged in successfully");
-      const user = JSON.parse(loggedUser);
-      setUser(user);
-      blogService.setToken(user.token);
-    }
-  }, []);
+  const userDispatch = useUserDispatch();
 
   const login = async credentials => {
     try {
       const user = await loginService.login(credentials);
-      setUser(user);
-      blogService.setToken(user.token);
-      window.localStorage.setItem("loggedUser", JSON.stringify(user));
+      userDispatch({ type: "LOGIN", payload: user });
       notificationDispatch({ type: "LOGIN" });
       window.location.href = "/";
     } catch (err) {
       console.error("Login error:", err.message);
-      eventEmitter.emit("showMessage", "Invalid username or password");
+      notificationDispatch({ type: "ERROR", payload: err.message });
     }
   };
 
   const logout = () => {
-    window.localStorage.removeItem("loggedUser");
-    setUser(null);
-    blogService.setToken(null);
-    eventEmitter.emit("showMessage", "Logged out successfully");
+    userDispatch({ type: "LOGOUT" });
   };
 
   return {
-    user,
     login,
     logout
   };

@@ -10,12 +10,14 @@ import eventEmitter from "./utils/utils";
 import Togglable from "./components/Togglable";
 import { fetchAllBlogs } from "./requests";
 import { useNotificationDispatch, useNotificationValue } from "./reducers/NotificationContext";
+import { useUserValue } from "./reducers/UserContext";
 
 const App = () => {
-  const { user, login, logout } = useAuth();
+  const { login, logout } = useAuth();
   const { noteFormRef, update, remove } = useBlog();
   const notification = useNotificationValue();
   const notificationDispatch = useNotificationDispatch();
+  const user = useUserValue();
 
   const {
     isPending,

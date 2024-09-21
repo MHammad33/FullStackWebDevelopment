@@ -32,7 +32,8 @@ const Notification = ({ message, type = "" }) => {
     textAlign: "center",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
     transition: "opacity 0.5s ease-in-out",
-    opacity: message ? 1 : 0
+    opacity: message ? 1 : 0,
+    zIndex: 99
   };
   return (
     <>

@@ -6,8 +6,8 @@ const notificationReducer = (state, action) => {
       return `Blog "${action.payload}" Added`;
     case "LIKE_BLOG":
       return `Blog "${action.payload}" liked`;
-    case "s":
-      return `Blog "${action.payload}" deleted`;
+    case "DELETE_BLOG":
+      return `Blog  deleted Successfully`;
     case "FETCHED_ALL_BLOGS":
       return `All Blogs Fetched Successfully`;
     case "LOGIN":

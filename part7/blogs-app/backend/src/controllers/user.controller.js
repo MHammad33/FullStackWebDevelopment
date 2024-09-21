@@ -3,9 +3,14 @@ const User = require("../models/user.model");
 
 // GET /api/users
 const getUsers = async (req, res) => {
-  const users = await User.find({}).populate("blogs", { title: 1, author: 1, url: 1, likes: 1 });
+  const users = await User.find({}).populate("blogs", {
+    title: 1,
+    author: 1,
+    url: 1,
+    likes: 1
+  });
   res.json(users);
-}
+};
 
 // POST /api/users
 const createUser = async (req, res) => {
@@ -13,9 +18,9 @@ const createUser = async (req, res) => {
 
   // Validate the request body
   if (!password || password.length < 3) {
-    return res
-      .status(400)
-      .json({ error: "Password is required and must be at least 3 characters long." });
+    return res.status(400).json({
+      error: "Password is required and must be at least 3 characters long."
+    });
   }
 
   // Hash the password

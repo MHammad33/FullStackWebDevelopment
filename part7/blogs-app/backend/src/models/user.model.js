@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Username is required."],
     minlength: [3, "Username must be at least 3 characters long."],
-    unique: true,
+    unique: true
   },
   name: String,
   passwordHash: String,
@@ -24,7 +24,7 @@ userSchema.set("toJSON", {
     delete returnedObject.passwordHash;
     delete returnedObject._id;
     delete returnedObject.__v;
-  },
+  }
 });
 
 module.exports = mongoose.model("User", userSchema);

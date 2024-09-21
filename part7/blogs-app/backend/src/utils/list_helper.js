@@ -1,20 +1,20 @@
-const dummy = (blogs) => {
+const dummy = blogs => {
   return 1;
-}
+};
 
-const totalLikes = (blogs) => {
+const totalLikes = blogs => {
   return blogs.reduce((acc, blog) => acc + blog.likes, 0);
-}
+};
 
-const favoriteBlog = (blogs) => {
+const favoriteBlog = blogs => {
   if (blogs.length === 0) {
     return null;
   }
 
-  return blogs.reduce((acc, blog) => acc.likes > blog.likes ? acc : blog, blogs[0]);
-}
+  return blogs.reduce((acc, blog) => (acc.likes > blog.likes ? acc : blog), blogs[0]);
+};
 
-const mostBlogs = (blogs) => {
+const mostBlogs = blogs => {
   if (blogs.length === 0) {
     return null;
   }
@@ -25,16 +25,16 @@ const mostBlogs = (blogs) => {
   }, {});
 
   const authorWithMostBlogs = Object.keys(authors).reduce((acc, author) => {
-    return authors[author] > authors[acc] ? author : acc
+    return authors[author] > authors[acc] ? author : acc;
   }, Object.keys(authors)[0]);
 
   return {
     author: authorWithMostBlogs,
     blogs: authors[authorWithMostBlogs]
-  }
-}
+  };
+};
 
-const mostLikes = (blogs) => {
+const mostLikes = blogs => {
   if (blogs.length === 0) {
     return null;
   }
@@ -45,14 +45,14 @@ const mostLikes = (blogs) => {
   }, {});
 
   const authorWithMostLikes = Object.keys(authors).reduce((acc, author) => {
-    return authors[author] > authors[acc] ? author : acc
+    return authors[author] > authors[acc] ? author : acc;
   }, Object.keys(authors)[0]);
 
   return {
     author: authorWithMostLikes,
     likes: authors[authorWithMostLikes]
-  }
-}
+  };
+};
 
 module.exports = {
   dummy,
@@ -60,4 +60,4 @@ module.exports = {
   favoriteBlog,
   mostBlogs,
   mostLikes
-}
+};

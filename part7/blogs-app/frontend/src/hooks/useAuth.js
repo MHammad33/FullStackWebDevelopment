@@ -3,7 +3,6 @@ import blogService from "../services/blogs";
 import loginService from "../services/login";
 import eventEmitter from "../utils/utils";
 
-
 const useAuth = () => {
   const [user, setUser] = useState(null);
 
@@ -17,7 +16,7 @@ const useAuth = () => {
     }
   }, []);
 
-  const login = async (credentials) => {
+  const login = async credentials => {
     try {
       const user = await loginService.login(credentials);
       setUser(user);
@@ -40,8 +39,8 @@ const useAuth = () => {
   return {
     user,
     login,
-    logout,
+    logout
   };
-}
+};
 
 export default useAuth;

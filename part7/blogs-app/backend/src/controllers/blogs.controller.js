@@ -5,11 +5,11 @@ const User = require("../models/user.model");
 
 // Get all blogs
 const getBlogs = async (req, res) => {
-  console.log("GET ALL BLOGS")
+  console.log("GET ALL BLOGS");
   const blogs = await Blog.find({}).populate("user", { username: 1, name: 1 });
-  console.log('blogs', blogs)
+  console.log("blogs", blogs);
   res.json(blogs);
-}
+};
 
 // Create a new blog
 const createBlog = async (req, res) => {
@@ -29,7 +29,7 @@ const createBlog = async (req, res) => {
     url: body.url,
     likes: body.likes || 0,
     user: user._id
-  })
+  });
 
   if (!newBlog.title || !newBlog.url) {
     return res.status(400).json({ error: "title or url missing" });
@@ -45,7 +45,7 @@ const createBlog = async (req, res) => {
       username: user?.username,
       name: user?.name
     }
-  }
+  };
 
   res.status(201).json(dataForFrontend);
 };
@@ -61,7 +61,7 @@ const getBlog = async (req, res) => {
   } else {
     res.status(404).end();
   }
-}
+};
 
 // Delete a blog
 const deleteBlog = async (req, res) => {
@@ -84,11 +84,11 @@ const deleteBlog = async (req, res) => {
   await Blog.findByIdAndDelete(id);
 
   // Remove the blog reference from the user's blog list
-  user.blogs = user.blogs.filter((blog) => blog._id.toString() !== id);
+  user.blogs = user.blogs.filter(blog => blog._id.toString() !== id);
   await user.save();
 
   res.status(204).end();
-}
+};
 
 // Update a blog
 const updateBlog = async (req, res) => {
@@ -111,8 +111,12 @@ const updateBlog = async (req, res) => {
   }
 
   res.status(200).json(updatedBlog);
-}
+};
 
 module.exports = {
-  getBlogs, createBlog, getBlog, deleteBlog, updateBlog
+  getBlogs,
+  createBlog,
+  getBlog,
+  deleteBlog,
+  updateBlog
 };

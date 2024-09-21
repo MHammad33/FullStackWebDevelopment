@@ -13,6 +13,6 @@ const start = async () => {
   } catch (err) {
     logger.error("Error connecting to the database: ", err.message);
   }
-}
+};
 
 start();

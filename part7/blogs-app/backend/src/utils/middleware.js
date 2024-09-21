@@ -9,11 +9,11 @@ const requestLogger = (req, res, next) => {
   logger.info("Body:  ", req.body);
   logger.info("---");
   next();
-}
+};
 
 const unknownEndpoint = (req, res) => {
   return res.status(404).send({ error: "unknown endpoint" });
-}
+};
 
 const errorHandler = (error, req, res, next) => {
   logger.error(error.message);
@@ -23,7 +23,7 @@ const errorHandler = (error, req, res, next) => {
     return res.status(400).json({ error: error.message });
   }
   next(error);
-}
+};
 
 const tokenExtractor = (req, res, next) => {
   const authorization = req.get("authorization");
@@ -35,7 +35,7 @@ const tokenExtractor = (req, res, next) => {
   }
 
   next();
-}
+};
 
 const userExtractor = async (req, res, next) => {
   const { token } = req;
@@ -62,7 +62,7 @@ const userExtractor = async (req, res, next) => {
   req.user = user;
 
   next();
-}
+};
 
 module.exports = {
   requestLogger,
@@ -70,4 +70,4 @@ module.exports = {
   errorHandler,
   tokenExtractor,
   userExtractor
-}
+};

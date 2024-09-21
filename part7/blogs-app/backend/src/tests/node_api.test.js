@@ -11,14 +11,12 @@ const helper = require("./helper");
 const config = require("../utils/config");
 const connectDb = require("../db/connectDb");
 
-
 const api = supertest(app);
 
 describe("Initially some blogs are saved and one user in the db", () => {
   let token;
 
   beforeEach(async () => {
-
     await connectDb(config.MONGODB_URI);
 
     // Delete all users and save one user before each test
@@ -29,14 +27,18 @@ describe("Initially some blogs are saved and one user in the db", () => {
 
     // Log in to get a token
     const response = await api.post("/api/login").send({
-      username: "root", password: "password"
+      username: "root",
+      password: "password"
     });
     token = response.body.token;
 
-    const blogsToAdd = helper.initialBlogs.map(blog => new Blog({
-      ...blog,
-      user: user._id
-    }));
+    const blogsToAdd = helper.initialBlogs.map(
+      blog =>
+        new Blog({
+          ...blog,
+          user: user._id
+        })
+    );
 
     // Delete all blogs and save initial blogs before each test
     await Blog.deleteMany({});
@@ -50,14 +52,13 @@ describe("Initially some blogs are saved and one user in the db", () => {
       .set("Authorization", `Bearer ${token}`)
       .expect(200)
       .expect("Content-Type", /application\/json/);
-    ;
-  })
+  });
 
   // Test that the GET request returns the correct number of blog posts
   test("all blogs are returned", async () => {
     const response = await api.get("/api/blogs").set("Authorization", `Bearer ${token}`);
     assert.strictEqual(response.body.length, helper.initialBlogs.length);
-  })
+  });
 
   // Test that the unique identifier property of the blog posts is named id
   test("unique identifier property of the blog posts is named id", async () => {
@@ -67,7 +68,6 @@ describe("Initially some blogs are saved and one user in the db", () => {
   });
 
   describe("Viewing a specific blog", () => {
-
     test("succeeds with a valid id", async () => {
       const blogsAtStart = await helper.blogsInDb();
       const blogToView = blogsAtStart[0];
@@ -77,7 +77,6 @@ describe("Initially some blogs are saved and one user in the db", () => {
         .set("Authorization", `Bearer ${token}`)
         .expect(200)
         .expect("Content-Type", /application\/json/);
-
 
       assert.deepStrictEqual(resultBlog.body, blogToView);
     });
@@ -92,24 +91,18 @@ describe("Initially some blogs are saved and one user in the db", () => {
 
     test("fails with status code 400 if id is invalid", async () => {
       const invalidId = "5a3d5da59070081a82a3445";
-      await api
-        .get(`/api/blogs/${invalidId}`)
-        .set("Authorization", `Bearer ${token}`)
-        .expect(400);
+      await api.get(`/api/blogs/${invalidId}`).set("Authorization", `Bearer ${token}`).expect(400);
     });
 
     test("fails with status code 401 if token is missing", async () => {
       const blogsAtStart = await helper.blogsInDb();
       const blogToView = blogsAtStart[0];
 
-      await api
-        .get(`/api/blogs/${blogToView.id}`)
-        .expect(401);
-    })
+      await api.get(`/api/blogs/${blogToView.id}`).expect(401);
+    });
   });
 
   describe("Adding a new blog", () => {
-
     // Test that a new blog post can be added
     test("a valid blog can be added", async () => {
       const newBlog = {
@@ -168,7 +161,6 @@ describe("Initially some blogs are saved and one user in the db", () => {
 
       const blogsAtEnd = await helper.blogsInDb();
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length);
-
     });
 
     test("fails with status code 401 if token is missing", async () => {
@@ -179,15 +171,11 @@ describe("Initially some blogs are saved and one user in the db", () => {
         likes: 10
       };
 
-      await api
-        .post("/api/blogs")
-        .send(newBlog).expect(401);
-    })
-
+      await api.post("/api/blogs").send(newBlog).expect(401);
+    });
   });
 
   describe("Deleting a blog", () => {
-
     test("a blog can be deleted", async () => {
       const blogsAtStart = await helper.blogsInDb();
       const blogToDelete = blogsAtStart[0];
@@ -210,8 +198,7 @@ describe("Initially some blogs are saved and one user in the db", () => {
         .delete(`/api/blogs/${validNonExistingId}`)
         .set("Authorization", `Bearer ${token}`)
         .expect(404);
-    }
-    );
+    });
 
     test("fails with status code 400 if id is invalid", async () => {
       const invalidId = "5a3d5da59070081a82a3445";
@@ -225,14 +212,11 @@ describe("Initially some blogs are saved and one user in the db", () => {
       const blogsAtStart = await helper.blogsInDb();
       const blogToDelete = blogsAtStart[0];
 
-      await api
-        .delete(`/api/blogs/${blogToDelete.id}`)
-        .expect(401);
-    })
+      await api.delete(`/api/blogs/${blogToDelete.id}`).expect(401);
+    });
   });
 
   describe("Updating a blog", () => {
-
     test("a blog can be updated", async () => {
       const blogsAtStart = await helper.blogsInDb();
       const blogToUpdate = blogsAtStart[0];
@@ -264,29 +248,19 @@ describe("Initially some blogs are saved and one user in the db", () => {
 
     test("fails with status code 400 if id is invalid", async () => {
       const invalidId = "5a3d5da59070081a82a3445";
-      await api
-        .put(`/api/blogs/${invalidId}`)
-        .set("Authorization", `Bearer ${token}`)
-        .expect(400);
+      await api.put(`/api/blogs/${invalidId}`).set("Authorization", `Bearer ${token}`).expect(400);
     });
 
     test("fails with status code 401 if token is missing", async () => {
       const blogsAtStart = await helper.blogsInDb();
       const blogToUpdate = blogsAtStart[0];
 
-      await api
-        .put(`/api/blogs/${blogToUpdate.id}`)
-        .expect(401);
+      await api.put(`/api/blogs/${blogToUpdate.id}`).expect(401);
     });
-
   });
-
 });
-
-
-
 
 // Close the connection after all tests are done
 after(async () => {
   await mongoose.connection.close();
-})
+});

@@ -32,7 +32,7 @@ describe("Test Users. Initially One User in Db", () => {
     const newUser = {
       username: "newuser",
       name: "New User",
-      password: "newpassword",
+      password: "newpassword"
     };
 
     await api
@@ -49,7 +49,7 @@ describe("Test Users. Initially One User in Db", () => {
     const newUser = {
       username: "newuser",
       name: "New User",
-      password: "12",
+      password: "12"
     };
 
     await api
@@ -65,7 +65,7 @@ describe("Test Users. Initially One User in Db", () => {
   test("POST /api/users with missing password returns 400", async () => {
     const newUser = {
       username: "newuser",
-      name: "New User",
+      name: "New User"
     };
 
     await api
@@ -82,24 +82,7 @@ describe("Test Users. Initially One User in Db", () => {
     const newUser = {
       username: "ro",
       name: "Root User",
-      password: "rootpassword",
-    };
-
-    await api
-      .post("/api/users")
-      .send(newUser)
-      .expect(400)
-      .expect("Content-Type", /application\/json/);
-
-    const users = await User.find({});
-    assert.strictEqual(users.length, 1);
-  })
-
-  test("POST /api/users with existing username returns 400", async () => {
-    const newUser = {
-      username: "root",
-      name: "Root User",
-      password: "rootpassword",
+      password: "rootpassword"
     };
 
     await api
@@ -112,11 +95,24 @@ describe("Test Users. Initially One User in Db", () => {
     assert.strictEqual(users.length, 1);
   });
 
+  test("POST /api/users with existing username returns 400", async () => {
+    const newUser = {
+      username: "root",
+      name: "Root User",
+      password: "rootpassword"
+    };
 
+    await api
+      .post("/api/users")
+      .send(newUser)
+      .expect(400)
+      .expect("Content-Type", /application\/json/);
+
+    const users = await User.find({});
+    assert.strictEqual(users.length, 1);
+  });
 });
 
 after(async () => {
   await mongoose.connection.close();
 });
-
-

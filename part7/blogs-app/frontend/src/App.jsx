@@ -13,7 +13,7 @@ import { useNotificationValue } from "./reducers/NotificationContext";
 
 const App = () => {
   const { user, login, logout } = useAuth();
-  const { blogs, addBlog, noteFormRef, update, remove } = useBlog();
+  const { noteFormRef, update, remove } = useBlog();
   const notification = useNotificationValue();
 
   const {
@@ -46,12 +46,12 @@ const App = () => {
             </div>
             <h3>Create new blog</h3>
             <Togglable buttonLabel="New Blog" ref={noteFormRef}>
-              <BlogForm onAddBlog={addBlog} />
+              <BlogForm noteFormRef={noteFormRef} />
             </Togglable>
 
             <hr />
             <div className="blog-container">
-              {blogs
+              {fetchedBlogs
                 .sort((a, b) => b.likes - a.likes)
                 .map(blog => (
                   <Blog

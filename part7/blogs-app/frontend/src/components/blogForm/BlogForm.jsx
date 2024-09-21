@@ -1,15 +1,32 @@
-import { useState } from "react";
 import "./BlogForm.css";
-import PropTypes from "prop-types";
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNotificationDispatch } from "../../reducers/NotificationContext";
+import { createNewBlog } from "../../requests";
 
-const BlogForm = ({ onAddBlog }) => {
+const BlogForm = ({ noteFormRef }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
 
+  const notificationDispatch = useNotificationDispatch();
+  const queryClient = useQueryClient();
+  const newBlogMutation = useMutation({
+    mutationFn: createNewBlog,
+    onSuccess: newBlog => {
+      const previousBlogs = queryClient.getQueryData(["blogs"]);
+      const updatedBlogs = [...previousBlogs, newBlog];
+      queryClient.setQueryData(["blogs"], updatedBlogs);
+      noteFormRef.current.toggleVisibility();
+      notificationDispatch({ type: "ADD_BLOG", payload: newBlog.title });
+    }
+  });
+
   const handleSubmit = e => {
     e.preventDefault();
-    onAddBlog({ title, author, url });
+
+    const newBlog = { title, author, url };
+    newBlogMutation.mutate(newBlog);
 
     // Clear form
     setTitle("");
@@ -57,10 +74,6 @@ const BlogForm = ({ onAddBlog }) => {
       <button type="submit">Add Blog</button>
     </form>
   );
-};
-
-BlogForm.propTypes = {
-  onAddBlog: PropTypes.func.isRequired
 };
 
 export default BlogForm;

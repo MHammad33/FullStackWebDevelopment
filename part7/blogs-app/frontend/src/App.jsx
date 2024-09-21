@@ -9,11 +9,12 @@ import BlogForm from "./components/blogForm/BlogForm";
 import eventEmitter from "./utils/utils";
 import Togglable from "./components/Togglable";
 import { fetchAllBlogs } from "./requests";
+import { useNotificationValue } from "./reducers/NotificationContext";
 
 const App = () => {
   const { user, login, logout } = useAuth();
   const { blogs, addBlog, noteFormRef, update, remove } = useBlog();
-  const [message, setMessage] = useState(null);
+  const notification = useNotificationValue();
 
   const {
     isPending,
@@ -27,34 +28,13 @@ const App = () => {
     refetchOnWindowFocus: false
   });
 
-  console.log("App :: ", message);
-
-  useEffect(() => {
-    const handleMessage = (msg, duration = 3000) => {
-      setMessage(msg);
-      setTimeout(() => {
-        setMessage(null);
-      }, duration);
-    };
-
-    eventEmitter.on("showMessage", handleMessage);
-
-    return () => {
-      eventEmitter.off("showMessage", handleMessage);
-    };
-  });
-
   if (isPending) {
     return <h3>Loading...</h3>;
   }
 
-  if (isError) {
-    return <span>Error: {error.message}</span>;
-  }
-
   return (
     <div>
-      {message && <Notification message={message} />}
+      {notification && <Notification message={notification} />}
       <h2>Blogs</h2>
       <div>
         {user ? (

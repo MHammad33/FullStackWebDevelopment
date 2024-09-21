@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import blogService from "../services/blogs";
 import loginService from "../services/login";
 import eventEmitter from "../utils/utils";
+import { useNotificationDispatch } from "../reducers/NotificationContext";
 
 const useAuth = () => {
   const [user, setUser] = useState(null);
+  const notificationDispatch = useNotificationDispatch();
 
   useEffect(() => {
     const loggedUser = window.localStorage.getItem("loggedUser");
@@ -22,7 +24,7 @@ const useAuth = () => {
       setUser(user);
       blogService.setToken(user.token);
       window.localStorage.setItem("loggedUser", JSON.stringify(user));
-      eventEmitter.emit("showMessage", "Logged in successfully");
+      notificationDispatch({ type: "LOGIN" });
     } catch (err) {
       console.error("Login error:", err.message);
       eventEmitter.emit("showMessage", "Invalid username or password");

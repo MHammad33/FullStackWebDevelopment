@@ -3,9 +3,13 @@ import { createContext, useReducer, useContext, useEffect } from "react";
 const notificationReducer = (state, action) => {
   switch (action.type) {
     case "ADD_BLOG":
-      return `Blog "${action.payload.content}" Added`;
+      return `Blog "${action.payload}" Added`;
+    case "UPDATE_BLOG":
+      return `Blog "${action.payload}" Updated`;
     case "FETCHED_ALL_BLOGS":
       return `All Blogs Fetched Successfully`;
+    case "LOGIN":
+      return `Login Successfull`;
     case "ERROR":
       return action.payload;
     case "CLEAR":

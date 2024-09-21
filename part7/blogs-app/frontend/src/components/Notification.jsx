@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
 
 const Notification = ({ message, type = "" }) => {
+  console.log("message", message);
+
   const getBackgroundColor = () => {
     switch (type) {
       case "success":

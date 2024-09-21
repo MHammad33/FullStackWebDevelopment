@@ -1,33 +1,35 @@
 import { useEffect, useRef, useState } from "react";
 import blogService from "../services/blogs";
+import { useNotificationDispatch } from "../reducers/NotificationContext";
 import eventEmitter from "../utils/utils";
 
 const useBlog = () => {
   const [blogs, setBlogs] = useState([]);
-
+  const notificationDispatch = useNotificationDispatch();
   const noteFormRef = useRef();
 
-  const fetchBlogs = async () => {
-    try {
-      const fetchedBlogs = await blogService.getAll();
-      const sortedBlogs = fetchedBlogs.sort((a, b) => b.likes - a.likes);
-      setBlogs(sortedBlogs);
-      eventEmitter.emit("showMessage", "Fetched blogs successful");
-    } catch (error) {
-      console.error("Error fetching blogs:", error.message);
-      eventEmitter.emit("showMessage", "Error fetching blogs");
-    }
-  };
+  // const fetchBlogs = async () => {
+  //   try {
+  //     const fetchedBlogs = await blogService.getAll();
+  //     const sortedBlogs = fetchedBlogs.sort((a, b) => b.likes - a.likes);
+  //     setBlogs(sortedBlogs);
+  //     notificationDispatch({ type: "FETCHED_ALL_BLOGS" });
+  //   } catch (error) {
+  //     console.error("Error fetching blogs:", error.message);
+  //     eventEmitter.emit("showMessage", "Error fetching blogs");
+  //     notificationDispatch({ type: "ERROR", payload: error.message });
+  //   }
+  // };
 
   const addBlog = async newBlog => {
     try {
       const savedBlog = await blogService.create(newBlog);
       setBlogs(prevBlogs => prevBlogs.concat(savedBlog));
-      eventEmitter.emit("showMessage", "Blog added successfully");
+      notificationDispatch({ type: "ADD_BLOG", payload: savedBlog.title });
       noteFormRef.current.toggleVisibility();
     } catch (error) {
       console.error("Add blog error:", error.message);
-      eventEmitter.emit("showMessage", "Error adding blog");
+      notificationDispatch({ type: "ERROR", payload: error.message });
     }
   };
 
@@ -35,10 +37,10 @@ const useBlog = () => {
     try {
       const updated = await blogService.update(id, updatedBlog);
       setBlogs(prevBlogs => prevBlogs.map(blog => (blog.id === id ? updated : blog)));
-      eventEmitter.emit("showMessage", "Blog updated successfully");
+      notificationDispatch({ type: "UPDATE_BLOG", payload: updated.title });
     } catch (error) {
       console.error("Update blog error:", error.message);
-      eventEmitter.emit("showMessage", "Error updating blog");
+      notificationDispatch({ type: "ERROR", payload: error.message });
     }
   };
 
@@ -54,13 +56,13 @@ const useBlog = () => {
   };
 
   useEffect(() => {
-    fetchBlogs();
+    // fetchBlogs();
   }, []);
 
   return {
     blogs,
     addBlog,
-    fetchBlogs,
+    // fetchBlogs,
     noteFormRef,
     update,
     remove

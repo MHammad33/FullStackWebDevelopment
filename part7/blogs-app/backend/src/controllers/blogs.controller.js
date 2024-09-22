@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const Blog = require("../models/blog.model");
 const User = require("../models/user.model");
 
-// Get all blogs
 const getBlogs = async (req, res) => {
   console.log("GET ALL BLOGS");
   const blogs = await Blog.find({}).populate("user", { username: 1, name: 1 });
@@ -11,7 +10,6 @@ const getBlogs = async (req, res) => {
   res.json(blogs);
 };
 
-// Create a new blog
 const createBlog = async (req, res) => {
   const { body, token } = req;
 
@@ -50,7 +48,6 @@ const createBlog = async (req, res) => {
   res.status(201).json(dataForFrontend);
 };
 
-// Get a single blog
 const getBlog = async (req, res) => {
   const { id } = req.params;
 
@@ -63,7 +60,6 @@ const getBlog = async (req, res) => {
   }
 };
 
-// Delete a blog
 const deleteBlog = async (req, res) => {
   const { id } = req.params;
   const { user } = req;
@@ -90,7 +86,6 @@ const deleteBlog = async (req, res) => {
   res.status(204).end();
 };
 
-// Update a blog
 const updateBlog = async (req, res) => {
   const { user, params, body } = req;
   const { id } = params;
@@ -114,10 +109,25 @@ const updateBlog = async (req, res) => {
   res.status(200).json(updatedBlog);
 };
 
+const addComment = async (req, res) => {
+  const { id } = req.params;
+  const { comment } = req.body;
+
+  const blog = await Blog.findById(id);
+  if (!blog) {
+    return res.status(404).json({ error: "Blog not found" });
+  }
+
+  blog.comments = blog.comments.concat(comment);
+  const updatedBlog = await blog.save();
+  res.status(200).json(updatedBlog);
+};
+
 module.exports = {
   getBlogs,
   createBlog,
   getBlog,
   deleteBlog,
-  updateBlog
+  updateBlog,
+  addComment
 };

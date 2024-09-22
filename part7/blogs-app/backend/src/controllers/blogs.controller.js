@@ -104,7 +104,8 @@ const updateBlog = async (req, res) => {
     return res.status(403).json({ error: "permission denied" });
   }
 
-  const updatedBlog = await Blog.findByIdAndUpdate(id, blog, { new: true });
+  await Blog.findByIdAndUpdate(id, blog, { new: true });
+  const updatedBlog = await Blog.findById(id).populate("user", { username: 1, name: 1 });
 
   if (!updatedBlog) {
     return res.status(404).end();

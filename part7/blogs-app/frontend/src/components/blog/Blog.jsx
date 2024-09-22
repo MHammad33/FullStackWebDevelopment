@@ -15,6 +15,7 @@ const Blog = props => {
   const updateBlogMutation = useMutation({
     mutationFn: updateBlogInDb,
     onSuccess: updatedBlogData => {
+      console.log("updatedBlogData", updatedBlogData);
       queryClient.setQueryData(["blogs"], prevBlogs => {
         return prevBlogs.map(blog => (blog.id === updatedBlogData.id ? updatedBlogData : blog));
       });

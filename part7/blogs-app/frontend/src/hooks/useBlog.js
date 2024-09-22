@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
 import { useNotificationDispatch } from "../reducers/NotificationContext";
-import { createNewBlog } from "../requests";
+import { createNewBlog, removeBlog, updateBlogInDb } from "../requests";
 
 const useBlog = () => {
   const noteFormRef = useRef();
@@ -18,9 +18,38 @@ const useBlog = () => {
     }
   });
 
+  const updateBlogMutation = useMutation({
+    mutationFn: updateBlogInDb,
+    onSuccess: updatedBlogData => {
+      console.log("updatedBlogData", updatedBlogData);
+      queryClient.setQueryData(["blogs"], prevBlogs => {
+        return prevBlogs.map(blog => (blog.id === updatedBlogData.id ? updatedBlogData : blog));
+      });
+      notificationDispatch({ type: "LIKE_BLOG", payload: updatedBlogData.title });
+    },
+    onError: error => {
+      console.log("error", error);
+    }
+  });
+
+  const deleteBlogMuatation = useMutation({
+    mutationFn: removeBlog,
+    onSuccess: deletedBlogId => {
+      queryClient.setQueryData(["blogs"], prevBlogs => {
+        return prevBlogs.filter(blog => blog.id !== deletedBlogId);
+      });
+      notificationDispatch({ type: "DELETE_BLOG", payload: "Blog" });
+    },
+    onError: error => {
+      console.log("error", error);
+    }
+  });
+
   return {
     noteFormRef,
-    newBlogMutation
+    newBlogMutation,
+    updateBlogMutation,
+    deleteBlogMuatation
   };
 };
 

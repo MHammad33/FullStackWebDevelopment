@@ -1,11 +1,14 @@
 import "./Login.css";
 import { useState } from "react";
 import PropTypes from "prop-types";
+import useAuth from "../../hooks/useAuth";
 
-const Login = ({ onLogin }) => {
+const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+
+  const { login } = useAuth();
 
   const handleLogin = e => {
     e.preventDefault();
@@ -15,12 +18,7 @@ const Login = ({ onLogin }) => {
       return;
     }
 
-    onLogin({ username, password });
-
-    // Clear the form
-    setUsername("");
-    setPassword("");
-    setError(null);
+    login({ username, password });
   };
 
   return (

@@ -6,6 +6,7 @@ import UserInfo from "./components/UserInfo";
 import UsersList from "./components/users/UsersList";
 import UserDetail from "./components/users/UserDetail";
 import BlogList from "./components/BlogList";
+import BlogDetail from "./components/BlogDetail";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
 
       <Routes>
         <Route path="/" element={<BlogList />} />
+        <Route path="/blogs/:id" element={<BlogDetail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/users" element={<UsersList />} />
         <Route path="/users/:id" element={<UserDetail />} />

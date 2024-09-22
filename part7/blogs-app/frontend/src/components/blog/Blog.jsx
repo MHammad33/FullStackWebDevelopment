@@ -66,16 +66,15 @@ const Blog = props => {
 
   return (
     <div className="blog-card">
-      <div className="blog-header">
-        <h3 className="blog-title">{blog.title}</h3>
-        <Link to={`/blogs/${blog.id}`} className="view-details-button">
-          View Details
-        </Link>
-      </div>
-      <p className="likes-count">{blog.likes} likes</p>
-      <button onClick={handleLikes} className="like-button">
-        👍 Like
-      </button>
+      <Link to={`/blogs/${blog.id}`} className="blog-link">
+        <div className="blog-header">
+          <h3 className="blog-title">{blog.title}</h3>
+          <p className="likes-count">{blog.likes} likes</p>
+        </div>
+        <div className="read-more">
+          <span>Read More</span>
+        </div>
+      </Link>
     </div>
   );
 };

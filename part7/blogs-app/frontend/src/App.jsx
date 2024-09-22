@@ -12,6 +12,7 @@ import { useNotificationDispatch, useNotificationValue } from "./reducers/Notifi
 import { useUserValue } from "./reducers/UserContext";
 import UserInfo from "./components/UserInfo";
 import UsersList from "./components/users/UsersList";
+import UserDetail from "./components/users/UserDetail";
 
 const App = () => {
   const { login, logout } = useAuth();
@@ -63,6 +64,7 @@ const App = () => {
           }
         />
         <Route path="/users" element={<UsersList />} />
+        <Route path="/users/:id" element={<UserDetail />} />
       </Routes>
     </div>
   );

@@ -11,6 +11,7 @@ import { fetchAllBlogs } from "./requests";
 import { useNotificationDispatch, useNotificationValue } from "./reducers/NotificationContext";
 import { useUserValue } from "./reducers/UserContext";
 import UserInfo from "./components/UserInfo";
+import UsersList from "./components/users/UsersList";
 
 const App = () => {
   const { login, logout } = useAuth();
@@ -61,7 +62,7 @@ const App = () => {
             />
           }
         />
-        <Route path="/users" element={<>Users</>} />
+        <Route path="/users" element={<UsersList />} />
       </Routes>
     </div>
   );

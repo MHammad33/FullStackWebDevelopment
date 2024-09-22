@@ -1,10 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import useBlog from "../hooks/useBlog";
 import { useUserValue } from "../reducers/UserContext";
 
 const BlogDetail = () => {
+  const [comment, setComment] = useState("");
+
   const { id: blogId } = useParams();
   const navigate = useNavigate();
   const { updateBlogMutation, deleteBlogMuatation } = useBlog();
@@ -13,6 +15,12 @@ const BlogDetail = () => {
   const queryClient = useQueryClient();
   const blogs = queryClient.getQueryData(["blogs"]);
   const blog = blogs.find(blog => blog.id === blogId);
+
+  console.log("blog", blog);
+
+  const handleAddComment = async e => {
+    e.preventDefault();
+  };
 
   if (!blog) {
     return <>Not Found</>;
@@ -61,6 +69,30 @@ const BlogDetail = () => {
             🗑️ Remove
           </button>
         )}
+      </div>
+
+      <div className="comments-section">
+        <h3>Comments</h3>
+        {blog.comments && blog.comments.length > 0 ? (
+          <ul>
+            {blog.comments.map((comment, index) => (
+              <li key={index}>{comment}</li>
+            ))}
+          </ul>
+        ) : (
+          <p>No comments yet</p>
+        )}
+
+        <form onSubmit={handleAddComment}>
+          <input
+            type="text"
+            value={comment}
+            onChange={e => setComment(e.target.value)}
+            placeholder="Add a comment"
+            required
+          />
+          <button type="submit">Add Comment</button>
+        </form>
       </div>
     </div>
   );

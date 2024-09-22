@@ -7,10 +7,12 @@ import UsersList from "./components/users/UsersList";
 import UserDetail from "./components/users/UserDetail";
 import BlogList from "./components/BlogList";
 import BlogDetail from "./components/BlogDetail";
+import Navbar from "./components/navbar/Navbar";
 
 const App = () => {
   return (
     <div>
+      <Navbar />
       <Notification />
       <h2>Blogs</h2>
       <UserInfo />

@@ -49,9 +49,14 @@ const useBlog = () => {
     mutationFn: addBlogComment,
     onSuccess: updatedBlogData => {
       queryClient.setQueryData(["blogs"], prevBlogs => {
+        if (!prevBlogs) return [];
         return prevBlogs.map(blog => (blog.id === updatedBlogData.id ? updatedBlogData : blog));
       });
-      notificationDispatch({ type: "UPDATE_BLOG", payload: blog.title });
+      queryClient.setQueryData(["blog", updatedBlogData.id], prevBlog => {
+        return updatedBlogData;
+      });
+
+      notificationDispatch({ type: "ADD_COMMENT", payload: updatedBlogData.title });
     },
     onError: error => {
       console.log("error", error);

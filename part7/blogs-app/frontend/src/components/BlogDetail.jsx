@@ -34,6 +34,7 @@ const BlogDetail = () => {
       id: blog.id,
       updatedBlog: { comment }
     });
+    setComment("");
   };
 
   if (blogLoading) {

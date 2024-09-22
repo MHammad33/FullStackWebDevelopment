@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNotificationDispatch } from "../../reducers/NotificationContext";
 import { removeBlog, updateBlogInDb } from "../../requests";
 import { useUserValue } from "../../reducers/UserContext";
+import { Link } from "react-router-dom";
 
 const Blog = props => {
   const [blog, setBlog] = useState(props.blog);
@@ -66,38 +67,15 @@ const Blog = props => {
   return (
     <div className="blog-card">
       <div className="blog-header">
-        <div className="blog-title-container">
-          <h3 className="blog-title">{blog.title}</h3>
-          <p className="blog-author">by {blog.author}</p>
-        </div>
-        <button
-          className={`${fullBlogVisible ? "blog-hide-button" : "blog-view-button"}`}
-          onClick={toggleVisibility}
-        >
-          {fullBlogVisible ? "Hide" : "View"}
-        </button>
+        <h3 className="blog-title">{blog.title}</h3>
+        <Link to={`/blogs/${blog.id}`} className="view-details-button">
+          View Details
+        </Link>
       </div>
-      {fullBlogVisible && (
-        <div className="blog-full">
-          <p>
-            <a href={blog.url}>Click here to see full blog</a>
-          </p>
-          <p>
-            {blog.likes} likes{" "}
-            <button onClick={handleLikes} className="like-button">
-              Like
-            </button>
-          </p>
-          <p>
-            Added by <b>{blog?.user.username}</b>
-          </p>
-          {currentUser?.username === blog?.user.username && (
-            <button onClick={handleRemoveBlog} className="remove-button">
-              Remove
-            </button>
-          )}
-        </div>
-      )}
+      <p className="likes-count">{blog.likes} likes</p>
+      <button onClick={handleLikes} className="like-button">
+        👍 Like
+      </button>
     </div>
   );
 };

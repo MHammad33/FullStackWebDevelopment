@@ -43,6 +43,17 @@ export const updateBlogInDb = async ({ id, updatedBlog }) => {
   return response.data;
 };
 
+export const addBlogComment = async ({ id, updatedBlog }) => {
+  const user = window.localStorage.getItem("loggedUser");
+  const { token } = JSON.parse(user);
+
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
+  const response = await axios.post(`${baseUrl}/${id}/comments`, updatedBlog, config);
+  return response.data;
+};
+
 export const removeBlog = async id => {
   const user = window.localStorage.getItem("loggedUser");
   const { token } = JSON.parse(user);

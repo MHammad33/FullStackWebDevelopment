@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
 import { useNotificationDispatch } from "../reducers/NotificationContext";
-import { createNewBlog, removeBlog, updateBlogInDb } from "../requests";
+import { addBlogComment, createNewBlog, removeBlog, updateBlogInDb } from "../requests";
 
 const useBlog = () => {
   const noteFormRef = useRef();
@@ -45,11 +45,25 @@ const useBlog = () => {
     }
   });
 
+  const commentBlogMutation = useMutation({
+    mutationFn: addBlogComment,
+    onSuccess: updatedBlogData => {
+      queryClient.setQueryData(["blogs"], prevBlogs => {
+        return prevBlogs.map(blog => (blog.id === updatedBlogData.id ? updatedBlogData : blog));
+      });
+      notificationDispatch({ type: "UPDATE_BLOG", payload: blog.title });
+    },
+    onError: error => {
+      console.log("error", error);
+    }
+  });
+
   return {
     noteFormRef,
     newBlogMutation,
     updateBlogMutation,
-    deleteBlogMuatation
+    deleteBlogMuatation,
+    commentBlogMutation
   };
 };
 

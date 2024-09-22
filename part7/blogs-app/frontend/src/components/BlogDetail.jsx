@@ -9,17 +9,19 @@ const BlogDetail = () => {
 
   const { id: blogId } = useParams();
   const navigate = useNavigate();
-  const { updateBlogMutation, deleteBlogMuatation } = useBlog();
+  const { updateBlogMutation, deleteBlogMuatation, commentBlogMutation } = useBlog();
   const currentUser = useUserValue();
 
   const queryClient = useQueryClient();
   const blogs = queryClient.getQueryData(["blogs"]);
   const blog = blogs.find(blog => blog.id === blogId);
 
-  console.log("blog", blog);
-
   const handleAddComment = async e => {
     e.preventDefault();
+    commentBlogMutation.mutate({
+      id: blog.id,
+      updatedBlog: { comment }
+    });
   };
 
   if (!blog) {

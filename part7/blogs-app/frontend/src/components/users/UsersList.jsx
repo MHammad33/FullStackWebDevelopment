@@ -1,14 +1,20 @@
+import { useQuery } from "@tanstack/react-query";
 import User from "./User";
+import { fetchAllUsers } from "./userRequests";
 
 const UsersList = () => {
-  const users = [
-    {
-      id: 1,
-      username: "fahad",
-      name: "Fahad Afzal",
-      blogs: [1, 2, 3]
-    }
-  ];
+  const {
+    data: users,
+    isPending: usersLoading,
+    isError: usersError
+  } = useQuery({
+    queryKey: ["users"],
+    queryFn: fetchAllUsers,
+    refetchOnWindowFocus: false
+  });
+
+  if (usersLoading) return <p>Loading...</p>;
+  if (usersError) return <p>Error fetching data</p>;
 
   return (
     <>

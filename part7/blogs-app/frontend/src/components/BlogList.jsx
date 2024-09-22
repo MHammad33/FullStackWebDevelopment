@@ -49,7 +49,7 @@ const BlogList = () => {
   return (
     <>
       <Togglable buttonLabel="New Blog" ref={noteFormRef}>
-        <BlogForm noteFormRef={noteFormRef} />
+        <BlogForm />
       </Togglable>
 
       <div className="blog-container">

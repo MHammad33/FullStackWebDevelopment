@@ -22,6 +22,7 @@ const useAuth = () => {
 
   const logout = () => {
     userDispatch({ type: "LOGOUT" });
+    navigate("/login");
   };
 
   return {

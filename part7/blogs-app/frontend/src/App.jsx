@@ -6,8 +6,6 @@ import Login from "./components/login/Login";
 import Notification from "./components/Notification";
 import useAuth from "./hooks/useAuth";
 import useBlog from "./hooks/useBlog";
-import { useNotificationDispatch, useNotificationValue } from "./reducers/NotificationContext";
-import { useUserValue } from "./reducers/UserContext";
 import UserInfo from "./components/UserInfo";
 import UsersList from "./components/users/UsersList";
 import UserDetail from "./components/users/UserDetail";
@@ -17,16 +15,12 @@ const App = () => {
   const navigate = useNavigate();
   const { login, logout } = useAuth();
   const { noteFormRef, update, remove } = useBlog();
-  const notification = useNotificationValue();
-  const notificationDispatch = useNotificationDispatch();
-  const user = useUserValue();
 
   return (
     <div>
       <Notification />
       <h2>Blogs</h2>
-
-      {user && <UserInfo user={user} onLogout={logout} />}
+      <UserInfo />
 
       <Routes>
         <Route path="/" element={<BlogList />} />

@@ -64,3 +64,18 @@ export const removeBlog = async id => {
   await axios.delete(`${baseUrl}/${id}`, config);
   return id;
 };
+
+export const fetchBlogById = async blogId => {
+  const user = window.localStorage.getItem("loggedUser");
+  const { token } = JSON.parse(user);
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
+
+  try {
+    const response = await axios.get(`${baseUrl}/${blogId}`, config);
+    return response.data;
+  } catch (error) {
+    console.error("Error", error);
+  }
+};

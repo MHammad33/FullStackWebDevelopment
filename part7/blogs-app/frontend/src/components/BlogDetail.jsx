@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import useBlog from "../hooks/useBlog";
 import { useUserValue } from "../reducers/UserContext";
+import { fetchBlogById } from "../requests";
 
 const BlogDetail = () => {
   const [comment, setComment] = useState("");
@@ -14,7 +15,18 @@ const BlogDetail = () => {
 
   const queryClient = useQueryClient();
   const blogs = queryClient.getQueryData(["blogs"]);
-  const blog = blogs.find(blog => blog.id === blogId);
+  const cachedBlog = blogs?.find(blog => blog.id === blogId);
+
+  const {
+    data: blog,
+    isError: blogError,
+    isLoading: blogLoading
+  } = useQuery({
+    queryKey: ["blog", blogId],
+    queryFn: () => fetchBlogById(blogId),
+    initialData: cachedBlog,
+    enabled: !cachedBlog
+  });
 
   const handleAddComment = async e => {
     e.preventDefault();
@@ -24,8 +36,12 @@ const BlogDetail = () => {
     });
   };
 
-  if (!blog) {
-    return <>Not Found</>;
+  if (blogLoading) {
+    return <>Loading...</>;
+  }
+
+  if (blogError || !blog) {
+    return <>Blog not found</>;
   }
 
   return (

@@ -1,7 +1,8 @@
 import PropTypes from "prop-types";
+import { useNotificationValue } from "../reducers/NotificationContext";
 
-const Notification = ({ message, type = "" }) => {
-  console.log("message", message);
+const Notification = ({ type = "" }) => {
+  const notificationMessage = useNotificationValue();
 
   const getBackgroundColor = () => {
     switch (type) {
@@ -26,25 +27,20 @@ const Notification = ({ message, type = "" }) => {
     border: "1px solid darkgrey",
     borderRadius: "5px",
     padding: "10px",
-    display: message ? "block" : "none",
+    display: notificationMessage ? "block" : "none",
     width: "80%",
     maxWidth: "300px",
     textAlign: "center",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
     transition: "opacity 0.5s ease-in-out",
-    opacity: message ? 1 : 0,
+    opacity: notificationMessage ? 1 : 0,
     zIndex: 99
   };
   return (
     <>
-      <div style={notificationStyles}>{message}</div>
+      <div style={notificationStyles}>{notificationMessage}</div>
     </>
   );
-};
-
-Notification.propTypes = {
-  message: PropTypes.string,
-  type: PropTypes.string
 };
 
 export default Notification;

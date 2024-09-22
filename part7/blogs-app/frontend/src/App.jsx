@@ -6,7 +6,6 @@ import Login from "./components/login/Login";
 import Notification from "./components/Notification";
 import useAuth from "./hooks/useAuth";
 import useBlog from "./hooks/useBlog";
-import { fetchAllBlogs } from "./requests";
 import { useNotificationDispatch, useNotificationValue } from "./reducers/NotificationContext";
 import { useUserValue } from "./reducers/UserContext";
 import UserInfo from "./components/UserInfo";
@@ -24,7 +23,7 @@ const App = () => {
 
   return (
     <div>
-      {notification && <Notification message={notification} />}
+      <Notification />
       <h2>Blogs</h2>
 
       {user && <UserInfo user={user} onLogout={logout} />}

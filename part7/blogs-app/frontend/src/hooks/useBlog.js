@@ -21,8 +21,8 @@ const useBlog = () => {
   const updateBlogMutation = useMutation({
     mutationFn: updateBlogInDb,
     onSuccess: updatedBlogData => {
-      console.log("updatedBlogData", updatedBlogData);
       queryClient.setQueryData(["blogs"], prevBlogs => {
+        if (prevBlogs) return [];
         return prevBlogs.map(blog => (blog.id === updatedBlogData.id ? updatedBlogData : blog));
       });
       queryClient.setQueryData(["blog", updatedBlogData.id], prevBlog => {

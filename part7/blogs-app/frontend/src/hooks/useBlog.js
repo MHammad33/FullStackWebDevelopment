@@ -25,6 +25,9 @@ const useBlog = () => {
       queryClient.setQueryData(["blogs"], prevBlogs => {
         return prevBlogs.map(blog => (blog.id === updatedBlogData.id ? updatedBlogData : blog));
       });
+      queryClient.setQueryData(["blog", updatedBlogData.id], prevBlog => {
+        return updatedBlogData;
+      });
       notificationDispatch({ type: "LIKE_BLOG", payload: updatedBlogData.title });
     },
     onError: error => {

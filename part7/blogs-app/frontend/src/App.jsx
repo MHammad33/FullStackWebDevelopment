@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { Routes, Route, Link } from "react-router-dom";
+
 import Blog from "./components/blog/Blog";
 import Login from "./components/login/Login";
 import Notification from "./components/Notification";
@@ -91,6 +93,11 @@ const App = () => {
           <Login onLogin={login} />
         )}
       </div>
+
+      <Routes>
+        <Route path="/" element={<>Blogs</>} />
+        <Route path="/users" element={<>Users</>} />
+      </Routes>
     </div>
   );
 };

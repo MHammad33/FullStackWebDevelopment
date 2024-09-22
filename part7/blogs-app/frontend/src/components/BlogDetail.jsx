@@ -20,7 +20,7 @@ const BlogDetail = () => {
         <strong>Author:</strong> {blog.author}
       </p>
       <p>
-        <strong>Likes:</strong> {blog.likes}
+        <strong>Likes:</strong> {blog.likes} <button className="like-button">👍</button>
       </p>
       <p>{blog.content}</p>
       <p>
@@ -28,6 +28,9 @@ const BlogDetail = () => {
           Read full blog
         </a>
       </p>
+      <div className="blog-actions">
+        <button className="remove-button">🗑️ Remove</button>
+      </div>
     </div>
   );
 };

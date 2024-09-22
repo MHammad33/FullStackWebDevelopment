@@ -75,9 +75,8 @@
 
 .like-button {
   background-color: #edf2f7;
-  border-radius: 9999px;
-  padding: 0.25rem 0.75rem;
-  margin-top: 0.5rem;
+  border-radius: 9px;
+  margin: 0.5rem;
   transition: background-color 0.2s;
   cursor: pointer;
 }

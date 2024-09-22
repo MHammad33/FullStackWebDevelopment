@@ -52,8 +52,4 @@ const Login = () => {
   );
 };
 
-Login.propTypes = {
-  onLogin: PropTypes.func.isRequired
-};
-
 export default Login;

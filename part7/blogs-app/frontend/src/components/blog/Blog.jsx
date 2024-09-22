@@ -3,11 +3,12 @@ import { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNotificationDispatch } from "../../reducers/NotificationContext";
 import { removeBlog, updateBlogInDb } from "../../requests";
+import { useUserValue } from "../../reducers/UserContext";
 
 const Blog = props => {
   const [blog, setBlog] = useState(props.blog);
   const [fullBlogVisible, setFullBlogVisible] = useState(false);
-  const { onDeleteBlog, currentUser } = props;
+  const currentUser = useUserValue();
 
   const notificationDispatch = useNotificationDispatch();
   const queryClient = useQueryClient();

@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { Container, Typography, Button, Box } from "@mui/material";
 
 import Login from "./components/login/Login";
 import Notification from "./components/Notification";
@@ -9,24 +10,31 @@ import BlogList from "./components/BlogList";
 import BlogDetail from "./components/BlogDetail";
 import Navbar from "./components/Navbar";
 
-import Button from "@mui/material/Button";
-
 const App = () => {
   return (
-    <div>
+    <Box>
       <Navbar />
-      <Notification />
-      <h2>Blogs</h2>
-      <Button variant="contained">Hello world</Button>;
-      <UserInfo />
-      <Routes>
-        <Route path="/" element={<BlogList />} />
-        <Route path="/blogs/:id" element={<BlogDetail />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/users" element={<UsersList />} />
-        <Route path="/users/:id" element={<UserDetail />} />
-      </Routes>
-    </div>
+      <Container>
+        <Notification />
+        <Typography
+          variant="h2"
+          component="h2"
+          gutterBottom
+          sx={{ fontFamily: "'Roboto', sans-serif", fontWeight: "bold", fontSize: "2.5rem" }}
+        >
+          Blogs
+        </Typography>
+
+        <UserInfo />
+        <Routes>
+          <Route path="/" element={<BlogList />} />
+          <Route path="/blogs/:id" element={<BlogDetail />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/users" element={<UsersList />} />
+          <Route path="/users/:id" element={<UserDetail />} />
+        </Routes>
+      </Container>
+    </Box>
   );
 };
 

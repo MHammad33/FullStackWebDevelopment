@@ -1,3 +1,4 @@
+import { Button, Collapse, Box } from "@mui/material";
 import PropTypes from "prop-types";
 import { forwardRef, useState, useImperativeHandle } from "react";
 
@@ -13,10 +14,14 @@ const Togglable = forwardRef(function Togglable(props, refs) {
   });
 
   return (
-    <div>
-      <button onClick={toggleVisibility}>{visible ? "Cancel" : props.buttonLabel}</button>
-      {visible && props.children}
-    </div>
+    <Box>
+      <Button variant="contained" onClick={toggleVisibility}>
+        {visible ? "Cancel" : props.buttonLabel}
+      </Button>
+      <Collapse in={visible}>
+        <Box mt={2}>{props.children}</Box>
+      </Collapse>
+    </Box>
   );
 });
 

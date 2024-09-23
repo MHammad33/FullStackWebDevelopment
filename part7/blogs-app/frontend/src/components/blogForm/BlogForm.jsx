@@ -1,6 +1,7 @@
+import { TextField, Button, Box } from "@mui/material";
+
 import { useState } from "react";
 import useBlog from "../../hooks/useBlog";
-import "./BlogForm.css";
 
 const BlogForm = () => {
   const [title, setTitle] = useState("");
@@ -24,42 +25,34 @@ const BlogForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="blog-form">
-      <div>
-        <label htmlFor="title">Title:</label>
-        <input
-          type="text"
-          id="title"
+      <Box display="flex" flexDirection="column" gap={2}>
+        <TextField
+          label="Title"
+          variant="outlined"
           value={title}
           onChange={e => setTitle(e.target.value)}
-          placeholder="Title"
           required
           data-testid="title"
         />
-      </div>
-      <div>
-        <label htmlFor="author">Author:</label>
-        <input
-          type="text"
-          id="author"
+        <TextField
+          label="Author"
+          variant="outlined"
           value={author}
           onChange={e => setAuthor(e.target.value)}
-          placeholder="Author"
           required
           data-testid="author"
         />
-      </div>
-      <div>
-        <label htmlFor="url">URL:</label>
-        <input
-          type="text"
-          id="url"
+        <TextField
+          label="URL"
+          variant="outlined"
           value={url}
-          placeholder="URL"
           onChange={e => setUrl(e.target.value)}
           data-testid="url"
         />
-      </div>
-      <button type="submit">Add Blog</button>
+        <Button type="submit" variant="contained" color="primary">
+          Add Blog
+        </Button>
+      </Box>
     </form>
   );
 };

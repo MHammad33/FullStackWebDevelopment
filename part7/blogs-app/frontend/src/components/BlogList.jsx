@@ -1,4 +1,6 @@
-import { Container, Typography, CircularProgress, Grid, Paper, Button } from "@mui/material";
+import { Container, Typography, Grid, Paper, Box } from "@mui/material";
+import { Add } from "@mui/icons-material";
+
 import BlogForm from "./blogForm/BlogForm";
 import Blog from "./blog/Blog";
 import Togglable from "./Togglable";
@@ -49,13 +51,22 @@ const BlogList = () => {
 
   return (
     <Container>
-      <Togglable buttonLabel="New Blog" ref={noteFormRef}>
-        <BlogForm />
-      </Togglable>
-
-      <Typography variant="h4" gutterBottom style={{ marginTop: "20px", textAlign: "center" }}>
+      <Typography variant="h4" gutterBottom align="center">
         Blog List
       </Typography>
+
+      <Box mb={2}>
+        <Togglable
+          buttonLabel={
+            <Box display="flex" alignItems="center">
+              <Add /> New Blog
+            </Box>
+          }
+          ref={noteFormRef}
+        >
+          <BlogForm />
+        </Togglable>
+      </Box>
 
       <Grid container spacing={4}>
         {blogs

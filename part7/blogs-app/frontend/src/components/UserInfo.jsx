@@ -1,3 +1,4 @@
+import { Button, Typography, Box } from "@mui/material";
 import useAuth from "../hooks/useAuth";
 import { useUserValue } from "../reducers/UserContext";
 
@@ -8,11 +9,14 @@ const UserInfo = () => {
   if (!user) return;
 
   return (
-    <div>
-      <p>
-        {user.name} logged in <button onClick={logout}>Logout</button>
-      </p>
-    </div>
+    <Box display="flex" alignItems="center" mt={2}>
+      <Typography variant="body1" sx={{ mr: 2 }}>
+        {user.name} logged in
+      </Typography>
+      <Button variant="contained" color="secondary" onClick={logout}>
+        Logout
+      </Button>
+    </Box>
   );
 };
 

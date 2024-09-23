@@ -14,7 +14,8 @@ const App = () => {
   return (
     <Box>
       <Navbar />
-      <Container>
+
+      <Container sx={{ marginTop: "7px" }}>
         <Notification />
         <Typography
           variant="h2"

@@ -7,7 +7,7 @@ import UsersList from "./components/users/UsersList";
 import UserDetail from "./components/users/UserDetail";
 import BlogList from "./components/BlogList";
 import BlogDetail from "./components/BlogDetail";
-import Navbar from "./components/navbar/Navbar";
+import Navbar from "./components/Navbar";
 
 import Button from "@mui/material/Button";
 

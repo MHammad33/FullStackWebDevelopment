@@ -1,3 +1,14 @@
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Paper,
+  CircularProgress
+} from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import User from "./User";
 import { fetchAllUsers } from "./userRequests";
@@ -17,23 +28,26 @@ const UsersList = () => {
   if (usersError) return <p>Error fetching data</p>;
 
   return (
-    <>
-      <h2>Users</h2>
+    <TableContainer component={Paper} sx={{ marginTop: 2 }}>
+      <Typography variant="h4" component="h2" sx={{ padding: 2 }}>
+        Users
+      </Typography>
 
-      <table border="1" cellPadding="10">
-        <thead>
-          <tr>
-            <th>User</th>
-            <th>Blogs Created</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>User</TableCell>
+            <TableCell>Blogs Created</TableCell>
+          </TableRow>
+        </TableHead>
+
+        <TableBody>
           {users.map(user => (
             <User key={user.id} user={user} />
           ))}
-        </tbody>
-      </table>
-    </>
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 export default UsersList;

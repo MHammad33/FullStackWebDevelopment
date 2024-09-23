@@ -1,3 +1,4 @@
+import { Box, Typography, List, ListItem, Paper } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import UserBlog from "./UserBlog";
@@ -11,18 +12,26 @@ const UserDetail = () => {
   if (!user) return <p>User not found</p>;
 
   return (
-    <div>
-      <h2>{user.name}</h2>
-      <p>
-        <strong>Username:</strong> {user.username}
-      </p>
-      <h3>Added Blogs</h3>
-      <ul>
-        {user.blogs.map(blog => (
-          <UserBlog key={blog.id} blog={blog} />
-        ))}
-      </ul>
-    </div>
+    <Box sx={{ mt: 4, p: 2 }}>
+      <Paper elevation={3} sx={{ p: 3 }}>
+        <Typography variant="h4" gutterBottom>
+          {user.name}
+        </Typography>
+        <Typography variant="body1">
+          <strong>Username:</strong> {user.username}
+        </Typography>
+        <Typography variant="h5" sx={{ mt: 4 }}>
+          Added Blogs
+        </Typography>
+        <List>
+          {user.blogs.map(blog => (
+            <ListItem key={blog.id}>
+              <UserBlog blog={blog} />
+            </ListItem>
+          ))}
+        </List>
+      </Paper>
+    </Box>
   );
 };
 export default UserDetail;

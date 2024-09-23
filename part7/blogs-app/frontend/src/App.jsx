@@ -9,14 +9,16 @@ import BlogList from "./components/BlogList";
 import BlogDetail from "./components/BlogDetail";
 import Navbar from "./components/navbar/Navbar";
 
+import Button from "@mui/material/Button";
+
 const App = () => {
   return (
     <div>
       <Navbar />
       <Notification />
       <h2>Blogs</h2>
+      <Button variant="contained">Hello world</Button>;
       <UserInfo />
-
       <Routes>
         <Route path="/" element={<BlogList />} />
         <Route path="/blogs/:id" element={<BlogDetail />} />

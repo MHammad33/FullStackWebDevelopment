@@ -1,3 +1,14 @@
+import {
+  Button,
+  Typography,
+  Paper,
+  TextField,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+  Box
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
@@ -46,37 +57,43 @@ const BlogDetail = () => {
   }
 
   return (
-    <div className="blog-detail">
-      <h2>{blog.title}</h2>
-      <p>
+    <Paper elevation={3} style={{ padding: "16px", margin: "16px" }}>
+      <Typography variant="h4">{blog.title}</Typography>
+      <Typography variant="subtitle1">
         <strong>Author:</strong> {blog.author}
-      </p>
-      <p>
+      </Typography>
+
+      <Typography variant="subtitle1">
         <strong>Likes:</strong> {blog.likes}{" "}
-        <button
+        <Button
+          variant="contained"
+          color="primary"
           onClick={() =>
             updateBlogMutation.mutate({
               id: blog.id,
-              updatedBlog: {
-                likes: blog.likes + 1
-              }
+              updatedBlog: { likes: blog.likes + 1 }
             })
           }
-          className="like-button"
         >
           👍
-        </button>
-      </p>
-      <p>{blog.content}</p>
-      <p>
+        </Button>
+      </Typography>
+
+      <Typography variant="body1" paragraph>
+        {blog.content}
+      </Typography>
+
+      <Typography variant="body1">
         <a href={blog.url} target="_blank" rel="noopener noreferrer">
           Read full blog
         </a>
-      </p>
-      <div className="blog-actions">
+      </Typography>
+
+      <div>
         {currentUser?.username === blog.user.username && (
-          <button
-            className="remove-button"
+          <Button
+            variant="outlined"
+            color="secondary"
             onClick={() => {
               const confirm = window.confirm(`Remove blog ${blog.title} by ${blog.author}?`);
               if (confirm) {
@@ -86,34 +103,51 @@ const BlogDetail = () => {
             }}
           >
             🗑️ Remove
-          </button>
+          </Button>
         )}
       </div>
 
-      <div className="comments-section">
-        <h3>Comments</h3>
-        {blog.comments && blog.comments.length > 0 ? (
-          <ul>
-            {blog.comments.map((comment, index) => (
-              <li key={index}>{comment}</li>
-            ))}
-          </ul>
-        ) : (
-          <p>No comments yet</p>
-        )}
+      <Divider style={{ margin: "16px 0" }} />
 
-        <form onSubmit={handleAddComment}>
-          <input
-            type="text"
+      <div>
+        <Typography variant="h6">Comments</Typography>
+        <Box
+          sx={{
+            border: "1px solid #ccc",
+            borderRadius: "4px",
+            padding: "8px",
+            backgroundColor: "#f9f9f9"
+          }}
+        >
+          {blog.comments && blog.comments.length > 0 ? (
+            <List>
+              {blog.comments.map((comment, index) => (
+                <ListItem key={index}>
+                  <ListItemText primary={comment} />
+                </ListItem>
+              ))}
+            </List>
+          ) : (
+            <Typography>No comments yet</Typography>
+          )}
+        </Box>
+
+        <form onSubmit={handleAddComment} style={{ marginTop: "16px" }}>
+          <TextField
+            variant="outlined"
+            fullWidth
             value={comment}
             onChange={e => setComment(e.target.value)}
             placeholder="Add a comment"
             required
+            style={{ marginBottom: "16px" }}
           />
-          <button type="submit">Add Comment</button>
+          <Button type="submit" variant="contained" color="primary">
+            Add Comment
+          </Button>
         </form>
       </div>
-    </div>
+    </Paper>
   );
 };
 export default BlogDetail;

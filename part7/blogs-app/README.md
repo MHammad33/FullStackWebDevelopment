@@ -1,3 +1,3 @@
-# Solutions for Part 5 Exercises
+# Solutions for Part 7 Exercises
 
 ## A blog application

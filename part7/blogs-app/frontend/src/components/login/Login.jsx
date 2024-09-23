@@ -1,4 +1,4 @@
-import "./Login.css";
+import { TextField, Button, Typography, Container, Box } from "@mui/material";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import useAuth from "../../hooks/useAuth";
@@ -22,33 +22,45 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <h2>Log in to application</h2>
+    <Container maxWidth="xs" style={{ marginTop: "50px" }}>
+      <Typography variant="h4" align="center" gutterBottom>
+        Log in to application
+      </Typography>
+
       <form onSubmit={handleLogin}>
-        {error && <div className="error-message">{error}</div>}
-        <div className="form-group">
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            id="username"
+        {error && (
+          <Typography color="error" align="center" gutterBottom>
+            {error}
+          </Typography>
+        )}
+        <Box mb={2}>
+          <TextField
+            label="Username"
+            variant="outlined"
+            fullWidth
             value={username}
             onChange={e => setUsername(e.target.value)}
             data-testid="test-username"
+            required
           />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input
+        </Box>
+        <Box mb={2}>
+          <TextField
+            label="Password"
             type="password"
-            id="password"
+            variant="outlined"
+            fullWidth
             value={password}
             onChange={e => setPassword(e.target.value)}
             data-testid="test-password"
+            required
           />
-        </div>
-        <button type="submit">Login</button>
+        </Box>
+        <Button variant="contained" color="primary" type="submit" fullWidth>
+          Login
+        </Button>
       </form>
-    </div>
+    </Container>
   );
 };
 

@@ -6,6 +6,8 @@ import { removeBlog, updateBlogInDb } from "../../requests";
 import { useUserValue } from "../../reducers/UserContext";
 import { Link } from "react-router-dom";
 
+import { Card, CardContent, CardActions, Typography, Button } from "@mui/material";
+
 const Blog = props => {
   const [blog, setBlog] = useState(props.blog);
   const [fullBlogVisible, setFullBlogVisible] = useState(false);
@@ -65,17 +67,21 @@ const Blog = props => {
   };
 
   return (
-    <div className="blog-card">
-      <Link to={`/blogs/${blog.id}`} className="blog-link">
-        <div className="blog-header">
-          <h3 className="blog-title">{blog.title}</h3>
-          <p className="likes-count">{blog.likes} likes</p>
-        </div>
-        <div className="read-more">
-          <span>Read More</span>
-        </div>
+    <Card variant="outlined" style={{ margin: "16px" }}>
+      <Link to={`/blogs/${blog.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+        <CardContent>
+          <Typography variant="h5" component="h3" className="blog-title">
+            {blog.title}
+          </Typography>
+          <Typography variant="subtitle1" color="textSecondary" className="likes-count">
+            {blog.likes} likes
+          </Typography>
+          <Typography variant="body2" color="primary" className="read-more">
+            Read More
+          </Typography>
+        </CardContent>
       </Link>
-    </div>
+    </Card>
   );
 };
 

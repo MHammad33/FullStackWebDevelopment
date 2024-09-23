@@ -1,3 +1,4 @@
+import { Container, Typography, CircularProgress, Grid, Paper, Button } from "@mui/material";
 import BlogForm from "./blogForm/BlogForm";
 import Blog from "./blog/Blog";
 import Togglable from "./Togglable";
@@ -47,19 +48,40 @@ const BlogList = () => {
   }
 
   return (
-    <>
+    <Container>
       <Togglable buttonLabel="New Blog" ref={noteFormRef}>
         <BlogForm />
       </Togglable>
 
-      <div className="blog-container">
+      <Typography variant="h4" gutterBottom style={{ marginTop: "20px", textAlign: "center" }}>
+        Blog List
+      </Typography>
+
+      <Grid container spacing={4}>
         {blogs
           ?.sort((a, b) => b.likes - a.likes)
           .map(blog => (
-            <Blog key={blog.id} blog={blog} />
+            <Grid item xs={12} sm={6} md={4} key={blog.id}>
+              <Paper
+                elevation={3}
+                style={{ padding: "16px", borderRadius: "8px", transition: "0.3s" }}
+              >
+                <Blog blog={blog} />
+              </Paper>
+            </Grid>
           ))}
-      </div>
-    </>
+      </Grid>
+
+      {blogs.length === 0 && (
+        <Typography
+          variant="body1"
+          color="textSecondary"
+          style={{ textAlign: "center", marginTop: "20px" }}
+        >
+          No blogs available. Start writing your first blog!
+        </Typography>
+      )}
+    </Container>
   );
 };
 

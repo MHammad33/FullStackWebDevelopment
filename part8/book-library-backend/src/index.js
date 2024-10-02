@@ -1,9 +1,13 @@
 const app = require("./app");
+const config = require("./utils/config");
+const connectDb = require("./db/connectDb");
 
-const startServer = () => {
+const startServer = async () => {
 	try {
-		const PORT = 3001;
-		app.listen(PORT, () => console.log("Listening on port:", PORT));
+		await connectDb(config.MONGODB_URI);
+		app.listen(config.PORT, () =>
+			console.log("Listening on port:", config.PORT)
+		);
 	} catch (error) {
 		console.error("Error starting server...", error);
 	}

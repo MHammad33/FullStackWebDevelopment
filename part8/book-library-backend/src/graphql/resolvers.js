@@ -1,6 +1,22 @@
+const authors = require("../data/authors");
+const books = require("../data/books");
+
 const resolvers = {
 	Query: {
-		dummy: () => 0,
+		allAuthors: () => authors,
+		allBooks: () => books,
+		findAuthor: (root, args) =>
+			authors.find((author) => author.name === args.name),
+		findBook: (root, args) => books.find((book) => book.title === args.title),
+		bookCount: () => books.length,
+		authorCount: () => authors.length,
+	},
+	Author: {
+		bookCount: (root) =>
+			books.filter((book) => book.author === root.name).length,
+	},
+	Book: {
+		author: (root) => authors.find((author) => author.name === root.author),
 	},
 };
 

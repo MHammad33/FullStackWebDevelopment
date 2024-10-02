@@ -1,4 +1,4 @@
-export const books = [
+const books = [
 	{
 		title: "Clean Code",
 		published: 2008,
@@ -49,3 +49,5 @@ export const books = [
 		genres: ["classic", "revolution"],
 	},
 ];
+
+module.exports = books;

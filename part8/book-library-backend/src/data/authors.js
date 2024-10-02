@@ -1,4 +1,4 @@
-export const authors = [
+const authors = [
 	{
 		name: "Robert Martin",
 		id: "afa51ab0-344d-11e9-a414-719c6709cf3e",
@@ -23,3 +23,5 @@ export const authors = [
 		id: "afa5b6f3-344d-11e9-a414-719c6709cf3e",
 	},
 ];
+
+module.exports = authors;

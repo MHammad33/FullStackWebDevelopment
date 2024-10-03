@@ -1,6 +1,11 @@
 const authors = require("../data/authors");
 const books = require("../data/books");
 
+const bookCounts = books.reduce((booksCountObj, book) => {
+	booksCountObj[book.author] = (booksCountObj[book.author] || 0) + 1;
+	return booksCountObj;
+}, {});
+
 const resolvers = {
 	Query: {
 		allAuthors: () => authors,
@@ -12,8 +17,7 @@ const resolvers = {
 		authorCount: () => authors.length,
 	},
 	Author: {
-		bookCount: (root) =>
-			books.filter((book) => book.author === root.name).length,
+		bookCount: (root) => bookCounts[root.name] || 0,
 	},
 };
 

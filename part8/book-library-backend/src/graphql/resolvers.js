@@ -15,9 +15,6 @@ const resolvers = {
 		bookCount: (root) =>
 			books.filter((book) => book.author === root.name).length,
 	},
-	Book: {
-		author: (root) => authors.find((author) => author.name === root.author),
-	},
 };
 
 module.exports = resolvers;

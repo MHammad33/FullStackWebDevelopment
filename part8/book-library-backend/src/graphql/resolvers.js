@@ -10,8 +10,10 @@ const resolvers = {
 	Query: {
 		allAuthors: () => authors,
 		allBooks: (root, args) => {
-			if (!args.author) return books;
-			return books.filter((book) => book.author === args.author);
+			if (args.author)
+				return books.filter((book) => book.author === args.author);
+
+			return books;
 		},
 		findAuthor: (root, args) =>
 			authors.find((author) => author.name === args.name),

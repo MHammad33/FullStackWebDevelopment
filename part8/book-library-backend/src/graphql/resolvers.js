@@ -13,6 +13,9 @@ const resolvers = {
 			if (args.author)
 				return books.filter((book) => book.author === args.author);
 
+			if (args.genre)
+				return books.filter((book) => book.genres.includes(args.genre));
+
 			return books;
 		},
 		findAuthor: (root, args) =>

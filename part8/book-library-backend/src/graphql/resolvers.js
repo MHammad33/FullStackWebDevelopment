@@ -9,7 +9,10 @@ const bookCounts = books.reduce((booksCountObj, book) => {
 const resolvers = {
 	Query: {
 		allAuthors: () => authors,
-		allBooks: () => books,
+		allBooks: (root, args) => {
+			if (!args.author) return books;
+			return books.filter((book) => book.author === args.author);
+		},
 		findAuthor: (root, args) =>
 			authors.find((author) => author.name === args.name),
 		findBook: (root, args) => books.find((book) => book.title === args.title),

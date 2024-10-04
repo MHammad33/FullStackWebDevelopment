@@ -1,5 +1,6 @@
-const authors = require("../data/authors");
-const books = require("../data/books");
+const { v1: uuid } = require("uuid");
+let authors = require("../data/authors");
+let books = require("../data/books");
 
 const bookCounts = books.reduce((booksCountObj, book) => {
 	booksCountObj[book.author] = (booksCountObj[book.author] || 0) + 1;
@@ -28,6 +29,29 @@ const resolvers = {
 		findBook: (root, args) => books.find((book) => book.title === args.title),
 		bookCount: () => books.length,
 		authorCount: () => authors.length,
+	},
+	Mutation: {
+		addBook: (root, args) => {
+			const book = { ...args, id: uuid() };
+
+			let existingAuthor = authors.find(
+				(author) => author.name === args.author
+			);
+
+			if (!existingAuthor) {
+				existingAuthor = { name: args.author, id: uuid(), born: null };
+				authors = authors.concat(existingAuthor);
+			}
+
+			const newBook = {
+				...args,
+				author: existingAuthor.name,
+				id: uuid(),
+			};
+
+			books = books.concat(newBook);
+			return newBook;
+		},
 	},
 	Author: {
 		bookCount: (root) => bookCounts[root.name] || 0,

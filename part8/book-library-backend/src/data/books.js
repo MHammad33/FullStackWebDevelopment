@@ -1,4 +1,4 @@
-const books = [
+let books = [
 	{
 		title: "Clean Code",
 		published: 2008,

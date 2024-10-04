@@ -10,13 +10,18 @@ const resolvers = {
 	Query: {
 		allAuthors: () => authors,
 		allBooks: (root, args) => {
+			let filteredBooks = books;
 			if (args.author)
-				return books.filter((book) => book.author === args.author);
+				filteredBooks = filteredBooks.filter(
+					(book) => book.author === args.author
+				);
 
 			if (args.genre)
-				return books.filter((book) => book.genres.includes(args.genre));
+				filteredBooks = filteredBooks.filter((book) =>
+					book.genres.includes(args.genre)
+				);
 
-			return books;
+			return filteredBooks;
 		},
 		findAuthor: (root, args) =>
 			authors.find((author) => author.name === args.name),

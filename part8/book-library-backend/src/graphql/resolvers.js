@@ -2,11 +2,6 @@ const { v1: uuid } = require("uuid");
 let authors = require("../data/authors");
 let books = require("../data/books");
 
-const bookCounts = books.reduce((booksCountObj, book) => {
-	booksCountObj[book.author] = (booksCountObj[book.author] || 0) + 1;
-	return booksCountObj;
-}, {});
-
 const resolvers = {
 	Query: {
 		allAuthors: () => authors,
@@ -52,9 +47,27 @@ const resolvers = {
 			books = books.concat(newBook);
 			return newBook;
 		},
+
+		editAuthor: (root, args) => {
+			const authorToUpdate = authors.find(
+				(author) => author.name === args.name
+			);
+
+			if (!authorToUpdate) {
+				return null;
+			}
+
+			const authorWithUpdatedData = { ...authorToUpdate, born: args.setBornTo };
+
+			authors = authors.map((author) =>
+				author.name === args.name ? authorWithUpdatedData : author
+			);
+			return authorWithUpdatedData;
+		},
 	},
 	Author: {
-		bookCount: (root) => bookCounts[root.name] || 0,
+		bookCount: (root) =>
+			books.filter((book) => book.author === root.name).length,
 	},
 };
 

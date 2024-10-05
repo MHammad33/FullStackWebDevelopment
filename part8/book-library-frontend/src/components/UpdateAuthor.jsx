@@ -1,9 +1,9 @@
 import { useMutation } from "@apollo/client";
 import Select from "react-select";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { UPDATE_AUTHOR } from "../queries";
 
-const UpdateAuthor = ({ authors }) => {
+const UpdateAuthor = React.memo(({ authors }) => {
 	const [selectedAuthor, setSelectedAuthor] = useState("");
 	const [born, setBorn] = useState(0);
 	const [updateAuthor, result] = useMutation(UPDATE_AUTHOR);
@@ -20,17 +20,20 @@ const UpdateAuthor = ({ authors }) => {
 		}
 	}, [result.data]);
 
-	const handleSubmit = (event) => {
-		event.preventDefault();
+	const handleSubmit = useCallback(
+		(event) => {
+			event.preventDefault();
 
-		if (selectedAuthor) {
-			updateAuthor({
-				variables: { name: selectedAuthor.value, setBornTo: Number(born) },
-			});
-			setSelectedAuthor(null);
-			setBorn(0);
-		}
-	};
+			if (selectedAuthor) {
+				updateAuthor({
+					variables: { name: selectedAuthor.value, setBornTo: Number(born) },
+				});
+				setSelectedAuthor(null);
+				setBorn(0);
+			}
+		},
+		[selectedAuthor, born, updateAuthor]
+	);
 
 	const authorOptions = authors?.map((author) => ({
 		value: author.name,
@@ -64,5 +67,5 @@ const UpdateAuthor = ({ authors }) => {
 			</form>
 		</div>
 	);
-};
+});
 export default UpdateAuthor;

@@ -1,4 +1,7 @@
 const { v1: uuid } = require("uuid");
+const Author = require("../models/Author.model");
+const Book = require("../models/Book.model");
+
 let authors = require("../data/authors");
 let books = require("../data/books");
 
@@ -26,26 +29,23 @@ const resolvers = {
 		authorCount: () => authors.length,
 	},
 	Mutation: {
-		addBook: (root, args) => {
-			const book = { ...args, id: uuid() };
+		addBook: async (root, args) => {
+			let author = await Author.findOne({ name: args.author });
 
-			let existingAuthor = authors.find(
-				(author) => author.name === args.author
-			);
-
-			if (!existingAuthor) {
-				existingAuthor = { name: args.author, id: uuid(), born: null };
-				authors = authors.concat(existingAuthor);
+			if (!author) {
+				author = new Author({ name: args.author });
+				await author.save();
 			}
 
-			const newBook = {
-				...args,
-				author: existingAuthor.name,
-				id: uuid(),
-			};
+			const newBook = new Book({
+				title: args.title,
+				published: args.published,
+				author: author._id,
+				genres: args.genres,
+			});
 
-			books = books.concat(newBook);
-			return newBook;
+			await newBook.save();
+			return newBook.populate("author");
 		},
 
 		editAuthor: (root, args) => {

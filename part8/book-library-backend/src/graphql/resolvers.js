@@ -8,11 +8,13 @@ let books = require("../data/books");
 const resolvers = {
 	Query: {
 		allAuthors: () => authors,
-		allBooks: (root, args) => {
+		allBooks: async (root, args) => {
+			const books = await Book.find({}).populate("author");
+
 			let filteredBooks = books;
 			if (args.author)
 				filteredBooks = filteredBooks.filter(
-					(book) => book.author === args.author
+					(book) => book.author.name === args.author
 				);
 
 			if (args.genre)

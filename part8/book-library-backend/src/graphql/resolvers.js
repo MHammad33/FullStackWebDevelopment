@@ -7,7 +7,10 @@ let books = require("../data/books");
 
 const resolvers = {
 	Query: {
-		allAuthors: () => authors,
+		allAuthors: async () => {
+			const authors = await Author.find({});
+			return authors;
+		},
 		allBooks: async (root, args) => {
 			const books = await Book.find({}).populate("author");
 

@@ -4,7 +4,7 @@ const Author = require("../models/Author.model");
 const Book = require("../models/Book.model");
 const User = require("../models/User.model");
 
-const JWT_SECRET_KEY = "secret";
+export const JWT_SECRET_KEY = "secret";
 
 const resolvers = {
 	Query: {
@@ -104,7 +104,7 @@ const resolvers = {
 			const user = await User.findOne({ username: args.username });
 
 			const password = "1122";
-			if (!user || args.password !== "secret") {
+			if (!user || args.password !== "1122") {
 				throw new GraphQLError("wrong credentials", {
 					extensions: {
 						code: "BAD_USER_INPUT",

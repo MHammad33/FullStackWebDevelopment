@@ -49,7 +49,7 @@ const resolvers = {
 		},
 
 		editAuthor: async (root, args) => {
-			const author = await Author.findOne({ name: args.author });
+			const author = await Author.findOne({ name: args.name });
 
 			if (!author) {
 				return null;

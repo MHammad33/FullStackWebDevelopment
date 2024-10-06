@@ -1,5 +1,7 @@
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
+const jwt = require("jsonwebtoken");
+const User = require("./models/User.model");
 const config = require("./utils/config");
 const connectDb = require("./db/connectDb");
 const typeDefs = require("./graphql/typeDefs");
@@ -19,9 +21,7 @@ const startServer = async () => {
 				const auth = req ? req.headers.authorization : null;
 				if (auth && auth.startsWith("Bearer ")) {
 					const decodedToken = jwt.verify(auth.substring(7), "secret");
-					const currentUser = await User.findById(decodedToken.id).populate(
-						"books"
-					);
+					const currentUser = await User.findById(decodedToken.id);
 					return { currentUser };
 				}
 			},

@@ -18,10 +18,7 @@ const startServer = async () => {
 			context: async ({ req, res }) => {
 				const auth = req ? req.headers.authorization : null;
 				if (auth && auth.startsWith("Bearer ")) {
-					const decodedToken = jwt.verify(
-						auth.substring(7),
-						resolvers.JWT_SECRET_KEY
-					);
+					const decodedToken = jwt.verify(auth.substring(7), "secret");
 					const currentUser = await User.findById(decodedToken.id).populate(
 						"books"
 					);

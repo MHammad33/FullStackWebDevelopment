@@ -4,7 +4,7 @@ const Author = require("../models/Author.model");
 const Book = require("../models/Book.model");
 const User = require("../models/User.model");
 
-export const JWT_SECRET_KEY = "secret";
+const JWT_SECRET_KEY = "secret";
 
 const resolvers = {
 	Query: {
@@ -42,8 +42,13 @@ const resolvers = {
 		},
 	},
 	Mutation: {
-		addBook: async (root, args) => {
+		addBook: async (root, args, context) => {
 			try {
+				const currentUser = context.currentUser;
+				if (!currentUser) {
+					throw new GraphQLError("Not authenticated");
+				}
+
 				let author = await Author.findOne({ name: args.author });
 
 				if (!author) {
@@ -67,8 +72,13 @@ const resolvers = {
 				throw new GraphQLError(`Error adding book: ${error.message}`);
 			}
 		},
-		editAuthor: async (root, args) => {
+		editAuthor: async (root, args, context) => {
 			try {
+				const currentUser = context.currentUser;
+				if (!currentUser) {
+					throw new GraphQLError("Not authenticated");
+				}
+
 				const author = await Author.findOne({ name: args.name });
 
 				if (!author) {

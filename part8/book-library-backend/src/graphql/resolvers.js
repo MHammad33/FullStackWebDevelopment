@@ -1,4 +1,5 @@
 const { GraphQLError } = require("graphql");
+const jwt = require("jsonwebtoken");
 const Author = require("../models/Author.model");
 const Book = require("../models/Book.model");
 const User = require("../models/User.model");
@@ -98,6 +99,26 @@ const resolvers = {
 			await user.save();
 
 			return user;
+		},
+		login: async (root, args) => {
+			const user = await User.findOne({ username: args.username });
+
+			const password = "1122";
+			if (!user || args.password !== "secret") {
+				throw new GraphQLError("wrong credentials", {
+					extensions: {
+						code: "BAD_USER_INPUT",
+					},
+				});
+			}
+			const userForToken = {
+				username: user.username,
+				id: user._id,
+			};
+
+			return {
+				value: jwt.sign(userForToken, JWT_SECRET_KEY, { expiresIn: "1h" }),
+			};
 		},
 	},
 	Author: {

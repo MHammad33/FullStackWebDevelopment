@@ -20,18 +20,22 @@ const resolvers = {
 					(book) => book.author.name === args.author
 				);
 
-			if (args.genre)
-				filteredBooks = filteredBooks.filter((book) =>
-					book.genres.includes(args.genre)
-				);
+			if (args.genre) filteredBooks.genres = { $in: [args.genre] };
 
 			return filteredBooks;
 		},
-		findAuthor: (root, args) =>
-			authors.find((author) => author.name === args.name),
-		findBook: (root, args) => books.find((book) => book.title === args.title),
-		bookCount: () => books.length,
-		authorCount: () => authors.length,
+		findAuthor: async (root, args) => {
+			return await Author.findOne({ name: args.name });
+		},
+		findBook: async (root, args) => {
+			return await Book.findOne({ title: args.title }).populate("author");
+		},
+		bookCount: async () => {
+			return await Book.countDocuments();
+		},
+		authorCount: async () => {
+			return await Author.countDocuments();
+		},
 	},
 	Mutation: {
 		addBook: async (root, args) => {

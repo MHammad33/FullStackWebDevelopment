@@ -1,3 +1,4 @@
+const { GraphQLError } = require("graphql");
 const Author = require("../models/Author.model");
 const Book = require("../models/Book.model");
 
@@ -35,34 +36,49 @@ const resolvers = {
 	},
 	Mutation: {
 		addBook: async (root, args) => {
-			let author = await Author.findOne({ name: args.author });
+			try {
+				let author = await Author.findOne({ name: args.author });
 
-			if (!author) {
-				author = new Author({ name: args.author });
-				await author.save();
+				if (!author) {
+					author = new Author({ name: args.author });
+					await author.save();
+				}
+
+				const newBook = new Book({
+					title: args.title,
+					published: args.published,
+					author: author._id,
+					genres: args.genres,
+				});
+
+				await newBook.save();
+				return newBook.populate("author");
+			} catch (error) {
+				if (error.name === "ValidationError") {
+					throw new GraphQLError(`Validation Error: ${error.message}`);
+				}
+				throw new GraphQLError(`Error adding book: ${error.message}`);
 			}
-
-			const newBook = new Book({
-				title: args.title,
-				published: args.published,
-				author: author._id,
-				genres: args.genres,
-			});
-
-			await newBook.save();
-			return newBook.populate("author");
 		},
 
 		editAuthor: async (root, args) => {
-			const author = await Author.findOne({ name: args.name });
+			try {
+				const author = await Author.findOne({ name: args.name });
 
-			if (!author) {
-				return null;
+				if (!author) {
+					throw new GraphQLError(`Author not found: ${args.name}`);
+				}
+
+				author.born = args.setBornTo;
+
+				await author.save();
+				return author;
+			} catch (error) {
+				if (error.name === "ValidationError") {
+					throw new GraphQLError(`Validation Error: ${error.message}`);
+				}
+				throw new GraphQLError(`Error editing author: ${error.message}`);
 			}
-
-			author.born = args.setBornTo;
-			await author.save();
-			return author;
 		},
 	},
 	Author: {

@@ -85,6 +85,20 @@ const resolvers = {
 				throw new GraphQLError(`Error editing author: ${error.message}`);
 			}
 		},
+		createUser: async (root, args) => {
+			const existingUser = await User.findOne({ username: args.username });
+			if (existingUser) {
+				throw new GraphQLError("Username already exists");
+			}
+
+			const user = new User({
+				username: args.username,
+				favoriteGenre: args.favoriteGenre,
+			});
+			await user.save();
+
+			return user;
+		},
 	},
 	Author: {
 		bookCount: async (root) => {

@@ -1,9 +1,5 @@
-const { v1: uuid } = require("uuid");
 const Author = require("../models/Author.model");
 const Book = require("../models/Book.model");
-
-let authors = require("../data/authors");
-let books = require("../data/books");
 
 const resolvers = {
 	Query: {

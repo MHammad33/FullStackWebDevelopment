@@ -1,9 +1,15 @@
 const { GraphQLError } = require("graphql");
 const Author = require("../models/Author.model");
 const Book = require("../models/Book.model");
+const User = require("../models/User.model");
+
+const JWT_SECRET_KEY = "secret";
 
 const resolvers = {
 	Query: {
+		me: (root, args, context) => {
+			return context.currentUser;
+		},
 		allAuthors: async () => {
 			const authors = await Author.find({});
 			return authors;
@@ -60,7 +66,6 @@ const resolvers = {
 				throw new GraphQLError(`Error adding book: ${error.message}`);
 			}
 		},
-
 		editAuthor: async (root, args) => {
 			try {
 				const author = await Author.findOne({ name: args.name });

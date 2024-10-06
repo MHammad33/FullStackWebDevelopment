@@ -48,21 +48,16 @@ const resolvers = {
 			return newBook.populate("author");
 		},
 
-		editAuthor: (root, args) => {
-			const authorToUpdate = authors.find(
-				(author) => author.name === args.name
-			);
+		editAuthor: async (root, args) => {
+			const author = await Author.findOne({ name: args.author });
 
-			if (!authorToUpdate) {
+			if (!author) {
 				return null;
 			}
 
-			const authorWithUpdatedData = { ...authorToUpdate, born: args.setBornTo };
-
-			authors = authors.map((author) =>
-				author.name === args.name ? authorWithUpdatedData : author
-			);
-			return authorWithUpdatedData;
+			author.born = args.setBornTo;
+			await author.save();
+			return author;
 		},
 	},
 	Author: {

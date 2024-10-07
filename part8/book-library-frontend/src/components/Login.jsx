@@ -19,6 +19,7 @@ const Login = (props) => {
 			const result = await login({ variables: { username, password } });
 			localStorage.setItem("booksLibrary-user-token", result.data.login.value);
 			setLoginMessage("Login successful!");
+			window.location.reload();
 		} catch (e) {
 			setLoginMessage("Login failed. Please try again.");
 			console.error("Login failed:", e);

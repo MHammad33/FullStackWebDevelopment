@@ -5,6 +5,7 @@ import { LOGIN_USER } from "../queries";
 const Login = (props) => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
+	const [loginMessage, setLoginMessage] = useState(null);
 
 	const [login, { data, loading, error }] = useMutation(LOGIN_USER);
 
@@ -16,14 +17,17 @@ const Login = (props) => {
 		event.preventDefault();
 		try {
 			const result = await login({ variables: { username, password } });
-			console.log("Login success:", result.data.login.value);
+			localStorage.setItem("booksLibrary-user-token", result.data.login.value);
+			setLoginMessage("Login successful!");
 		} catch (e) {
+			setLoginMessage("Login failed. Please try again.");
 			console.error("Login failed:", e);
 		}
 	};
 
 	return (
 		<div>
+			{loginMessage && <p>{loginMessage}</p>}
 			<h2>Login</h2>
 			<form onSubmit={handleSubmit}>
 				<div>

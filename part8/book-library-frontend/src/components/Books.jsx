@@ -24,11 +24,6 @@ const Books = (props) => {
 		book.genres.forEach((genre) => uniqueGenres.add(genre))
 	);
 
-	const filteredBooks =
-		selectedGenre === "All"
-			? books
-			: books.filter((book) => book.genres.includes(selectedGenre));
-
 	return (
 		<div>
 			<h2>books</h2>
@@ -40,7 +35,7 @@ const Books = (props) => {
 						<th>author</th>
 						<th>published</th>
 					</tr>
-					{filteredBooks?.map((a) => (
+					{books?.map((a) => (
 						<tr key={a.title}>
 							<td>{a.title}</td>
 							<td>{a.author.name || "unknown"}</td>

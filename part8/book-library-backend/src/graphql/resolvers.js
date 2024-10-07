@@ -16,17 +16,17 @@ const resolvers = {
 			return authors;
 		},
 		allBooks: async (root, args) => {
-			const books = await Book.find({}).populate("author");
+			const query = {};
+			if (args.author) {
+				query["author.name"] = args.author;
+			}
 
-			let filteredBooks = books;
-			if (args.author)
-				filteredBooks = filteredBooks.filter(
-					(book) => book.author.name === args.author
-				);
+			if (args.genre) {
+				query.genres = { $in: [args.genre] };
+			}
 
-			if (args.genre) filteredBooks.genres = { $in: [args.genre] };
-
-			return filteredBooks;
+			const books = await Book.find(query).populate("author");
+			return books;
 		},
 		findAuthor: async (root, args) => {
 			return await Author.findOne({ name: args.name });

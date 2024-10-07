@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 
 import Authors from "./components/Authors";
@@ -8,14 +8,34 @@ import Login from "./components/Login";
 
 const App = () => {
 	const [page, setPage] = useState("authors");
+	const [loggedIn, setLoggedIn] = useState(false);
+
+	useEffect(() => {
+		const token = localStorage.getItem("booksLibrary-user-token");
+		if (token) {
+			setLoggedIn(true);
+		}
+	}, []);
+
+	const handleLogout = () => {
+		localStorage.clear();
+		setLoggedIn(false);
+		setPage("login");
+	};
 
 	return (
 		<div>
 			<div>
 				<button onClick={() => setPage("authors")}>authors</button>
 				<button onClick={() => setPage("books")}>books</button>
-				<button onClick={() => setPage("add")}>add book</button>
-				<button onClick={() => setPage("login")}>login</button>
+				{loggedIn ? (
+					<>
+						<button onClick={() => setPage("add")}>add book</button>
+						<button onClick={handleLogout}>logout</button>
+					</>
+				) : (
+					<button onClick={() => setPage("login")}>login</button>
+				)}
 			</div>
 
 			<Authors show={page === "authors"} />

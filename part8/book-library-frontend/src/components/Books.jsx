@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { ALL_BOOKS } from "../queries";
+import { GET_BOOKS_BY_GENRE } from "../queries";
 
 const Books = (props) => {
-	const result = useQuery(ALL_BOOKS);
 	const [selectedGenre, setSelectedGenre] = useState("All");
+	const result = useQuery(GET_BOOKS_BY_GENRE, {
+		variables: { genre: selectedGenre === "All" ? "" : selectedGenre },
+		skip: !props.show,
+	});
 
 	if (!props.show) {
 		return null;

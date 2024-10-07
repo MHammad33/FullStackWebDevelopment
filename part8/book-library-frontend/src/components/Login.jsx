@@ -1,16 +1,25 @@
 import { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { LOGIN_USER } from "../queries";
 
 const Login = (props) => {
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+
+	const [login, { data, loading, error }] = useMutation(LOGIN_USER);
+
 	if (!props.show) {
 		return null;
 	}
 
-	const [username, setUsername] = useState("");
-	const [password, setPassword] = useState("");
-
-	const handleSubmit = (event) => {
+	const handleSubmit = async (event) => {
 		event.preventDefault();
-		console.log("Login Submitted", { username, password });
+		try {
+			const result = await login({ variables: { username, password } });
+			console.log("Login success:", result.data.login.value);
+		} catch (e) {
+			console.error("Login failed:", e);
+		}
 	};
 
 	return (
@@ -36,6 +45,8 @@ const Login = (props) => {
 					/>
 				</div>
 				<button type="submit">Login</button>
+				{loading && <p>Loading...</p>}
+				{error && <p>Error: {error.message}</p>}
 			</form>
 		</div>
 	);

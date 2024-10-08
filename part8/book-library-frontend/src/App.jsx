@@ -39,8 +39,8 @@ const App = () => {
 		}
 	};
 
-	return (
-		<div>
+	const navButtons = useMemo(
+		() => (
 			<div>
 				<button onClick={() => setPage("authors")}>authors</button>
 				<button onClick={() => setPage("books")}>books</button>
@@ -56,7 +56,13 @@ const App = () => {
 					<button onClick={() => setPage("login")}>login</button>
 				)}
 			</div>
+		),
+		[loggedIn]
+	);
 
+	return (
+		<div>
+			{navButtons}
 			{renderPage()}
 		</div>
 	);

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useQuery, useApolloClient } from "@apollo/client";
 
 import Authors from "./components/Authors";
@@ -9,19 +9,15 @@ import BooksByFavoriteGenre from "./components/BooksByFavoriteGenre";
 
 const App = () => {
 	const [page, setPage] = useState("authors");
-	const [loggedIn, setLoggedIn] = useState(false);
-	const client = useApolloClient();
+	const loggedIn = useMemo(
+		() => !!localStorage.getItem("booksLibrary-user-token"),
+		[]
+	);
 
-	useEffect(() => {
-		const token = localStorage.getItem("booksLibrary-user-token");
-		if (token) {
-			setLoggedIn(true);
-		}
-	}, []);
+	const client = useApolloClient();
 
 	const handleLogout = () => {
 		localStorage.clear();
-		setLoggedIn(false);
 		setPage("login");
 		client.resetStore();
 	};

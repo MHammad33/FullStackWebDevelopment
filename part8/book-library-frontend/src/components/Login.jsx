@@ -49,10 +49,11 @@ const Login = (props) => {
 						required
 					/>
 				</div>
-				<button type="submit">Login</button>
-				{loading && <p>Loading...</p>}
-				{error && <p>Error: {error.message}</p>}
+				<button type="submit" disabled={loading}>
+					{loading ? "Logging in..." : "Login"}
+				</button>
 			</form>
+			{error && <p style={{ color: "red" }}>Error: {error.message}</p>}
 		</div>
 	);
 };

@@ -22,6 +22,23 @@ const App = () => {
 		client.resetStore();
 	};
 
+	const renderPage = () => {
+		switch (page) {
+			case "authors":
+				return <Authors show />;
+			case "books":
+				return <Books show />;
+			case "add":
+				return loggedIn && <NewBook show />;
+			case "login":
+				return <Login show />;
+			case "favoriteGenre":
+				return loggedIn && <BooksByFavoriteGenre show />;
+			default:
+				return null;
+		}
+	};
+
 	return (
 		<div>
 			<div>
@@ -40,15 +57,7 @@ const App = () => {
 				)}
 			</div>
 
-			<Authors show={page === "authors"} />
-
-			<Books show={page === "books"} />
-
-			<NewBook show={page === "add"} />
-
-			<Login show={page === "login"} />
-
-			<BooksByFavoriteGenre show={page === "favoriteGenre"} />
+			{renderPage()}
 		</div>
 	);
 };

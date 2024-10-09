@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import Select from "react-select";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { UPDATE_AUTHOR } from "../queries";
 
 const UpdateAuthor = React.memo(({ authors }) => {
@@ -35,10 +35,14 @@ const UpdateAuthor = React.memo(({ authors }) => {
 		[selectedAuthor, born, updateAuthor]
 	);
 
-	const authorOptions = authors?.map((author) => ({
-		value: author.name,
-		label: author.name,
-	}));
+	const authorOptions = useMemo(
+		() =>
+			authors?.map((author) => ({
+				value: author.name,
+				label: author.name,
+			})),
+		[authors]
+	);
 
 	return (
 		<div>

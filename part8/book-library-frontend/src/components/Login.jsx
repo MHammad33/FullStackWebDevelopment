@@ -1,21 +1,30 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../queries";
 
 const Login = (props) => {
-	const [username, setUsername] = useState("");
-	const [password, setPassword] = useState("");
-
+	const [credentials, setCredentials] = useState({
+		username: "",
+		password: "",
+	});
 	const [login, { data, loading, error: loginError }] = useMutation(LOGIN_USER);
 
 	if (!props.show) {
 		return null;
 	}
 
+	const handleChange = useCallback((e) => {
+		const { name, value } = e.target;
+		setCredentials((prevCredentials) => ({
+			...prevCredentials,
+			[name]: value,
+		}));
+	}, []);
+
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		try {
-			const result = await login({ variables: { username, password } });
+			const result = await login({ variables: { ...credentials } });
 			localStorage.setItem("booksLibrary-user-token", result.data.login.value);
 			window.location.reload();
 		} catch (e) {
@@ -31,8 +40,9 @@ const Login = (props) => {
 					<label>Username</label>
 					<input
 						type="text"
-						value={username}
-						onChange={(e) => setUsername(e.target.value)}
+						name="username"
+						value={credentials.username}
+						onChange={handleChange}
 						required
 					/>
 				</div>
@@ -40,8 +50,9 @@ const Login = (props) => {
 					<label>Password</label>
 					<input
 						type="password"
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
+						name="password"
+						value={credentials.password}
+						onChange={handleChange}
 						required
 					/>
 				</div>

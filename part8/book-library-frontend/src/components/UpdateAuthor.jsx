@@ -6,19 +6,19 @@ import { UPDATE_AUTHOR } from "../queries";
 const UpdateAuthor = React.memo(({ authors }) => {
 	const [selectedAuthor, setSelectedAuthor] = useState("");
 	const [born, setBorn] = useState(0);
-	const [updateAuthor, result] = useMutation(UPDATE_AUTHOR);
+	const [updateAuthor, { data: authorData }] = useMutation(UPDATE_AUTHOR);
 
 	useEffect(() => {
-		if (!result.data) {
+		if (!authorData) {
 			return;
 		}
 
-		if (result.data.editAuthor === null) {
+		if (authorData?.editAuthor === null) {
 			console.log("Author not found");
-		} else {
-			console.log("Author updated:", result.data.editAuthor);
+		} else if (authorData?.editAuthor) {
+			console.log("Author updated:", authorData?.editAuthor);
 		}
-	}, [result.data]);
+	}, [authorData]);
 
 	const handleSubmit = useCallback(
 		(event) => {

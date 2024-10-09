@@ -7,7 +7,7 @@ const Login = (props) => {
 	const [password, setPassword] = useState("");
 	const [loginMessage, setLoginMessage] = useState(null);
 
-	const [login, { data, loading, error }] = useMutation(LOGIN_USER);
+	const [login, { data, loading, error: loginError }] = useMutation(LOGIN_USER);
 
 	if (!props.show) {
 		return null;
@@ -28,7 +28,7 @@ const Login = (props) => {
 
 	return (
 		<div>
-			{loginError && <p style={{ color: "red" }}>{loginError}</p>}
+			{loginError && <p style={{ color: "red" }}>Error: {loginError}</p>}
 			<h2>Login</h2>
 			<form onSubmit={handleSubmit}>
 				<div>
@@ -53,7 +53,6 @@ const Login = (props) => {
 					{loading ? "Logging in..." : "Login"}
 				</button>
 			</form>
-			{error && <p style={{ color: "red" }}>Error: {error.message}</p>}
 		</div>
 	);
 };

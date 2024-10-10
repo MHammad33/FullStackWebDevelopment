@@ -11,15 +11,22 @@ const BOOK_DETAILS = gql`
 	}
 `;
 
+const AUTHOR_DETAILS = gql`
+	fragment AuthorDetails on Author {
+		id
+		name
+		born
+		bookCount
+	}
+`;
+
 export const ALL_AUTHORS = gql`
 	query {
 		allAuthors {
-			id
-			name
-			born
-			bookCount
+			...AuthorDetails
 		}
 	}
+	${AUTHOR_DETAILS}
 `;
 
 export const ALL_BOOKS = gql`

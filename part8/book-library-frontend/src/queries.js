@@ -44,14 +44,10 @@ export const CREATE_BOOK = gql`
 			published: $published
 			genres: $genres
 		) {
-			title
-			author {
-				name
-			}
-			published
-			genres
+			...BookDetails
 		}
 	}
+	${BOOK_DETAILS}
 `;
 
 export const UPDATE_AUTHOR = gql`

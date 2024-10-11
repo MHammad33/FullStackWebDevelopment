@@ -1,10 +1,13 @@
 const { GraphQLError } = require("graphql");
+const { PubSub } = require("graphql-subscriptions");
 const jwt = require("jsonwebtoken");
 const Author = require("../models/Author.model");
 const Book = require("../models/Book.model");
 const User = require("../models/User.model");
 
 const JWT_SECRET_KEY = "secret";
+
+const pubsub = new PubSub();
 
 const resolvers = {
 	Query: {
@@ -64,6 +67,9 @@ const resolvers = {
 				});
 
 				await newBook.save();
+
+				pubsub.publish("BOOK_ADDED", { bookAdded: newBook });
+
 				return newBook.populate("author");
 			} catch (error) {
 				if (error.name === "ValidationError") {
@@ -135,6 +141,11 @@ const resolvers = {
 		bookCount: async (root) => {
 			const count = await Book.countDocuments({ author: root._id });
 			return count;
+		},
+	},
+	Subscription: {
+		bookAdded: () => {
+			subscribe: () => pubsub.asyncIterator("BOOK_ADDED");
 		},
 	},
 };

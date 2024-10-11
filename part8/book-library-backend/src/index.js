@@ -59,7 +59,7 @@ const startServer = async () => {
 		express.json(),
 		expressMiddleware(server, {
 			context: async ({ req }) => {
-				const auth = req.authorization.headers || null;
+				const auth = req.headers.authorization || null;
 				if (auth && auth.startsWith("Bearer ")) {
 					const decodedToken = jwt.verify(auth.substring(7), "secret");
 					const currentUser = await User.findById(decodedToken.id);

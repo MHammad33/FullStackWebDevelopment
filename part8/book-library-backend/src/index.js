@@ -31,7 +31,21 @@ const startServer = async () => {
 
 	const PORT = 4000;
 
-	app.use("/", cors(), express.json(), expressMiddleware(server));
+	app.use(
+		"/",
+		cors(),
+		express.json(),
+		expressMiddleware(server, {
+			context: async ({ req }) => {
+				const auth = req.authorization.headers || null;
+				if (auth && auth.startsWith("Bearer ")) {
+					const decodedToken = jwt.verify(auth.substring(7), "secret");
+					const currentUser = await User.findById(decodedToken.id);
+					return { currentUser };
+				}
+			},
+		})
+	);
 
 	httpServer.listen(PORT, () => {
 		console.log(`Server is now running on http://localhost:${PORT}`);

@@ -15,16 +15,27 @@ const connectDb = require("./db/connectDb");
 const typeDefs = require("./graphql/typeDefs");
 const resolvers = require("./graphql/resolvers");
 
-connectDb(config.MONGODB_URI)
-	.then((response) => {
-		console.log("Connection to Database");
-	})
-	.catch((error) => {
-		console.log("Error connecting to database", error);
-	});
+// Db connection
+connectDb(config.MONGODB_URI);
 
 const startServer = async () => {
 	const app = express();
+	const httpServer = http.createServer(app);
+
+	const server = new ApolloServer({
+		schema: makeExecutableSchema({ typeDefs, resolvers }),
+		plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+	});
+
+	await server.start();
+
+	const PORT = 4000;
+
+	app.use("/", cors(), express.json(), expressMiddleware(server));
+
+	httpServer.listen(PORT, () => {
+		console.log(`Server is now running on http://localhost:${PORT}`);
+	});
 };
 
 startServer();

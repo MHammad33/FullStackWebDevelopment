@@ -68,7 +68,8 @@ const resolvers = {
 
 				await newBook.save();
 
-				pubsub.publish("BOOK_ADDED", { bookAdded: newBook });
+				const populatedBook = await newBook.populate("author");
+				pubsub.publish("BOOK_ADDED", { bookAdded: populatedBook });
 
 				return newBook.populate("author");
 			} catch (error) {

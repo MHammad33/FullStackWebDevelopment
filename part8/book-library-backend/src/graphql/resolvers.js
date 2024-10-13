@@ -19,6 +19,8 @@ const resolvers = {
 			return authors;
 		},
 		allBooks: async (root, args) => {
+			console.count("Book.find");
+
 			const query = {};
 			if (args.author) {
 				query["author.name"] = args.author;
@@ -140,6 +142,7 @@ const resolvers = {
 	},
 	Author: {
 		bookCount: async (root) => {
+			console.count(`Fetching bookCount for author ${root.name}`);
 			const count = await Book.countDocuments({ author: root._id });
 			return count;
 		},

@@ -9,4 +9,6 @@ const connectDb = async (url) => {
 	}
 };
 
+mongoose.set("debug", true);
+
 module.exports = connectDb;

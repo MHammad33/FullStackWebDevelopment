@@ -35,7 +35,11 @@ const App = () => {
 		onData: ({ data, client }) => {
 			const addedBook = data.data.bookAdded;
 			window.alert(`${addedBook.title} added`);
-			updateBooksCache(client.cache, { query: ALL_BOOKS }, addedBook);
+			updateBooksCache(
+				client.cache,
+				{ query: GET_BOOKS_BY_GENRE, variables: { genre: "" } },
+				addedBook
+			);
 		},
 	});
 

@@ -17,6 +17,7 @@ const config = require("./utils/config");
 const connectDb = require("./db/connectDb");
 const typeDefs = require("./graphql/typeDefs");
 const resolvers = require("./graphql/resolvers");
+const { bookCountLoader } = require("./utils/bookCountLoader");
 
 // Db connection
 connectDb(config.MONGODB_URI);
@@ -63,7 +64,7 @@ const startServer = async () => {
 				if (auth && auth.startsWith("Bearer ")) {
 					const decodedToken = jwt.verify(auth.substring(7), "secret");
 					const currentUser = await User.findById(decodedToken.id);
-					return { currentUser };
+					return { currentUser, bookCountLoader };
 				}
 			},
 		})

@@ -16,6 +16,7 @@ const resolvers = {
 		},
 		allAuthors: async () => {
 			const authors = await Author.find({});
+			console.log("Batch request for authors made.");
 			return authors;
 		},
 		allBooks: async (root, args) => {
@@ -141,10 +142,8 @@ const resolvers = {
 		},
 	},
 	Author: {
-		bookCount: async (root) => {
-			console.count(`Fetching bookCount for author ${root.name}`);
-			const count = await Book.countDocuments({ author: root._id });
-			return count;
+		bookCount: async (root, args, { bookCountLoader }) => {
+			return bookCountLoader.load(root._id);
 		},
 	},
 	Subscription: {

@@ -6,7 +6,23 @@ import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import Login from "./components/Login";
 import BooksByFavoriteGenre from "./components/BooksByFavoriteGenre";
-import { GET_BOOKS_BY_GENRE, BOOK_ADDED } from "./queries";
+import { GET_BOOKS_BY_GENRE, BOOK_ADDED, ALL_BOOKS } from "./queries";
+
+export const updateBooksCache = (cache, query, addedBook) => {
+	const uniqueByTitle = (books) => {
+		let seenBooks = new Set();
+		return books.filter((book) => {
+			let bookTitle = book.title;
+			return seenBooks.has(bookTitle) ? false : seenBooks.add(book);
+		});
+	};
+
+	cache.updateQuery(query, ({ allBooks }) => {
+		return {
+			allBooks: uniqueByTitle(allBooks.concat(addedBook)),
+		};
+	});
+};
 
 const App = () => {
 	const [page, setPage] = useState("authors");
@@ -19,15 +35,7 @@ const App = () => {
 		onData: ({ data, client }) => {
 			const addedBook = data.data.bookAdded;
 			window.alert(`${addedBook.title} added`);
-
-			client.cache.updateQuery(
-				{ query: GET_BOOKS_BY_GENRE },
-				({ allBooks }) => {
-					return {
-						allBooks: allBooks.concat(addedBook),
-					};
-				}
-			);
+			updateBooksCache(client.cache, { query: ALL_BOOKS }, addedBook);
 		},
 	});
 

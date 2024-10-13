@@ -6,7 +6,7 @@ import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import Login from "./components/Login";
 import BooksByFavoriteGenre from "./components/BooksByFavoriteGenre";
-import { BOOK_ADDED } from "./queries";
+import { GET_BOOKS_BY_GENRE, BOOK_ADDED } from "./queries";
 
 const App = () => {
 	const [page, setPage] = useState("authors");
@@ -16,8 +16,18 @@ const App = () => {
 	);
 
 	useSubscription(BOOK_ADDED, {
-		onData: ({ data }) => {
-			console.log(data);
+		onData: ({ data, client }) => {
+			const addedBook = data.data.bookAdded;
+			window.alert(`${addedBook.title} added`);
+
+			client.cache.updateQuery(
+				{ query: GET_BOOKS_BY_GENRE },
+				({ allBooks }) => {
+					return {
+						allBooks: allBooks.concat(addedBook),
+					};
+				}
+			);
 		},
 	});
 

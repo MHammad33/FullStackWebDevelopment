@@ -23,6 +23,10 @@ const Login = ({ show }) => {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
+		await attemptLogin();
+	};
+
+	const attemptLogin = async () => {
 		try {
 			const result = await login({ variables: { ...credentials } });
 			localStorage.setItem("booksLibrary-user-token", result.data.login.value);

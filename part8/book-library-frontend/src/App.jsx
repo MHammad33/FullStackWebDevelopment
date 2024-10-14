@@ -54,9 +54,9 @@ const App = () => {
 	const renderPage = () => {
 		switch (page) {
 			case "authors":
-				return <Authors show />;
+				return <Authors show={loggedIn} />;
 			case "books":
-				return <Books show />;
+				return <Books show={loggedIn} />;
 			case "add":
 				return loggedIn && <NewBook show />;
 			case "login":

@@ -2,14 +2,14 @@ import { useState, useCallback } from "react";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../queries";
 
-const Login = (props) => {
+const Login = ({ show }) => {
 	const [credentials, setCredentials] = useState({
 		username: "",
 		password: "",
 	});
 	const [login, { data, loading, error: loginError }] = useMutation(LOGIN_USER);
 
-	if (!props.show) {
+	if (!show) {
 		return null;
 	}
 

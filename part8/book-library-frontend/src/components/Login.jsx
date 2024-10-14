@@ -29,11 +29,23 @@ const Login = ({ show }) => {
 	const attemptLogin = async () => {
 		try {
 			const result = await login({ variables: { ...credentials } });
-			localStorage.setItem("booksLibrary-user-token", result.data.login.value);
-			window.location.reload();
-		} catch (e) {
-			console.error("Login failed:", e);
+			storeUserToken(result.data.login.value);
+			reloadPage();
+		} catch (error) {
+			handleError(error);
 		}
+	};
+
+	const storeUserToken = (token) => {
+		localStorage.setItem("booksLibrary-user-token", token);
+	};
+
+	const reloadPage = () => {
+		window.location.reload();
+	};
+
+	const handleError = (error) => {
+		console.error("Login failed:", error);
 	};
 
 	return (

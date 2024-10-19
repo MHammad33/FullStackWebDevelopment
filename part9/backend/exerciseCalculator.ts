@@ -43,4 +43,7 @@ const calculateExercises = (
 	};
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+const target = Number(process.argv[2]);
+const dailyExerciseHours = process.argv.slice(3).map(Number);
+
+console.log(calculateExercises(dailyExerciseHours, target));

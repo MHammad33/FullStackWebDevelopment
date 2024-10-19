@@ -15,4 +15,7 @@ const calculateBmi = (heightInCM: number, bodyMassInKG: number): BMI => {
 	}
 };
 
-console.log(calculateBmi(180, 74));
+const heightInCM = Number(process.argv[2]);
+const bodyMassInKG = Number(process.argv[3]);
+
+console.log(calculateBmi(heightInCM, bodyMassInKG));

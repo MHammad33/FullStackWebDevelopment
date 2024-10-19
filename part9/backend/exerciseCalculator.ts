@@ -1,3 +1,5 @@
+import { isNotNumber } from "./utils";
+
 interface ExerciseResult {
 	periodLength: number;
 	trainingDays: number;
@@ -43,7 +45,28 @@ const calculateExercises = (
 	};
 };
 
-const target = Number(process.argv[2]);
-const dailyExerciseHours = process.argv.slice(3).map(Number);
+try {
+	const args = process.argv.slice(2);
 
-console.log(calculateExercises(dailyExerciseHours, target));
+	if (args.length < 2) {
+		throw new Error(
+			"Please provide at least one target value and one day of exercise hours."
+		);
+	}
+
+	const target = Number(args[0]);
+	const dailyExerciseHours = args.slice(1).map((arg) => {
+		if (isNotNumber(arg)) {
+			throw new Error(`Invalid input: ${arg} is not a valid number`);
+		}
+		return Number(arg);
+	});
+
+	if (isNotNumber(target)) {
+		throw new Error(`Invalid target value: ${target}`);
+	}
+
+	console.log(calculateExercises(dailyExerciseHours, target));
+} catch (error) {
+	console.log(`Error: ${error.message}`);
+}

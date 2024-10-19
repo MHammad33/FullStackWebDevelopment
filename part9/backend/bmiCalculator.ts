@@ -1,3 +1,5 @@
+import { isNotNumber } from "./utils";
+
 type BMI = "Underweight" | "Normal Range" | "Overweight" | "Obese";
 
 const calculateBmi = (heightInCM: number, bodyMassInKG: number): BMI => {
@@ -15,7 +17,23 @@ const calculateBmi = (heightInCM: number, bodyMassInKG: number): BMI => {
 	}
 };
 
-const heightInCM = Number(process.argv[2]);
-const bodyMassInKG = Number(process.argv[3]);
+try {
+	const args = process.argv.slice(2);
 
-console.log(calculateBmi(heightInCM, bodyMassInKG));
+	if (args.length !== 2) {
+		throw new Error(
+			"Please provide exactly two arguments: height (cm) and weight (kg)."
+		);
+	}
+
+	const heightInCM = Number(args[0]);
+	const bodyMassInKG = Number(args[1]);
+
+	if (isNotNumber(heightInCM) || isNotNumber(bodyMassInKG)) {
+		throw new Error("Both height and weight should be valid numbers.");
+	}
+
+	console.log(calculateBmi(heightInCM, bodyMassInKG));
+} catch (error) {
+	console.log(`Error: ${error.message}`);
+}

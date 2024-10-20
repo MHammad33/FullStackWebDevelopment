@@ -1,5 +1,3 @@
-import { isNotNumber } from "./utils";
-
 type BMI = "Underweight" | "Normal Range" | "Overweight" | "Obese";
 
 export const calculateBmi = (heightInCM: number, bodyMassInKG: number): BMI => {
@@ -17,23 +15,17 @@ export const calculateBmi = (heightInCM: number, bodyMassInKG: number): BMI => {
 	}
 };
 
-try {
-	const args = process.argv.slice(2);
+if (require.main === module) {
+	try {
+		const height = Number(process.argv[2]);
+		const weight = Number(process.argv[3]);
 
-	if (args.length !== 2) {
-		throw new Error(
-			"Please provide exactly two arguments: height (cm) and weight (kg)."
-		);
+		if (isNaN(height) || isNaN(weight)) {
+			throw new Error("malformatted parameters");
+		}
+
+		console.log(calculateBmi(height, weight));
+	} catch (error) {
+		console.error((error as Error).message);
 	}
-
-	const heightInCM = Number(args[0]);
-	const bodyMassInKG = Number(args[1]);
-
-	if (isNotNumber(heightInCM) || isNotNumber(bodyMassInKG)) {
-		throw new Error("Both height and weight should be valid numbers.");
-	}
-
-	console.log(calculateBmi(heightInCM, bodyMassInKG));
-} catch (error) {
-	console.log(`Error: ${error.message}`);
 }

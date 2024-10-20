@@ -1,5 +1,6 @@
 import express from "express";
 import { calculateBmi } from "./bmiCalculator";
+import { calculateExercises } from "./exerciseCalculator";
 const app = express();
 
 app.use(express.json());
@@ -32,11 +33,13 @@ app.get("/bmi", (req, res) => {
 app.post("/exercises", (req, res) => {
 	try {
 		const { daily_exercises, target } = req.body;
+
 		if (!daily_exercises || !target) {
 			throw new Error("malformatted parameters");
 		}
 
-		res.status(200).json({ daily_exercises, target });
+		const result = calculateExercises(daily_exercises, target);
+		res.status(200).json(result);
 	} catch (error) {
 		res.status(400).json({ msg: error.message });
 	}

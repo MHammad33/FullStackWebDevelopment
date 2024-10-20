@@ -2,7 +2,7 @@ import { isNotNumber } from "./utils";
 
 type BMI = "Underweight" | "Normal Range" | "Overweight" | "Obese";
 
-const calculateBmi = (heightInCM: number, bodyMassInKG: number): BMI => {
+export const calculateBmi = (heightInCM: number, bodyMassInKG: number): BMI => {
 	const heightInMetres = heightInCM / 100;
 	const bmi = bodyMassInKG / (heightInMetres * heightInMetres);
 

@@ -1,4 +1,4 @@
-export interface Diagnosis {
+export interface DiagnosisData {
 	code: string;
 	name: string;
 	latin?: string;

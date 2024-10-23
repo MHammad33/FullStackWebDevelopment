@@ -1,4 +1,4 @@
-import diagnosisData from "../../data/diagnosis";
+import diagnosisData from "../../data/diagnosis.json";
 
 const getDiagnosis = () => {
 	return diagnosisData;

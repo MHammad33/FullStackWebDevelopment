@@ -6,7 +6,7 @@ export interface DiagnosisInfo {
 
 export type Gender = "male" | "female" | "other";
 
-export interface PatientRecord {
+export interface PatientInfo {
 	id: string;
 	name: string;
 	dateOfBirth: string;

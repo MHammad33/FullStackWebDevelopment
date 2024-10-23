@@ -1,6 +1,7 @@
-import diagnosisData from "../../data/diagnosis.json";
+import diagnosisData from "../../data/diagnosis";
+import { DiagnosisInfo } from "../types";
 
-const getDiagnosis = () => {
+const getDiagnosis = (): DiagnosisInfo[] => {
 	return diagnosisData;
 };
 

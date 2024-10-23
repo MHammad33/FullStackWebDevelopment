@@ -16,8 +16,8 @@ const App = () => {
 		void axios.get<void>(`${apiBaseUrl}/ping`);
 
 		const fetchPatientList = async () => {
-			// const patients = await patientService.getAll();
-			// setPatients(patients);
+			const patients = await patientService.getAll();
+			setPatients(patients);
 		};
 		void fetchPatientList();
 	}, []);

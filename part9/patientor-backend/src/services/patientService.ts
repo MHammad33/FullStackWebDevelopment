@@ -1,3 +1,4 @@
+import { v1 as uuid } from "uuid";
 import patientsData from "../../data/patients";
 import { NewPatientInfo, PatientInfo } from "../types";
 
@@ -15,7 +16,7 @@ const getAllPatientDetails = (): PatientInfoWithoutSSN[] => {
 
 const createNewPatient = (patient: NewPatientInfo): PatientInfo => {
 	const newPatientData = {
-		id: "1",
+		id: uuid(),
 		...patient,
 	};
 

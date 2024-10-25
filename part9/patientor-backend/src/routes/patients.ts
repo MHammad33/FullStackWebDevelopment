@@ -15,4 +15,8 @@ patientRouter.get("/", (_req, res) => {
 	}
 });
 
+patientRouter.post("/", (_req, res) => {
+	res.send("Creating a new patient...");
+});
+
 export default patientRouter;

@@ -13,6 +13,11 @@ const getAllPatientDetails = (): PatientInfoWithoutSSN[] => {
 	}));
 };
 
+const createNewPatient = (patient: any) => {
+	patientsData.push(patient);
+};
+
 export default {
 	getAllPatientDetails,
+	createNewPatient,
 };

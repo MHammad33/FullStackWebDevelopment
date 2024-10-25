@@ -15,8 +15,17 @@ patientRouter.get("/", (_req, res) => {
 	}
 });
 
-patientRouter.post("/", (_req, res) => {
-	res.send("Creating a new patient...");
+patientRouter.post("/", (req, res) => {
+	const { name, dateOfBirth, ssn, gender, occupation } = req.body;
+
+	const newPatient = patientService.createNewPatient({
+		name,
+		dateOfBirth,
+		ssn,
+		gender,
+		occupation,
+	});
+	res.json(newPatient);
 });
 
 export default patientRouter;

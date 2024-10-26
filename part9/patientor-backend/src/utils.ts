@@ -62,5 +62,7 @@ const parseGender = (gender: unknown): Gender => {
 };
 
 const isGender = (gender: string): gender is Gender => {
-	return ["male", "female", "others"].includes(gender);
+	return Object.values(Gender)
+		.map((g) => g.toString())
+		.includes(gender);
 };

@@ -55,14 +55,14 @@ const isString = (text: unknown): text is string => {
 };
 
 const parseDate = (date: unknown) => {
-	if (!date || !isDate(date)) {
+	if (!date || !isString(date) || !isDate(date)) {
 		throw new Error("Incorrect or missing date");
 	}
 
 	return date;
 };
 
-const isDate = (date: string) => {
+const isDate = (date: string): date is string => {
 	return Boolean(Date.parse(date));
 };
 

@@ -50,7 +50,7 @@ const parseSSN = (ssn: unknown) => {
 	return ssn;
 };
 
-const isString = (text: unknown) => {
+const isString = (text: unknown): text is string => {
 	return typeof text === "string" || text instanceof String;
 };
 

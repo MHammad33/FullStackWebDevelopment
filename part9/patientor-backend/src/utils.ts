@@ -43,7 +43,7 @@ const parseOccupation = (occupation: unknown) => {
 };
 
 const parseSSN = (ssn: unknown) => {
-	if (!ssn || isString(ssn)) {
+	if (!ssn || !isString(ssn)) {
 		throw new Error("Incorrect or missing ssn");
 	}
 

@@ -1,16 +1,29 @@
 import { Gender, NewPatientInfo } from "./types";
 
 export const toNewPatientData = (object: unknown): NewPatientInfo => {
-	console.log(object);
-	const newPatient: NewPatientInfo = {
-		name: parseName(object.name),
-		dateOfBirth: parseDate(object.dateOfBirth),
-		ssn: parseSSN(object.ssn),
-		gender: parseGender(object.gender),
-		occupation: parseOccupation(object.occupation),
-	};
+	if (!object || typeof object !== "object") {
+		throw new Error("Incorrect or missing data");
+	}
 
-	return newPatient;
+	if (
+		"name" in object &&
+		"dateOfBirth" in object &&
+		"gender" in object &&
+		"ssn" in object &&
+		"occupation" in object
+	) {
+		const newPatient: NewPatientInfo = {
+			name: parseName(object.name),
+			dateOfBirth: parseDate(object.dateOfBirth),
+			ssn: parseSSN(object.ssn),
+			gender: parseGender(object.gender),
+			occupation: parseOccupation(object.occupation),
+		};
+
+		return newPatient;
+	}
+
+	throw new Error("Incorrect data: some fields are missing");
 };
 
 const parseName = (name: unknown) => {

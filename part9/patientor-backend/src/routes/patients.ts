@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response, Router } from "express";
 import patientService from "../services/patientService";
-import { NewPatientSchema } from "../utils";
 import { z } from "zod";
 import { NewPatientInfo } from "../types";
+import { newPatientParser } from "../middlewares/validationMiddlewares";
 
 const patientRouter = Router();
 
@@ -17,15 +17,6 @@ patientRouter.get("/", (_req, res) => {
 			.json({ message: "An error occurred while fetching diagnoses." });
 	}
 });
-
-const newDiaryParser = (req: Request, _res: Response, next: NextFunction) => {
-	try {
-		NewPatientSchema.parse(req.body);
-		next();
-	} catch (error) {
-		next(error);
-	}
-};
 
 const errorMiddleware = (
 	error: unknown,
@@ -42,7 +33,7 @@ const errorMiddleware = (
 
 patientRouter.post(
 	"/",
-	newDiaryParser,
+	newPatientParser,
 	(req: Request<unknown, unknown, NewPatientInfo>, res) => {
 		const newPatient = patientService.createNewPatient(req.body);
 		res.json(newPatient);

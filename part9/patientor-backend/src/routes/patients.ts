@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import patientService from "../services/patientService";
 import { NewPatientSchema } from "../utils";
 import { z } from "zod";
@@ -17,7 +17,16 @@ patientRouter.get("/", (_req, res) => {
 	}
 });
 
-patientRouter.post("/", (req, res) => {
+const newDiaryParser = (req: Request, _res: Response, next: NextFunction) => {
+	try {
+		NewPatientSchema.parse(req.body);
+		next();
+	} catch (error) {
+		next(error);
+	}
+};
+
+patientRouter.post("/", newDiaryParser, (req, res) => {
 	try {
 		const newPatientData = NewPatientSchema.parse(req.body);
 		const newPatient = patientService.createNewPatient(newPatientData);

@@ -3,6 +3,7 @@ import patientService from "../services/patientService";
 import { z } from "zod";
 import { NewPatientInfo } from "../types";
 import { newPatientParser } from "../middlewares/validationMiddlewares";
+import { errorMiddleware } from "../middlewares/errorMiddleware";
 
 const patientRouter = Router();
 
@@ -17,19 +18,6 @@ patientRouter.get("/", (_req, res) => {
 			.json({ message: "An error occurred while fetching diagnoses." });
 	}
 });
-
-const errorMiddleware = (
-	error: unknown,
-	_req: Request,
-	res: Response,
-	next: NextFunction
-) => {
-	if (error instanceof z.ZodError) {
-		res.status(400).send({ error: error.issues });
-	} else {
-		next(error);
-	}
-};
 
 patientRouter.post(
 	"/",

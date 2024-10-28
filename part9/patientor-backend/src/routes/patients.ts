@@ -1,6 +1,6 @@
 import { Router } from "express";
 import patientService from "../services/patientService";
-import { toNewPatientData } from "../utils";
+import { NewPatientSchema } from "../utils";
 import { z } from "zod";
 
 const patientRouter = Router();
@@ -19,7 +19,7 @@ patientRouter.get("/", (_req, res) => {
 
 patientRouter.post("/", (req, res) => {
 	try {
-		const newPatientData = toNewPatientData(req.body);
+		const newPatientData = NewPatientSchema.parse(req.body);
 		const newPatient = patientService.createNewPatient(newPatientData);
 		res.json(newPatient);
 	} catch (error: unknown) {

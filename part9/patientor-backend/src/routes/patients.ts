@@ -27,6 +27,19 @@ const newDiaryParser = (req: Request, _res: Response, next: NextFunction) => {
 	}
 };
 
+const errorMiddleware = (
+	error: unknown,
+	_req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	if (error instanceof z.ZodError) {
+		res.status(400).send({ error: error.issues });
+	} else {
+		next(error);
+	}
+};
+
 patientRouter.post(
 	"/",
 	newDiaryParser,
@@ -35,5 +48,7 @@ patientRouter.post(
 		res.json(newPatient);
 	}
 );
+
+patientRouter.use(errorMiddleware);
 
 export default patientRouter;

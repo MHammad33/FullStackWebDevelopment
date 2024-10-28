@@ -2,6 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import patientService from "../services/patientService";
 import { NewPatientSchema } from "../utils";
 import { z } from "zod";
+import { NewPatientInfo } from "../types";
 
 const patientRouter = Router();
 
@@ -26,18 +27,13 @@ const newDiaryParser = (req: Request, _res: Response, next: NextFunction) => {
 	}
 };
 
-patientRouter.post("/", newDiaryParser, (req, res) => {
-	try {
-		const newPatientData = NewPatientSchema.parse(req.body);
-		const newPatient = patientService.createNewPatient(newPatientData);
+patientRouter.post(
+	"/",
+	newDiaryParser,
+	(req: Request<unknown, unknown, NewPatientInfo>, res) => {
+		const newPatient = patientService.createNewPatient(req.body);
 		res.json(newPatient);
-	} catch (error: unknown) {
-		if (error instanceof z.ZodError) {
-			res.status(400).send({ error: error.issues });
-		} else {
-			res.status(400).send({ error: "Unknown error" });
-		}
 	}
-});
+);
 
 export default patientRouter;

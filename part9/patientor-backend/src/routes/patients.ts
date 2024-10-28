@@ -1,6 +1,5 @@
-import { NextFunction, Request, Response, Router } from "express";
+import { Request, Router } from "express";
 import patientService from "../services/patientService";
-import { z } from "zod";
 import { NewPatientInfo } from "../types";
 import { newPatientParser } from "../middlewares/validationMiddlewares";
 import { errorMiddleware } from "../middlewares/errorMiddleware";

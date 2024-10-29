@@ -26,10 +26,9 @@ const App = () => {
 
 	return (
 		<div>
-			<p>Number of exercises {totalExercises}</p>
 			<Header name={courseName} />
 			<Content courseParts={courseParts} />
-			<Total />
+			<Total totalExercises={totalExercises} />
 		</div>
 	);
 };

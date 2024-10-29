@@ -1,9 +1,11 @@
 import { FC } from "react";
 
-interface TotalProps {}
+interface TotalProps {
+	totalExercises: number;
+}
 
-const Total: FC<TotalProps> = ({}) => {
-	return <div>Total</div>;
+const Total: FC<TotalProps> = ({ totalExercises }) => {
+	return <p>Number of exercises {totalExercises}</p>;
 };
 
 export default Total;

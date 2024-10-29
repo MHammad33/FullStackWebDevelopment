@@ -1,9 +1,11 @@
 import { FC } from "react";
 
-interface HeaderProps {}
+interface HeaderProps {
+	name: string;
+}
 
-const Header: FC<HeaderProps> = ({}) => {
-	return <div>Header</div>;
+const Header: FC<HeaderProps> = ({ name }) => {
+	return <h1>{name}</h1>;
 };
 
 export default Header;

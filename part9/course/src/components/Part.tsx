@@ -38,6 +38,16 @@ const Part: FC<PartProps> = ({ part }) => {
 					</p>
 				</div>
 			);
+		case "special":
+			return (
+				<div>
+					<p>
+						<strong>{part.name}</strong> ({part.exerciseCount} exercises)
+					</p>
+					<p>{part.description}</p>
+					<p>Requirements: {part.requirements.join(", ")}</p>
+				</div>
+			);
 		default:
 			return null;
 	}

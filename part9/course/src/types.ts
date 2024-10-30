@@ -7,16 +7,21 @@ interface CoursePartBaseWithDesc extends CoursePartBase {
 	description: string;
 }
 
-export interface CoursePartBasic extends CoursePartBaseWithDesc {
+interface CoursePartSpecial extends CoursePartBaseWithDesc {
+	requirements: string[];
+	kind: "special";
+}
+
+interface CoursePartBasic extends CoursePartBaseWithDesc {
 	kind: "basic";
 }
 
-export interface CoursePartGroup extends CoursePartBase {
+interface CoursePartGroup extends CoursePartBase {
 	groupProjectCount: number;
 	kind: "group";
 }
 
-export interface CoursePartBackground extends CoursePartBaseWithDesc {
+interface CoursePartBackground extends CoursePartBaseWithDesc {
 	backgroundMaterial: string;
 	kind: "background";
 }
@@ -24,4 +29,5 @@ export interface CoursePartBackground extends CoursePartBaseWithDesc {
 export type CoursePart =
 	| CoursePartBasic
 	| CoursePartGroup
-	| CoursePartBackground;
+	| CoursePartBackground
+	| CoursePartSpecial;

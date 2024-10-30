@@ -11,7 +11,9 @@ const Part: FC<PartProps> = ({ part }) => {
 			return (
 				<div>
 					<p>
-						<strong>{part.name}</strong> ({part.exerciseCount} exercises)
+						<strong>
+							{part.name} {part.exerciseCount}
+						</strong>
 					</p>
 					<p>{part.description}</p>
 				</div>
@@ -20,20 +22,24 @@ const Part: FC<PartProps> = ({ part }) => {
 			return (
 				<div>
 					<p>
-						<strong>{part.name}</strong> ({part.exerciseCount} exercises,{" "}
-						{part.groupProjectCount} group projects)
+						<strong>
+							{part.name} {part.exerciseCount}
+						</strong>
 					</p>
+					<p>project exercises {part.groupProjectCount}</p>
 				</div>
 			);
 		case "background":
 			return (
 				<div>
 					<p>
-						<strong>{part.name}</strong> ({part.exerciseCount} exercises)
+						<strong>
+							{part.name} {part.exerciseCount}
+						</strong>
 					</p>
 					<p>{part.description}</p>
 					<p>
-						Background material:{" "}
+						Submit to:{" "}
 						<a href={part.backgroundMaterial}>{part.backgroundMaterial}</a>
 					</p>
 				</div>
@@ -42,10 +48,12 @@ const Part: FC<PartProps> = ({ part }) => {
 			return (
 				<div>
 					<p>
-						<strong>{part.name}</strong> ({part.exerciseCount} exercises)
+						<strong>
+							{part.name} {part.exerciseCount}
+						</strong>
 					</p>
 					<p>{part.description}</p>
-					<p>Requirements: {part.requirements.join(", ")}</p>
+					<p>Required Skills: {part.requirements.join(", ")}</p>
 				</div>
 			);
 		default:

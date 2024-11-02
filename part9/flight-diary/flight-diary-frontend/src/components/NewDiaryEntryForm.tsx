@@ -1,9 +1,8 @@
 import { FC, useState } from "react";
-import { createNewDiaryEntry } from "../service/diaryService";
 import { DiaryEntry } from "../types";
 
 interface NewDiaryEntryFormProps {
-	onDiarySubmit: (addedDiary: DiaryEntry) => {};
+	onDiarySubmit: (addedDiary: DiaryEntry) => void;
 }
 
 const NewDiaryEntryForm: FC<NewDiaryEntryFormProps> = ({ onDiarySubmit }) => {
@@ -14,15 +13,12 @@ const NewDiaryEntryForm: FC<NewDiaryEntryFormProps> = ({ onDiarySubmit }) => {
 
 	const handleSubmit = async (event: React.SyntheticEvent) => {
 		event.preventDefault();
-
-		const newlyCreatedDiary = await createNewDiaryEntry({
+		onDiarySubmit({
 			date,
 			visibility,
 			weather,
 			comment,
 		});
-
-		onDiarySubmit(newlyCreatedDiary);
 
 		setDate("");
 		setVisibility("");

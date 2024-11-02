@@ -1,15 +1,33 @@
 import { FC, useState } from "react";
+import { createNewDiaryEntry } from "../service/diaryService";
+import { DiaryEntry } from "../types";
 
-interface NewDiaryEntryFormProps {}
+interface NewDiaryEntryFormProps {
+	onDiarySubmit: (addedDiary: DiaryEntry) => {};
+}
 
-const NewDiaryEntryForm: FC<NewDiaryEntryFormProps> = ({}) => {
+const NewDiaryEntryForm: FC<NewDiaryEntryFormProps> = ({ onDiarySubmit }) => {
 	const [date, setDate] = useState("");
 	const [visibility, setVisibility] = useState("");
 	const [weather, setWeather] = useState("");
 	const [comment, setComment] = useState("");
 
-	const handleSubmit = (event: React.SyntheticEvent) => {
+	const handleSubmit = async (event: React.SyntheticEvent) => {
 		event.preventDefault();
+
+		const newlyCreatedDiary = await createNewDiaryEntry({
+			date,
+			visibility,
+			weather,
+			comment,
+		});
+
+		onDiarySubmit(newlyCreatedDiary);
+
+		setDate("");
+		setVisibility("");
+		setWeather("");
+		setComment("");
 	};
 
 	return (

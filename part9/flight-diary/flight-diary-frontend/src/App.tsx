@@ -12,9 +12,13 @@ function App() {
 		});
 	}, []);
 
+	const handleDiarySubmit = (addedDiary: DiaryEntry) => {
+		setDiaries(diaries.concat(addedDiary));
+	};
+
 	return (
 		<>
-			<NewDiaryEntryForm />
+			<NewDiaryEntryForm onDiarySubmit={handleDiarySubmit} />
 			<h1>Diary Entries</h1>
 			{diaries.map((diary) => (
 				<div key={diary.id}>

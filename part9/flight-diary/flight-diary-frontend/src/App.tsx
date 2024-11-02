@@ -27,9 +27,7 @@ function App() {
 			setError(null);
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
-				setError(
-					error.response?.data?.message || "Failed to create diary entry."
-				);
+				setError(error.response?.data || "Failed to create diary entry.");
 			} else {
 				setError("An unexpected error occurred.");
 			}

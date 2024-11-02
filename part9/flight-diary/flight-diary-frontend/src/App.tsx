@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { DiaryEntry } from "./types";
 import { getAllDiaries } from "./service/diaryService";
+import NewDiaryEntryForm from "./components/NewDiaryEntryForm";
 
 function App() {
 	const [diaries, setDiaries] = useState<DiaryEntry[]>([]);
@@ -13,6 +14,7 @@ function App() {
 
 	return (
 		<>
+			<NewDiaryEntryForm />
 			<h1>Diary Entries</h1>
 			{diaries.map((diary) => (
 				<div key={diary.id}>

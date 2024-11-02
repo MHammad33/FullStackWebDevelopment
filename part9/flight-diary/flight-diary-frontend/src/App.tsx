@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { DiaryEntry } from "./types";
+import { DiaryEntry, NewDiaryEntry } from "./types";
 import { createNewDiaryEntry, getAllDiaries } from "./service/diaryService";
 import NewDiaryEntryForm from "./components/NewDiaryEntryForm";
 import axios from "axios";
@@ -20,7 +20,7 @@ function App() {
 			});
 	}, []);
 
-	const handleDiarySubmit = async (addedDiary: DiaryEntry) => {
+	const handleDiarySubmit = async (addedDiary: NewDiaryEntry) => {
 		try {
 			const savedDiary = await createNewDiaryEntry(addedDiary);
 			setDiaries(diaries.concat(savedDiary));

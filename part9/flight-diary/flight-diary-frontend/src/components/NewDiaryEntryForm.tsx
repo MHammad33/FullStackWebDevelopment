@@ -1,14 +1,14 @@
 import { FC, useState } from "react";
-import { DiaryEntry } from "../types";
+import { NewDiaryEntry, Visibility, Weather } from "../types";
 
 interface NewDiaryEntryFormProps {
-	onDiarySubmit: (addedDiary: DiaryEntry) => void;
+	onDiarySubmit: (addedDiary: NewDiaryEntry) => void;
 }
 
 const NewDiaryEntryForm: FC<NewDiaryEntryFormProps> = ({ onDiarySubmit }) => {
 	const [date, setDate] = useState("");
-	const [visibility, setVisibility] = useState("");
-	const [weather, setWeather] = useState("");
+	const [visibility, setVisibility] = useState<Visibility>(Visibility.Ok);
+	const [weather, setWeather] = useState<Weather>(Weather.Sunny);
 	const [comment, setComment] = useState("");
 
 	const handleSubmit = async (event: React.SyntheticEvent) => {
@@ -21,8 +21,8 @@ const NewDiaryEntryForm: FC<NewDiaryEntryFormProps> = ({ onDiarySubmit }) => {
 		});
 
 		setDate("");
-		setVisibility("");
-		setWeather("");
+		setVisibility(Visibility.Ok);
+		setWeather(Weather.Sunny);
 		setComment("");
 	};
 
@@ -34,19 +34,107 @@ const NewDiaryEntryForm: FC<NewDiaryEntryFormProps> = ({ onDiarySubmit }) => {
 					type="date"
 					value={date}
 					onChange={(e) => setDate(e.target.value)}
+					required
 				/>
 			</div>
 			<div>
 				<label>Visibility:</label>
-				<input
-					value={visibility}
-					onChange={(e) => setVisibility(e.target.value)}
-				/>
+				<label>
+					<input
+						type="radio"
+						name="visibility"
+						value="ok"
+						checked={visibility === "ok"}
+						onChange={() => setVisibility(Visibility.Ok)}
+					/>
+					Ok
+				</label>
+				<label>
+					<input
+						type="radio"
+						name="visibility"
+						value="great"
+						checked={visibility === "great"}
+						onChange={() => setVisibility(Visibility.Great)}
+					/>
+					Great
+				</label>
+				<label>
+					<input
+						type="radio"
+						name="visibility"
+						value="good"
+						checked={visibility === "good"}
+						onChange={() => setVisibility(Visibility.Good)}
+					/>
+					Good
+				</label>
+				<label>
+					<input
+						type="radio"
+						name="visibility"
+						value="poor"
+						checked={visibility === "poor"}
+						onChange={() => setVisibility(Visibility.Poor)}
+					/>
+					Poor
+				</label>
 			</div>
+
 			<div>
 				<label>Weather:</label>
-				<input value={weather} onChange={(e) => setWeather(e.target.value)} />
+				<label>
+					<input
+						type="radio"
+						name="weather"
+						value="sunny"
+						checked={weather === "sunny"}
+						onChange={() => setWeather(Weather.Sunny)}
+					/>
+					Sunny
+				</label>
+				<label>
+					<input
+						type="radio"
+						name="weather"
+						value="rainy"
+						checked={weather === "rainy"}
+						onChange={() => setWeather(Weather.Rainy)}
+					/>
+					Rainy
+				</label>
+				<label>
+					<input
+						type="radio"
+						name="weather"
+						value="cloudy"
+						checked={weather === "cloudy"}
+						onChange={() => setWeather(Weather.Cloudy)}
+					/>
+					Cloudy
+				</label>
+				<label>
+					<input
+						type="radio"
+						name="weather"
+						value="stormy"
+						checked={weather === "stormy"}
+						onChange={() => setWeather(Weather.Stormy)}
+					/>
+					Stormy
+				</label>
+				<label>
+					<input
+						type="radio"
+						name="weather"
+						value="windy"
+						checked={weather === "windy"}
+						onChange={() => setWeather(Weather.Windy)}
+					/>
+					Windy
+				</label>
 			</div>
+
 			<div>
 				<label>Comment:</label>
 				<input value={comment} onChange={(e) => setComment(e.target.value)} />

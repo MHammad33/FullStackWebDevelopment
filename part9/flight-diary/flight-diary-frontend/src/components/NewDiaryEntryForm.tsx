@@ -39,100 +39,34 @@ const NewDiaryEntryForm: FC<NewDiaryEntryFormProps> = ({ onDiarySubmit }) => {
 			</div>
 			<div>
 				<label>Visibility:</label>
-				<label>
-					<input
-						type="radio"
-						name="visibility"
-						value="ok"
-						checked={visibility === "ok"}
-						onChange={() => setVisibility(Visibility.Ok)}
-					/>
-					Ok
-				</label>
-				<label>
-					<input
-						type="radio"
-						name="visibility"
-						value="great"
-						checked={visibility === "great"}
-						onChange={() => setVisibility(Visibility.Great)}
-					/>
-					Great
-				</label>
-				<label>
-					<input
-						type="radio"
-						name="visibility"
-						value="good"
-						checked={visibility === "good"}
-						onChange={() => setVisibility(Visibility.Good)}
-					/>
-					Good
-				</label>
-				<label>
-					<input
-						type="radio"
-						name="visibility"
-						value="poor"
-						checked={visibility === "poor"}
-						onChange={() => setVisibility(Visibility.Poor)}
-					/>
-					Poor
-				</label>
+				{Object.values(Visibility).map((option) => (
+					<label key={option}>
+						<input
+							type="radio"
+							name="visibility"
+							value={option}
+							checked={visibility === option}
+							onChange={() => setVisibility(option)}
+						/>
+						{option}
+					</label>
+				))}
 			</div>
 
 			<div>
 				<label>Weather:</label>
-				<label>
-					<input
-						type="radio"
-						name="weather"
-						value="sunny"
-						checked={weather === "sunny"}
-						onChange={() => setWeather(Weather.Sunny)}
-					/>
-					Sunny
-				</label>
-				<label>
-					<input
-						type="radio"
-						name="weather"
-						value="rainy"
-						checked={weather === "rainy"}
-						onChange={() => setWeather(Weather.Rainy)}
-					/>
-					Rainy
-				</label>
-				<label>
-					<input
-						type="radio"
-						name="weather"
-						value="cloudy"
-						checked={weather === "cloudy"}
-						onChange={() => setWeather(Weather.Cloudy)}
-					/>
-					Cloudy
-				</label>
-				<label>
-					<input
-						type="radio"
-						name="weather"
-						value="stormy"
-						checked={weather === "stormy"}
-						onChange={() => setWeather(Weather.Stormy)}
-					/>
-					Stormy
-				</label>
-				<label>
-					<input
-						type="radio"
-						name="weather"
-						value="windy"
-						checked={weather === "windy"}
-						onChange={() => setWeather(Weather.Windy)}
-					/>
-					Windy
-				</label>
+				{Object.values(Weather).map((option) => (
+					<label key={option}>
+						<input
+							type="radio"
+							name="weather"
+							value={option}
+							checked={weather === option}
+							onChange={() => setWeather(option)}
+						/>
+						{option}
+					</label>
+				))}
 			</div>
 
 			<div>

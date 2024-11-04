@@ -1,10 +1,8 @@
 import { v1 as uuid } from "uuid";
 import patientsData from "../../data/patients";
-import { NewPatientInfo, PatientInfo } from "../types";
+import { NewPatientInfo, NonSensitivePatient, PatientInfo } from "../types";
 
-type PatientInfoWithoutSSN = Omit<PatientInfo, "ssn">;
-
-const getAllPatientDetails = (): PatientInfoWithoutSSN[] => {
+const getAllPatientDetails = (): NonSensitivePatient[] => {
 	return patientsData.map(({ id, name, dateOfBirth, gender, occupation }) => ({
 		id,
 		name,
@@ -24,7 +22,16 @@ const createNewPatient = (patient: NewPatientInfo): PatientInfo => {
 	return newPatientData;
 };
 
+const getPatientById = (patientId: string): PatientInfo => {
+	const patient = patientsData.find((patient) => patient.id === patientId);
+	if (!patient) {
+		throw new Error("Patient with given id does not exist");
+	}
+	return patient;
+};
+
 export default {
 	getAllPatientDetails,
 	createNewPatient,
+	getPatientById,
 };

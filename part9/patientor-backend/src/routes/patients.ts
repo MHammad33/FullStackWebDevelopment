@@ -14,7 +14,7 @@ patientRouter.get("/", (_req, res) => {
 		console.error(error);
 		res
 			.status(500)
-			.json({ message: "An error occurred while fetching diagnoses." });
+			.json({ message: "An error occurred while fetching patients." });
 	}
 });
 
@@ -26,6 +26,19 @@ patientRouter.post(
 		res.json(newPatient);
 	}
 );
+
+patientRouter.get("/:id", (req, res) => {
+	try {
+		const patientId = req.params.id;
+		const patient = patientService.getPatientById(patientId);
+		res.json(patient);
+	} catch (error) {
+		console.error(error);
+		res
+			.status(500)
+			.json({ message: "An error occurred while fetching patient." });
+	}
+});
 
 patientRouter.use(errorMiddleware);
 

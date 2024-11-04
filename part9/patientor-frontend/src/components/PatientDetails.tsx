@@ -6,22 +6,28 @@ import {
 	Typography,
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Patient } from "../types";
+import patientService from "../services/patients";
 
 interface PatientDetailsProps {}
 
 const PatientDetails: FC<PatientDetailsProps> = ({}) => {
 	const { id } = useParams<{ id: string }>();
+	const navigate = useNavigate();
 	const [patient, setPatient] = useState<Patient | null>(null);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
+		if (!id) {
+			navigate("/");
+			return;
+		}
+
 		const fetchPatient = async () => {
 			try {
-				const response = await fetch(`/api/patients/${id}`);
-				const data: Patient = await response.json();
-				setPatient(data);
+				const patientData = await patientService.getById(id);
+				setPatient(patientData);
 			} catch (error) {
 				console.error("Failed to fetch patient data:", error);
 			} finally {
@@ -30,7 +36,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({}) => {
 		};
 
 		fetchPatient();
-	}, []);
+	}, [id, navigate]);
 
 	if (loading) {
 		return <CircularProgress />;

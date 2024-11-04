@@ -1,10 +1,6 @@
-import {
-	Card,
-	CardContent,
-	CircularProgress,
-	Container,
-	Typography,
-} from "@mui/material";
+import { CardContent, CircularProgress, Typography } from "@mui/material";
+import FemaleIcon from "@mui/icons-material/Female";
+import MaleIcon from "@mui/icons-material/Male";
 import { FC, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Patient } from "../types";
@@ -47,24 +43,22 @@ const PatientDetails: FC<PatientDetailsProps> = ({}) => {
 	}
 
 	return (
-		<Container maxWidth="sm">
-			<Card variant="outlined">
-				<CardContent>
-					<Typography variant="h4" gutterBottom>
-						{patient.name}
-					</Typography>
-					<Typography variant="body1">ID: {patient.id}</Typography>
-					<Typography variant="body1">
-						Date of Birth: {patient.dateOfBirth}
-					</Typography>
-					<Typography variant="body1">SSN: {patient.ssn}</Typography>
-					<Typography variant="body1">Gender: {patient.gender}</Typography>
-					<Typography variant="body1">
-						Occupation: {patient.occupation}
-					</Typography>
-				</CardContent>
-			</Card>
-		</Container>
+		<>
+			<CardContent>
+				<Typography variant="h4" gutterBottom>
+					{patient.name}{" "}
+					{patient.gender === "male" ? (
+						<MaleIcon color="primary" />
+					) : (
+						<FemaleIcon color="secondary" />
+					)}
+				</Typography>
+				<Typography variant="body1">SSN: {patient.ssn}</Typography>
+				<Typography variant="body1">
+					Occupation: {patient.occupation}
+				</Typography>
+			</CardContent>
+		</>
 	);
 };
 

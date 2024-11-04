@@ -84,11 +84,11 @@ const PatientListPage = ({ patients, setPatients }: Props) => {
 									component={RouterLink}
 									to={`/patients/${patient.id}`}
 									sx={{
-										color: "primary.main", // Customize color
-										textDecoration: "none", // Remove underline
+										color: "primary.main",
+										textDecoration: "none",
 										"&:hover": {
-											color: "primary.dark", // Change color on hover
-											textDecoration: "underline", // Add underline on hover
+											color: "primary.dark",
+											textDecoration: "underline",
 										},
 									}}
 								>

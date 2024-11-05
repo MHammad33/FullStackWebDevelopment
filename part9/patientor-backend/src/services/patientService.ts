@@ -1,6 +1,6 @@
 import { v1 as uuid } from "uuid";
 import patientsData from "../../data/patients";
-import { NewPatientInfo, NonSensitivePatient, PatientInfo } from "../types";
+import { NewPatient, NonSensitivePatient, Patient } from "../types";
 
 const getAllPatientDetails = (): NonSensitivePatient[] => {
 	return patientsData.map(({ id, name, dateOfBirth, gender, occupation }) => ({
@@ -12,7 +12,7 @@ const getAllPatientDetails = (): NonSensitivePatient[] => {
 	}));
 };
 
-const createNewPatient = (patient: NewPatientInfo): PatientInfo => {
+const createNewPatient = (patient: NewPatient): Patient => {
 	const newPatientData = {
 		id: uuid(),
 		...patient,
@@ -22,7 +22,7 @@ const createNewPatient = (patient: NewPatientInfo): PatientInfo => {
 	return newPatientData;
 };
 
-const getPatientById = (patientId: string): PatientInfo => {
+const getPatientById = (patientId: string): Patient => {
 	const patient = patientsData.find((patient) => patient.id === patientId);
 	if (!patient) {
 		throw new Error("Patient with given id does not exist");

@@ -24,13 +24,31 @@ interface HealthCheckEntry extends BaseEntry {
 	healthCheckRating: HealthCheckRating;
 }
 
+interface OccupationalHealthcareEntry extends BaseEntry {
+	type: "OccupationalHealthcare";
+	employerName: string;
+	specialist: string;
+	sickLeave?: {
+		startDate: string;
+		endDate: string;
+	};
+}
+
+interface HospitalEntry extends BaseEntry {
+	type: "Hospital";
+	discharge: {
+		date: string;
+		criteria: string;
+	};
+}
+
 export enum Gender {
 	Male = "male",
 	Female = "female",
 	Other = "others",
 }
 
-export interface PatientInfo {
+export interface Patient {
 	id: string;
 	name: string;
 	dateOfBirth: string;
@@ -45,9 +63,9 @@ export type Entry =
 	| OccupationalHealthcareEntry
 	| HealthCheckEntry;
 
-export type NonSensitivePatient = Omit<PatientInfo, "ssn" | "entries">;
+export type NonSensitivePatient = Omit<Patient, "ssn" | "entries">;
 
-export type NewPatientInfo = Omit<PatientInfo, "id">;
+export type NewPatient = Omit<Patient, "id">;
 
 type UnionOmit<T, K extends string | number | symbol> = T extends unknown
 	? Omit<T, K>

@@ -1,17 +1,11 @@
-import {
-	Box,
-	CardContent,
-	CircularProgress,
-	ListItem,
-	Typography,
-} from "@mui/material";
+import { CardContent, CircularProgress, Typography } from "@mui/material";
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
 import { FC, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Diagnosis, Patient } from "../types";
+import { Patient } from "../types";
 import patientService from "../services/patients";
-import diagnosisService from "../services/diagnosis";
+import Entries from "./Entries";
 
 interface PatientDetailsProps {}
 
@@ -19,7 +13,6 @@ const PatientDetails: FC<PatientDetailsProps> = ({}) => {
 	const { id } = useParams<{ id: string }>();
 	const navigate = useNavigate();
 	const [patient, setPatient] = useState<Patient | null>(null);
-	const [diagnoses, setDiagnoses] = useState<Diagnosis[] | null>(null);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -39,17 +32,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({}) => {
 			}
 		};
 
-		const fetchDiagnosis = async () => {
-			try {
-				const diagnosesData = await diagnosisService.getAll();
-				setDiagnoses(diagnosesData);
-			} catch (error) {
-				console.error("Failed to fetch diagnoses data:", error);
-			}
-		};
-
 		fetchPatient();
-		fetchDiagnosis();
 	}, [id, navigate]);
 
 	if (loading) {
@@ -77,44 +60,7 @@ const PatientDetails: FC<PatientDetailsProps> = ({}) => {
 				</Typography>
 
 				<h2>Entries</h2>
-
-				{patient.entries.map((entry) => (
-					<div key={entry.id} style={{ marginBottom: "1em" }}>
-						<Typography variant="body2">
-							<strong>Date:</strong> {entry.date}
-						</Typography>
-						<Typography variant="body2">
-							<strong>Description:</strong> {entry.description}
-						</Typography>
-						{entry.diagnosisCodes && entry.diagnosisCodes.length > 0 && (
-							<>
-								<Typography variant="body2">
-									<strong>Diagnose Codes:</strong>{" "}
-								</Typography>
-								<Box component="ul" sx={{ paddingLeft: 2, margin: 0 }}>
-									<ul>
-										{entry.diagnosisCodes.map((code) => {
-											const diagnosis = diagnoses?.find((d) => d.code === code);
-											return (
-												<ListItem
-													key={code}
-													sx={{
-														display: "list-item",
-														padding: 0,
-														fontSize: "0.875rem",
-														color: "text.primary",
-													}}
-												>
-													{code} {diagnosis ? `- ${diagnosis.name}` : ""}
-												</ListItem>
-											);
-										})}
-									</ul>
-								</Box>
-							</>
-						)}
-					</div>
-				))}
+				{patient.entries && <Entries entries={patient.entries} />}
 			</CardContent>
 		</>
 	);

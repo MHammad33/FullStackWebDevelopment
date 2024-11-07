@@ -1,6 +1,6 @@
 import { Request, Router } from "express";
 import patientService from "../services/patientService";
-import { NewPatientInfo } from "../types";
+import { NewPatient } from "../types";
 import { newPatientParser } from "../middlewares/validationMiddlewares";
 import { errorMiddleware } from "../middlewares/errorMiddleware";
 
@@ -21,7 +21,7 @@ patientRouter.get("/", (_req, res) => {
 patientRouter.post(
 	"/",
 	newPatientParser,
-	(req: Request<unknown, unknown, NewPatientInfo>, res) => {
+	(req: Request<unknown, unknown, NewPatient>, res) => {
 		const newPatient = patientService.createNewPatient(req.body);
 		res.json(newPatient);
 	}

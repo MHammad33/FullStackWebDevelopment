@@ -1,7 +1,10 @@
 import { Request, Router } from "express";
 import patientService from "../services/patientService";
 import { Entry, NewPatient } from "../types";
-import { newPatientParser } from "../middlewares/validationMiddlewares";
+import {
+	newEntryParser,
+	newPatientParser,
+} from "../middlewares/validationMiddlewares";
 import { errorMiddleware } from "../middlewares/errorMiddleware";
 
 const patientRouter = Router();
@@ -42,6 +45,7 @@ patientRouter.get("/:id", (req, res) => {
 
 patientRouter.post(
 	"/:id/entries",
+	newEntryParser,
 	(req: Request<{ id: string }, unknown, Entry>, res) => {
 		try {
 			const patientId = req.params.id;

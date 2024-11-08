@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { NewPatientSchema } from "../utils";
+import { NewEntrySchema, NewPatientSchema } from "../utils";
 
 export const newPatientParser = (
 	req: Request,
@@ -8,6 +8,19 @@ export const newPatientParser = (
 ) => {
 	try {
 		NewPatientSchema.parse(req.body);
+		next();
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const newEntryParser = (
+	req: Request,
+	_res: Response,
+	next: NextFunction
+) => {
+	try {
+		NewEntrySchema.parse(req.body);
 		next();
 	} catch (error) {
 		next(error);

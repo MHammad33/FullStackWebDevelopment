@@ -1,6 +1,6 @@
 import { Request, Router } from "express";
 import patientService from "../services/patientService";
-import { NewPatient } from "../types";
+import { Entry, NewPatient } from "../types";
 import { newPatientParser } from "../middlewares/validationMiddlewares";
 import { errorMiddleware } from "../middlewares/errorMiddleware";
 
@@ -40,17 +40,21 @@ patientRouter.get("/:id", (req, res) => {
 	}
 });
 
-patientRouter.post("/:id/entries", (req, res) => {
-	try {
-		console.log(req);
-		res.json({ message: "Add Entry" });
-	} catch (error) {
-		console.error(error);
-		res
-			.status(500)
-			.json({ message: "An error occurred while fetching patient." });
+patientRouter.post(
+	"/:id/entries",
+	(req: Request<{ id: string }, unknown, Entry>, res) => {
+		try {
+			const patientId = req.params.id;
+			const updatedPatient = patientService.addEntry(req.body, patientId);
+			res.json(updatedPatient);
+		} catch (error) {
+			console.error(error);
+			res
+				.status(500)
+				.json({ message: "An error occurred while fetching patient." });
+		}
 	}
-});
+);
 
 patientRouter.use(errorMiddleware);
 

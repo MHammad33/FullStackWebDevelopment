@@ -1,4 +1,10 @@
-import { CardContent, CircularProgress, Typography } from "@mui/material";
+import {
+	Box,
+	Button,
+	CardContent,
+	CircularProgress,
+	Typography,
+} from "@mui/material";
 import FemaleIcon from "@mui/icons-material/Female";
 import MaleIcon from "@mui/icons-material/Male";
 import { FC, useEffect, useState } from "react";
@@ -6,12 +12,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Patient } from "../types";
 import patientService from "../services/patients";
 import Entries from "./Entries";
+import AddEntryForm from "./AddEntryForm";
 
 interface PatientDetailsProps {}
 
 const PatientDetails: FC<PatientDetailsProps> = ({}) => {
 	const { id } = useParams<{ id: string }>();
 	const navigate = useNavigate();
+	const [isFormOpen, setIsFormOpen] = useState(false);
 	const [patient, setPatient] = useState<Patient | null>(null);
 	const [loading, setLoading] = useState(true);
 
@@ -34,6 +42,10 @@ const PatientDetails: FC<PatientDetailsProps> = ({}) => {
 
 		fetchPatient();
 	}, [id, navigate]);
+
+	const handleCancelForm = () => {
+		setIsFormOpen(false);
+	};
 
 	if (loading) {
 		return <CircularProgress />;
@@ -59,7 +71,30 @@ const PatientDetails: FC<PatientDetailsProps> = ({}) => {
 					Occupation: {patient.occupation}
 				</Typography>
 
-				<h2>Entries</h2>
+				{!isFormOpen && (
+					<Box
+						display="flex"
+						justifyContent="space-between"
+						alignItems="center"
+						mt={2}
+					>
+						<h2>Entries</h2>
+						<Button
+							variant="contained"
+							color="primary"
+							size="small"
+							// sx={{ flexShrink: 0 }}
+							onClick={() => setIsFormOpen(true)}
+						>
+							Add Entry
+						</Button>
+					</Box>
+				)}
+
+				{isFormOpen && (
+					<AddEntryForm patientId={id!} onCancel={handleCancelForm} />
+				)}
+
 				{patient.entries && <Entries entries={patient.entries} />}
 			</CardContent>
 		</>

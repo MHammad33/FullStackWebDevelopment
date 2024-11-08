@@ -23,8 +23,11 @@ const getById = async (patientId: string | null) => {
 	return data;
 };
 
+const addEntry = (patientId: string, newEntry) => {};
+
 export default {
 	getAll,
 	create,
 	getById,
+	addEntry,
 };

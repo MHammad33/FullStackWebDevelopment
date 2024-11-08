@@ -83,7 +83,6 @@ const PatientDetails: FC<PatientDetailsProps> = ({}) => {
 							variant="contained"
 							color="primary"
 							size="small"
-							// sx={{ flexShrink: 0 }}
 							onClick={() => setIsFormOpen(true)}
 						>
 							Add Entry

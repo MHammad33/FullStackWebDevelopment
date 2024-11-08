@@ -40,6 +40,18 @@ patientRouter.get("/:id", (req, res) => {
 	}
 });
 
+patientRouter.post("/:id/entries", (req, res) => {
+	try {
+		console.log(req);
+		res.json({ message: "Add Entry" });
+	} catch (error) {
+		console.error(error);
+		res
+			.status(500)
+			.json({ message: "An error occurred while fetching patient." });
+	}
+});
+
 patientRouter.use(errorMiddleware);
 
 export default patientRouter;

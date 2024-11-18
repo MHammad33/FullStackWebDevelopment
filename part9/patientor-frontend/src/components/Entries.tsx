@@ -26,19 +26,22 @@ const Entries: FC<EntryDetailsProps> = ({ entries }) => {
 
 	return (
 		<>
-			{entries.map((entry) => (
-				<Box
-					key={entry.id}
-					sx={{
-						marginBottom: "1em",
-						padding: 2,
-						border: "1px solid #ddd",
-						borderRadius: "8px",
-					}}
-				>
-					<EntryDetails entry={entry} diagnoses={diagnoses || []} />
-				</Box>
-			))}
+			{entries.map((entry) => {
+				console.log("entry", entry);
+				return (
+					<Box
+						key={entry.id}
+						sx={{
+							marginBottom: "1em",
+							padding: 2,
+							border: "1px solid #ddd",
+							borderRadius: "8px",
+						}}
+					>
+						<EntryDetails entry={entry} diagnoses={diagnoses || []} />
+					</Box>
+				);
+			})}
 		</>
 	);
 };

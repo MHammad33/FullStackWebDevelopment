@@ -1,4 +1,4 @@
-import { Request, Router } from "express";
+import { Request, Response, Router } from "express";
 import patientService from "../services/patientService";
 import { Entry, NewPatient } from "../types";
 import {
@@ -24,7 +24,7 @@ patientRouter.get("/", (_req, res) => {
 patientRouter.post(
 	"/",
 	newPatientParser,
-	(req: Request<unknown, unknown, NewPatient>, res) => {
+	(req: Request<unknown, unknown, NewPatient>, res: Response) => {
 		const newPatient = patientService.createNewPatient(req.body);
 		res.json(newPatient);
 	}

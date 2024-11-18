@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
-import { Entry } from "../types";
 import { Box, Button, TextField, Typography } from "@mui/material";
+import patientService from "../services/patients";
+import { EntryWithoutId } from "../types";
 
 interface AddEntryFormProps {
 	patientId: string;
@@ -12,7 +13,7 @@ const AddEntryForm: FC<AddEntryFormProps> = ({ patientId, onCancel }) => {
 		description: "",
 		date: "",
 		specialist: "",
-		healthCheckRating: "",
+		healthCheckRating: 0,
 		diagnosisCodes: "",
 	});
 
@@ -28,11 +29,15 @@ const AddEntryForm: FC<AddEntryFormProps> = ({ patientId, onCancel }) => {
 				.split(",")
 				.map((code) => code.trim());
 
-			const patientData = {
+			const newEntryData: EntryWithoutId = {
 				...formData,
 				diagnosisCodes: diagnosisCodesArray,
+				healthCheckRating: Number(formData.healthCheckRating),
 				type: "HealthCheck",
 			};
+
+			patientService.addEntry(patientId, newEntryData);
+			console.log("newEntryData", newEntryData);
 		} catch (error) {
 			console.error("Error adding entry:", error);
 		}
@@ -76,8 +81,19 @@ const AddEntryForm: FC<AddEntryFormProps> = ({ patientId, onCancel }) => {
 				name="healthCheckRating"
 				type="number"
 				value={formData.healthCheckRating}
-				onChange={handleInputChange}
+				onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+					const value = Number(e.target.value);
+					if (value > 3) {
+						alert("Health Check Rating cannot be more than 3.");
+						return;
+					}
+					handleInputChange(e);
+				}}
 				margin="normal"
+				inputProps={{
+					max: 3,
+					min: 0,
+				}}
 				required
 			/>
 			<TextField

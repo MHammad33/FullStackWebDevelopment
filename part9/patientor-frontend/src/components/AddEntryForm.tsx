@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import React, { FC, useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import patientService from "../services/patients";
 import { EntryWithoutId, Patient } from "../types";
@@ -137,7 +137,15 @@ const AddEntryForm: FC<AddEntryFormProps> = ({
 				type="date"
 				InputLabelProps={{ shrink: true }}
 				value={formData.date}
-				onChange={handleInputChange}
+				onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+					const selectedDate = new Date(e.target.value);
+					const today = new Date();
+					if (selectedDate > today) {
+						alert("Date cannot be in the future.");
+						return;
+					}
+					handleInputChange(e);
+				}}
 				margin="normal"
 				required
 			/>
@@ -183,7 +191,15 @@ const AddEntryForm: FC<AddEntryFormProps> = ({
 						type="date"
 						InputLabelProps={{ shrink: true }}
 						value={formData.dischargeDate}
-						onChange={handleInputChange}
+						onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+							const selectedDate = new Date(e.target.value);
+							const today = new Date();
+							if (selectedDate > today) {
+								alert("Date cannot be in the future.");
+								return;
+							}
+							handleInputChange(e);
+						}}
 						margin="normal"
 						required
 					/>
@@ -217,7 +233,15 @@ const AddEntryForm: FC<AddEntryFormProps> = ({
 						type="date"
 						InputLabelProps={{ shrink: true }}
 						value={formData.sickLeaveStartDate}
-						onChange={handleInputChange}
+						onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+							const selectedDate = new Date(e.target.value);
+							const today = new Date();
+							if (selectedDate > today) {
+								alert("Date cannot be in the future.");
+								return;
+							}
+							handleInputChange(e);
+						}}
 						margin="normal"
 					/>
 					<TextField
@@ -227,7 +251,15 @@ const AddEntryForm: FC<AddEntryFormProps> = ({
 						type="date"
 						InputLabelProps={{ shrink: true }}
 						value={formData.sickLeaveEndDate}
-						onChange={handleInputChange}
+						onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+							const selectedDate = new Date(e.target.value);
+							const today = new Date();
+							if (selectedDate > today) {
+								alert("Date cannot be in the future.");
+								return;
+							}
+							handleInputChange(e);
+						}}
 						margin="normal"
 					/>
 				</>

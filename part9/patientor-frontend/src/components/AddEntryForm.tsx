@@ -1,7 +1,19 @@
 import React, { FC, useState } from "react";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import {
+	Box,
+	Button,
+	Chip,
+	FormControl,
+	IconButton,
+	InputLabel,
+	MenuItem,
+	Select,
+	TextField,
+	Typography,
+} from "@mui/material";
 import patientService from "../services/patients";
 import { EntryWithoutId, Patient } from "../types";
+import { Cancel } from "@mui/icons-material";
 
 interface AddEntryFormProps {
 	patientId: string;
@@ -265,7 +277,7 @@ const AddEntryForm: FC<AddEntryFormProps> = ({
 				</>
 			)}
 
-			<TextField
+			{/* <TextField
 				fullWidth
 				label="Diagnosis Codes (comma-separated)"
 				name="diagnosisCodes"
@@ -273,7 +285,71 @@ const AddEntryForm: FC<AddEntryFormProps> = ({
 				onChange={handleInputChange}
 				margin="normal"
 				placeholder="e.g., S03.5, M54.5"
-			/>
+			/> */}
+			<FormControl fullWidth margin="normal" sx={{ mt: 2 }}>
+				<InputLabel id="diagnosis-codes-label" sx={{ marginTop: "-8px" }}>
+					Diagnosis Codes
+				</InputLabel>
+				<Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+					<Select
+						labelId="diagnosis-codes-label"
+						multiple
+						value={formData.diagnosisCodes.split(",").filter((code) => code)}
+						onChange={(e) => {
+							const selectedCodes = e.target.value as string[];
+							setFormData({
+								...formData,
+								diagnosisCodes: selectedCodes.join(","),
+							});
+						}}
+						renderValue={(selected) => (
+							<Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+								{(Array.isArray(selected) ? selected : []).map((code) => (
+									<Chip
+										key={code}
+										label={code}
+										sx={{
+											marginRight: 1,
+										}}
+									/>
+								))}
+							</Box>
+						)}
+						MenuProps={{
+							PaperProps: {
+								sx: {
+									maxHeight: 200,
+								},
+							},
+						}}
+						sx={{
+							flexGrow: 1,
+							paddingTop: "8px",
+						}}
+					>
+						{["S03.5", "M54.5", "A12.1", "C14.8"].map((code) => (
+							<MenuItem key={code} value={code}>
+								{code}
+							</MenuItem>
+						))}
+					</Select>
+
+					{/* Cross button to clear filters inside the select */}
+					{formData.diagnosisCodes && (
+						<IconButton
+							onClick={() => setFormData({ ...formData, diagnosisCodes: "" })}
+							sx={{
+								color: "gray",
+								"&:hover": {
+									color: "red", // Hover effect to indicate removal
+								},
+							}}
+						>
+							<Cancel sx={{ fontSize: "20px" }} />
+						</IconButton>
+					)}
+				</Box>
+			</FormControl>
 
 			<Box display="flex" justifyContent="space-between" mt={2}>
 				<Button variant="outlined" color="secondary" onClick={onCancel}>

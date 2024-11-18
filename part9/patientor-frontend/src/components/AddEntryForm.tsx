@@ -1,14 +1,19 @@
 import { FC, useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import patientService from "../services/patients";
-import { EntryWithoutId } from "../types";
+import { EntryWithoutId, Patient } from "../types";
 
 interface AddEntryFormProps {
 	patientId: string;
 	onCancel: () => void;
+	onAddEntry: (updatedPatient: Patient) => void;
 }
 
-const AddEntryForm: FC<AddEntryFormProps> = ({ patientId, onCancel }) => {
+const AddEntryForm: FC<AddEntryFormProps> = ({
+	patientId,
+	onCancel,
+	onAddEntry,
+}) => {
 	const [formData, setFormData] = useState({
 		description: "",
 		date: "",
@@ -36,8 +41,20 @@ const AddEntryForm: FC<AddEntryFormProps> = ({ patientId, onCancel }) => {
 				type: "HealthCheck",
 			};
 
-			patientService.addEntry(patientId, newEntryData);
-			console.log("newEntryData", newEntryData);
+			const updatedPatient = await patientService.addEntry(
+				patientId,
+				newEntryData
+			);
+			onAddEntry(updatedPatient);
+
+			setFormData({
+				description: "",
+				date: "",
+				specialist: "",
+				healthCheckRating: 0,
+				diagnosisCodes: "",
+			});
+			onCancel();
 		} catch (error) {
 			console.error("Error adding entry:", error);
 		}

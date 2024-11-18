@@ -47,6 +47,10 @@ const PatientDetails: FC<PatientDetailsProps> = ({}) => {
 		setIsFormOpen(false);
 	};
 
+	const onAddEntry = (updatedPatient: Patient) => {
+		setPatient(updatedPatient);
+	};
+
 	if (loading) {
 		return <CircularProgress />;
 	}
@@ -91,7 +95,11 @@ const PatientDetails: FC<PatientDetailsProps> = ({}) => {
 				)}
 
 				{isFormOpen && (
-					<AddEntryForm patientId={id!} onCancel={handleCancelForm} />
+					<AddEntryForm
+						patientId={id!}
+						onCancel={handleCancelForm}
+						onAddEntry={onAddEntry}
+					/>
 				)}
 
 				{patient.entries && <Entries entries={patient.entries} />}
